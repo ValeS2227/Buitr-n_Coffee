@@ -1,0 +1,101 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.auth-body {
+    height: 100vh;
+    background:#eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    background: #ffffff;
+    width: 380px;
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.card h1 {
+    color: #3e2723;
+    margin-bottom: 10px;
+}
+
+.card h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.card label {
+    display: block;
+    text-align: left;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #444;
+}
+
+.card input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+}
+
+.card input:focus {
+    border-color: #6d4c41;
+    outline: none;
+    box-shadow: 0 0 5px rgba(109, 76, 65, 0.4);
+}
+
+.card button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 25px;
+    border: none;
+    background:#b52b1e;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.card button:hover {
+    background: #4e342e;
+    transform: translateY(-2px);
+}
+
+/* ===== LINKS ===== */
+.links-login {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.links-login a {
+    color: #6d4c41;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.links-login a:hover {
+    text-decoration: underline;
+}
+
+/* ===== SECCIONES ===== */
+.seccion {
+    display: none;
+}
+
+#inicio {
+    display: block;
+}

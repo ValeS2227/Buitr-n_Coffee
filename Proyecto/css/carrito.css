@@ -1,0 +1,100 @@
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f4f4;
+}
+
+.nav{
+    background: #c0392b;
+    color:white;
+    padding:16px;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    
+}
+.nav button{
+    width: 15%;
+    padding: 6px;
+    margin-top: 1px;
+    border-radius: 25px;
+    background:#b52b1e;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+.container{
+    padding:30px;
+    
+}
+
+.titulo{
+    text-align:center;
+}
+
+.productos{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    justify-content:center;
+    margin-top:20px;
+}
+
+.card{
+    background:#f7ebe9;
+    color:black;
+    width:220px;
+    padding:15px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 5px 10px rgba(0,0,0,0.2);
+}
+
+.card input{
+    width:60px;
+    text-align:center;
+    margin:5px 0;
+}
+.imagen-producto{
+    width:100px;
+    height:170px;
+    object-fit:cover;
+    border-radius:8px;
+    margin-bottom:10px;
+}
+.card button{
+    margin:5px;
+    padding:6px 10px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.btn-eliminar{
+    background:grey;
+    color:white;
+}
+
+.recibo{
+    text-align:center;
+    margin-top:30px;
+}
+
+.recibo button{
+    background:#8B0000;
+    color:white;
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+#resultado{
+    margin-top:20px;
+    background:white;
+    padding:15px;
+    border-radius:8px;
+    display:inline-block;
+}

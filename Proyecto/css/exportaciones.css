@@ -1,0 +1,43 @@
+.produccion-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #222;
+  padding: 36px 20px 50px;
+}
+
+.exportaciones-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  max-width: 1200px;
+  margin: 0 auto 100px;
+  padding: 0 40px;
+}
+
+.exportaciones-text {
+  background-color: #f5e6d3;
+  border-radius: 20px;
+  padding: 30px 36px;
+  font-size: 22px;
+  color: #444;
+  line-height: 1.7;
+  min-width: 260px;
+  max-width: 400px;
+}
+
+/* Imagen grande a la derecha */
+.exportaciones-mapa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.exportaciones-mapa img {
+  max-width: 650px;
+  width: 50%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 20px;
+}

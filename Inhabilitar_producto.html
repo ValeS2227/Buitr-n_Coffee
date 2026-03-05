@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inhabilitar Productos</title>
+  <link rel="stylesheet" href="css/estilos_inhabilitar_productos.css">
+  <link rel="stylesheet" href="css/estilos_navbar.css">
+
+
+  <style>
+    html, body {
+      display: block;
+      align-items: unset;
+      justify-content: unset;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .pagina-productos {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+
+<div class="pagina-productos">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <button class="btn-back" onclick="window.location.href='Crub_Admin_Inicio.html'">Volver al Inicio</button>
+    <div class="navbar-titulo">INHABILITAR PRODUCTOS</div>
+    <div class="navbar-usuario">
+      <span>AdminLauris</span>
+      <div class="navbar-avatar">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="14" r="8" stroke="#2E2E2E" stroke-width="2.5"/>
+          <path d="M4 36c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="#2E2E2E" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="vista-productos">
+    <div class="grilla-productos">
+
+      <!-- Producto 1 -->
+      <div class="tarjeta-producto">
+        <div class="producto-imagen">
+          <img src="../img/producto1.png" alt="Café Molido" onerror="this.style.display='none'"/>
+        </div>
+        <div class="producto-info">
+          <h3 class="producto-nombre">Café Molido</h3>
+          <p class="producto-descripcion">Café Molido con un exquisito aroma para iniciar el dia con un buen animo.</p>
+          <div class="producto-footer">
+            <div class="precio-carrito">
+              <span class="producto-precio">$60.000</span>
+            </div>
+            <div class="btn-accion-fila">
+              <span class="producto-actualizar">INHABILITAR</span>
+              <button class="btn-menos-icono" onclick="abrirModal(this)">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px">
+                  <circle cx="12" cy="12" r="10" fill="#2E2E2E"/>
+                  <rect x="6" y="11" width="12" height="2.5" rx="1.2" fill="white"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 2 -->
+      <div class="tarjeta-producto">
+        <div class="producto-imagen">
+          <img src="../img/producto2.png" alt="Grano" onerror="this.style.display='none'"/>
+        </div>
+        <div class="producto-info">
+          <h3 class="producto-nombre">Grano</h3>
+          <p class="producto-descripcion">Delicioso Grano de café para tener la mejor energía en el día.</p>
+          <div class="producto-footer">
+            <div class="precio-carrito">
+              <span class="producto-precio">$65.000</span>
+            </div>
+            <div class="btn-accion-fila">
+              <span class="producto-actualizar">INHABILITAR</span>
+              <button class="btn-menos-icono" onclick="abrirModal(this)">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px">
+                  <circle cx="12" cy="12" r="10" fill="#2E2E2E"/>
+                  <rect x="6" y="11" width="12" height="2.5" rx="1.2" fill="white"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 3 -->
+      <div class="tarjeta-producto">
+        <div class="producto-imagen">
+          <img src="../img/producto3.png" alt="Grano Especial" onerror="this.style.display='none'"/>
+        </div>
+        <div class="producto-info">
+          <h3 class="producto-nombre">Grano Especial</h3>
+          <p class="producto-descripcion">Delicioso Grano ahora en su version especial por un excelente precio.</p>
+          <div class="producto-footer">
+            <div class="precio-carrito">
+              <span class="producto-precio">$70.000</span>
+            </div>
+            <div class="btn-accion-fila">
+              <span class="producto-actualizar">INHABILITAR</span>
+              <button class="btn-menos-icono" onclick="abrirModal(this)">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px">
+                  <circle cx="12" cy="12" r="10" fill="#2E2E2E"/>
+                  <rect x="6" y="11" width="12" height="2.5" rx="1.2" fill="white"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 4 -->
+      <div class="tarjeta-producto">
+        <div class="producto-imagen">
+          <img src="../img/producto4.png" alt="Café Bourbon Rosado" onerror="this.style.display='none'"/>
+        </div>
+        <div class="producto-info">
+          <h3 class="producto-nombre">Café Bourbon Rosado</h3>
+          <p class="producto-descripcion">Café Molido fino con un exquisito toque de picante para tus días</p>
+          <div class="producto-footer">
+            <div class="precio-carrito">
+              <span class="producto-precio">$32.000</span>
+            </div>
+            <div class="btn-accion-fila">
+              <span class="producto-actualizar">INHABILITAR</span>
+              <button class="btn-menos-icono" onclick="abrirModal(this)">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px">
+                  <circle cx="12" cy="12" r="10" fill="#2E2E2E"/>
+                  <rect x="6" y="11" width="12" height="2.5" rx="1.2" fill="white"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 5 -->
+      <div class="tarjeta-producto">
+        <div class="producto-imagen">
+          <img src="../img/producto5.png" alt="Café al por mayor" onerror="this.style.display='none'"/>
+        </div>
+        <div class="producto-info">
+          <h3 class="producto-nombre">Café al por mayor</h3>
+          <p class="producto-descripcion">Ya disponible café al por mayor. ¡Adquierelo ahora!</p>
+          <div class="producto-footer">
+            <div class="precio-carrito">
+              <span class="producto-precio">$250.000</span>
+            </div>
+            <div class="btn-accion-fila">
+              <span class="producto-actualizar">INHABILITAR</span>
+              <button class="btn-menos-icono" onclick="abrirModal(this)">
+              <button onclick="habilitarUsuario()">Reactivar Usuario/Producto</button>
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px">
+                  <circle cx="12" cy="12" r="10" fill="#2E2E2E"/>
+                  <rect x="6" y="11" width="12" height="2.5" rx="1.2" fill="white"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="modalInhabilitar" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+       background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:1000;">
+    <div class="modal-caja">
+      <div class="modal-logo">Buitron Coffee</div>
+      <div class="modal-pregunta">¿Estás seguro de inhabilitar este producto?</div>
+      <button class="modal-btn" onclick="confirmarInhabilitar()">Aceptar</button>
+      <button class="modal-btn" onclick="cerrarModal()">Cancelar</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let tarjetaSeleccionada = null;
+
+  function abrirModal(boton) {
+    tarjetaSeleccionada = boton.closest(".tarjeta-producto");
+    const modal = document.getElementById("modalInhabilitar");
+    modal.style.display = "flex";
+  }
+
+  function cerrarModal() {
+    document.getElementById("modalInhabilitar").style.display = "none";
+    tarjetaSeleccionada = null;
+  }
+
+  function confirmarInhabilitar() {
+    if (tarjetaSeleccionada) {
+      tarjetaSeleccionada.classList.add("inhabilitado");
+      // Deshabilitar el botón para que no se pueda volver a pulsar
+      const btn = tarjetaSeleccionada.querySelector(".btn-menos-icono");
+      if (btn) {
+        btn.onclick = null;
+        btn.style.opacity = "0.4";
+        btn.style.cursor = "not-allowed";
+      }
+    }
+    cerrarModal();
+    alert("Producto inhabilitado correctamente");
+  }
+  function habilitarUsuario() {
+    // Buscamos los elementos por su ID y cambiamos su propiedad disabled a false
+    document.getElementById("nombreUsuario").disabled = false;
+    document.getElementById("btnGuardar").disabled = false;
+    alert("¡El usuario ha sido habilitado!");
+}
+</script>
+
+</body>
+</html>

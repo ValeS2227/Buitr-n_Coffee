@@ -1,0 +1,178 @@
+/* =============================================
+   estilos_actualizar_form.css
+   Actualizar_producto_from.html
+   ============================================= */
+
+@import url('estilos_navbar.css');
+
+html, body {
+    display: block;
+    align-items: unset;
+    justify-content: unset;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.pagina-crear {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Contenido */
+.vista-crear {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 28px;
+}
+
+.formulario-producto {
+    background-color: #F3E9DC;
+    border: 3px solid #4B2E2B;
+    border-radius: 24px;
+    padding: 36px;
+    display: flex;
+    flex-direction: row;
+    gap: 36px;
+    width: 100%;
+    max-width: 1100px;
+    align-items: flex-start;
+}
+
+/* Columna izquierda */
+.columna-izquierda {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    min-width: 260px;
+}
+
+.caja-imagen {
+    background-color: white;
+    border: 2px solid #b89f86;
+    border-radius: 14px;
+    width: 260px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.texto-imagen {
+    color: #b89f86;
+    font-size: 0.95rem;
+    text-align: center;
+    padding: 10px;
+}
+
+.campo-unidades {
+    background-color: white;
+    border: 2px solid #4B2E2B;
+    border-radius: 14px;
+    width: 180px;
+    height: 80px;
+    font-family: Arial, sans-serif;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #2E2E2E;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.campo-unidades:hover { background-color: #F3E9DC; }
+
+/* Columna derecha */
+.columna-derecha {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+}
+
+/* Campo con icono de edición */
+.campo-con-icono {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.campo-texto {
+    background-color: white;
+    border: 2px solid #b89f86;
+    border-radius: 30px;
+    padding: 14px 24px;
+    font-family: Arial, sans-serif;
+    font-size: 0.95rem;
+    color: #2E2E2E;
+    text-align: center;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s;
+    flex: 1;
+}
+
+.campo-texto::placeholder { color: #999; }
+.campo-texto:focus { border-color: #C0582B; }
+
+.btn-editar-campo {
+    background-color: transparent;
+    border: 2px solid #b89f86;
+    border-radius: 10px;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: border-color 0.2s, background 0.2s;
+    padding: 0;
+}
+
+.btn-editar-campo:hover {
+    border-color: #C0582B;
+    background-color: #F3E9DC;
+}
+
+.btn-editar-campo svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Botón actualizar */
+.btn-crear-producto {
+    background-color: #C0582B;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 16px 24px;
+    font-family: Arial, sans-serif;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 1px;
+    width: 100%;
+    transition: background 0.2s, transform 0.15s;
+    margin-top: 4px;
+}
+
+.btn-crear-producto:hover {
+    background-color: #a94a22;
+    transform: scale(1.02);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .formulario-producto {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .columna-izquierda { width: 100%; min-width: unset; }
+    .caja-imagen { width: 100%; }
+}

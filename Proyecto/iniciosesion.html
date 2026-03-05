@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buitrón Coffee - Iniciar Sesión</title>
+  <link href="css/Index.css" rel="stylesheet" type="text/css"/>
+  <link href="css/iniciosesion.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body class="auth-body">
+
+  <div class="card">
+    <div id="inicio" class="seccion">
+      <h1>Buitrón Coffee</h1>
+      <button onclick="mostrarLogin()">Inicia sesión</button>
+      <button onclick="location.href='Registro.html'">Regístrate</button>
+      <button onclick="location.href='Index.html'">Volver al inicio</button>
+    </div>
+
+    <div id="login" class="seccion" style="display:none;">
+      <h1>Buitrón Coffee</h1>
+      <h2>Bienvenido al inicio de sesión</h2>
+
+      <label>Usuario</label>
+      <input type="text" id="usuario" placeholder="Ingrese usuario">
+
+      <label>Contraseña</label>
+      <input type="password" id="password" placeholder="••••••••">
+
+      <button onclick="iniciarSesion()">Ingresar</button>
+      <button onclick="volverInicio()">Volver</button>
+
+      <div class="links-login">
+        <p>¿Olvidaste tu contraseña?
+          <a href="recuperar_contra.html">Recuperar</a>
+        </p>
+      </div>
+
+      <div class="links-login">
+        <p>¿No tienes cuenta?
+          <a href="Registro.html">Regístrate</a>
+        </p>
+      </div>
+    </div>
+    <div id="bienvenida" class="seccion bienvenida" style="display:none;">
+      <h1>Buitrón Coffee</h1>
+      <h2>Bienvenido a Buitrón Coffee</h2>
+      <button onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+  </div>
+    <script src="js/iniciosesion.js" type="text/javascript"></script>
+</body>
+</html>

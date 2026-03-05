@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Actualizar_producto_from</title>
+  <link rel="stylesheet" href="css/estilos-actualizar_from.css">
+  <link rel="stylesheet" href="css/estilos_navbar.css">
+</head>
+<body>
+
+<div class="pagina-crear">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <button class="btn-back" onclick="window.location.href='Crub_Admin_Inicio.html'">Volver al Inicio</button>
+    <div class="navbar-titulo">ACTUALIZAR PRODUCTOS</div>
+    <div class="navbar-usuario">
+      <span>AdminLauris</span>
+      <div class="navbar-avatar">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="14" r="8" stroke="#2E2E2E" stroke-width="2.5"/>
+          <path d="M4 36c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="#2E2E2E" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="vista-crear">
+    <div class="formulario-producto">
+
+      <!-- Columna izquierda: imagen + unidades -->
+      <div class="columna-izquierda">
+        <div class="caja-imagen">
+          <span class="texto-imagen">Insertar Imagen Png...</span>
+          <input type="file" accept="image/png" style="display:none" id="inputImagen"/>
+        </div>
+
+        <div class="campo-con-icono">
+          <button class="campo-unidades" onclick="document.getElementById('inputImagen').click()">Insertar<br>Imagen</button>
+          <button class="btn-editar-campo" onclick="document.getElementById('inputImagen').click()">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Columna derecha: campos -->
+      <div class="columna-derecha">
+
+        <!-- Nombre del Café -->
+        <div class="campo-con-icono">
+          <input class="campo-texto" type="text" placeholder="Ingrese el nombre del Café" id="campo-nombre"/>
+          <button class="btn-editar-campo" onclick="document.getElementById('campo-nombre').focus()">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Nivel de Tostado -->
+        <div class="campo-con-icono">
+          <input class="campo-texto" type="text" placeholder="Nivel de Tostado" id="campo-tostado"/>
+          <button class="btn-editar-campo" onclick="document.getElementById('campo-tostado').focus()">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Estado -->
+        <div class="campo-con-icono">
+          <input class="campo-texto" type="text" placeholder="Estado" id="campo-estado"/>
+          <button class="btn-editar-campo" onclick="document.getElementById('campo-estado').focus()">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Precio -->
+        <div class="campo-con-icono">
+          <input class="campo-texto" type="text" placeholder="Precio" id="campo-precio"/>
+          <button class="btn-editar-campo" onclick="document.getElementById('campo-precio').focus()">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Descripción -->
+        <div class="campo-con-icono">
+          <input class="campo-texto" type="text" placeholder="Ingrese descripción" id="campo-descripcion"/>
+          <button class="btn-editar-campo" onclick="document.getElementById('campo-descripcion').focus()">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Unidades disponibles -->
+        <div class="campo-con-icono">
+          <input class="campo-texto" type="number" placeholder="Unidades disponibles" id="campo-unidades-disp"/>
+          <button class="btn-editar-campo" onclick="document.getElementById('campo-unidades-disp').focus()">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="#2E2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <button class="btn-crear-producto">ACTUALIZAR</button>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

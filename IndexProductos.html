@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buitron Coffee — Productos</title>
+
+  <!--
+    Archivo: IndexProductos.html
+    Ubicación: raíz del proyecto
+    Propósito: Catálogo detallado de productos individuales de Buitrón Coffee.
+    Muestra cada producto en formato vertical con imagen, nombre, estado,
+    nivel de tostado, calificación y botón para agregar al carrito.
+    Se accede desde los botones "VER" del inicio o desde el ícono de búsqueda.
+    Proyecto: Buitrón Coffee — Pitalito, Huila, Colombia
+  -->
+
+  <link rel="stylesheet" href="estilos/Index.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- Banner superior: mensaje promocional -->
+  <div class="top-banner">
+    Encontrarás descuentos por el día de hoy
+  </div>
+
+  <!-- Header: logo y contador del carrito -->
+  <header>
+    <div class="header-spacer"></div>
+    <div class="header-logo">
+      <h1><i>Buitron Coffee</i></h1>
+    </div>
+    <div class="header-icons">
+      <a href="inisesi_reg_volini.html" title="Usuario">&#128100;</a>
+      <a href="IndexProductos.html" title="Productos" class="active">&#128269;</a>
+      <a href="#" title="Carrito">&#128722; <span id="contador" style="font-size:13px;font-family:'Lato',sans-serif;font-weight:700;">0</span></a>
+    </div>
+  </header>
+
+  <!-- Navegación: sin enlace activo específico (página interna) -->
+  <nav>
+    <a href="Buitron_Coffee.html">Inicio</a>
+    <a href="Produccion.html">Producción</a>
+    <a href="Nosotros.html">Nosotros</a>
+    <a href="Exportaciones.html">Exportaciones</a>
+    <a href="CafePorMayor.html">Café por Mayor</a>
+  </nav>
+
+  <!--
+    Hero de la sección: título y descripción del catálogo.
+    Presenta todos los productos disponibles para compra individual.
+  -->
+  <div class="productos-hero">
+    <h2>Nuestros Productos</h2>
+    <p>Café especial cultivado en la Finca Las Brisas Montecristo, Pitalito, Huila,
+    a 1.750 m.s.n.m. Elige el que más se adapte a tu gusto.</p>
+  </div>
+
+  <!--
+    Catálogo vertical: cada producto se presenta con imagen a la izquierda
+    e información a la derecha, con botón de agregar al carrito.
+  -->
+  <section class="productos-vertical">
+
+    <!-- Producto: Café Molido -->
+    <div class="producto-container">
+      <div class="producto-card">
+        <img src="img/cafe2.jpeg" alt="Café Molido Buitron">
+        <div class="info">
+          <h2>Café Molido</h2>
+          <div class="detalle">Estado: <strong>ACTIVO</strong></div>
+          <div class="detalle">Nivel de Tostado: Medio</div>
+          <div class="detalle">Calificación: ⭐⭐⭐⭐⭐</div>
+          <div class="detalle">Variedad: Bourbon Rosado</div>
+          <button class="btn-carrito" onclick="agregarCarrito('Café Molido', 60000)">
+            🛒 Agregar — $60.000
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Producto: Grano -->
+    <div class="producto-container">
+      <div class="producto-card">
+        <img src="img/cafe3.jpeg" alt="Café en Grano Buitron">
+        <div class="info">
+          <h2>Grano</h2>
+          <div class="detalle">Estado: <strong>ACTIVO</strong></div>
+          <div class="detalle">Nivel de Tostado: Alto</div>
+          <div class="detalle">Calificación: ⭐⭐⭐⭐</div>
+          <div class="detalle">Variedad: Café Supremo</div>
+          <button class="btn-carrito" onclick="agregarCarrito('Grano', 65000)">
+            🛒 Agregar — $65.000
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Producto: Grano Especial -->
+    <div class="producto-container">
+      <div class="producto-card">
+        <img src="img/cafe4.jpeg" alt="Grano Especial Buitron">
+        <div class="info">
+          <h2>Grano Especial</h2>
+          <div class="detalle">Estado: <strong>ACTIVO</strong></div>
+          <div class="detalle">Nivel de Tostado: Medio</div>
+          <div class="detalle">Calificación: ⭐⭐⭐⭐⭐</div>
+          <div class="detalle">Variedad: Bourbon Rosado Premium</div>
+          <button class="btn-carrito" onclick="agregarCarrito('Grano Especial', 70000)">
+            🛒 Agregar — $70.000
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Producto: Café por Mayor (enlace a página dedicada) -->
+    <div class="producto-container">
+      <div class="producto-card">
+        <img src="img/cafe1.jpeg" alt="Café por Mayor Buitron">
+        <div class="info">
+          <h2>Café por Mayor</h2>
+          <div class="detalle">Estado: <strong>ACTIVO</strong></div>
+          <div class="detalle">Presentación: Pack × 5 unidades</div>
+          <div class="detalle">Calificación: ⭐⭐⭐⭐</div>
+          <div class="detalle">Ideal para negocios y distribuidores</div>
+          <button class="btn-carrito" onclick="location.href='CafePorMayor.html'">
+            Ver paquetes mayoristas
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Footer del sitio -->
+  <footer>
+    <p>© 2024 Buitrón Coffee — Pitalito, Huila, Colombia | Finca Las Brisas Montecristo</p>
+    <p><a href="inisesi_reg_volini.html">Iniciar sesión</a> · <a href="CafePorMayor.html">Distribuidores</a> · <a href="Nosotros.html">Nosotros</a></p>
+  </footer>
+
+  <!-- Botón flotante de WhatsApp -->
+  <a
+    class="whatsapp-btn"
+    href="https://wa.me/573001234567"
+    target="_blank"
+    title="Contáctanos por WhatsApp"
+  >
+    <img src="img/whatsapp.jpeg" alt="WhatsApp" width="52" height="52">
+  </a>
+
+  <!-- Modal de confirmación al agregar al carrito -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h3>¡Añadido al carrito!</h3>
+      <p id="modal-texto">Producto agregado correctamente.</p>
+      <button onclick="cerrarModal()">Seguir comprando</button>
+    </div>
+  </div>
+
+  <script>
+    // Contador de productos en el carrito
+    let contador = 0;
+
+    // Agrega producto y muestra modal de confirmación
+    function agregarCarrito(nombre, precio) {
+      contador++;
+      document.getElementById('contador').textContent = contador;
+      document.getElementById('modal-texto').textContent =
+        nombre + ' — $' + precio.toLocaleString('es-CO') + ' agregado con éxito.';
+      document.getElementById('modal').classList.add('show');
+    }
+
+    // Cierra el modal
+    function cerrarModal() {
+      document.getElementById('modal').classList.remove('show');
+    }
+
+    // Cerrar modal al hacer clic en el fondo
+    document.getElementById('modal').addEventListener('click', function(e) {
+      if (e.target === this) cerrarModal();
+    });
+  </script>
+
+</body>
+</html>

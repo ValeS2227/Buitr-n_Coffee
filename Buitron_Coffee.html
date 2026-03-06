@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buitron Coffee — Inicio</title>
+
+  <!--
+    Archivo: Buitron_Coffee.html
+    Ubicación: raíz del proyecto
+    Propósito: Página de inicio principal del sitio Buitron Coffee.
+    Contiene: banner promocional, header con íconos de acción,
+    navegación global, imagen hero, sección de productos con tabs
+    (Ideales para ti / Café por Mayor) y botón flotante de WhatsApp.
+    Proyecto: Buitrón Coffee — Pitalito, Huila, Colombia
+  -->
+
+  <link rel="stylesheet" href="estilos/Index.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- Banner superior: mensaje promocional del día -->
+  <div class="top-banner">
+    Encontrarás descuentos por el día de hoy
+  </div>
+
+  <!-- Header: logo centrado e íconos de usuario, búsqueda y carrito -->
+  <header>
+    <div class="header-spacer"></div>
+    <div class="header-logo">
+      <h1><i>Buitron Coffee</i></h1>
+    </div>
+    <div class="header-icons">
+      <a href="inisesi_reg_volini.html" title="Usuario">&#128100;</a>
+      <a href="IndexProductos.html" title="Buscar productos">&#128269;</a>
+      <a href="#" title="Carrito" id="icon-carrito">&#128722; <span id="contador-carrito" style="font-size:13px;font-family:'Lato',sans-serif;font-weight:700;">0</span></a>
+    </div>
+  </header>
+
+  <!-- Navegación principal: enlaces a todas las secciones del sitio -->
+  <nav>
+    <a href="Buitron_Coffee.html" class="active">Inicio</a>
+    <a href="Produccion.html">Producción</a>
+    <a href="Nosotros.html">Nosotros</a>
+    <a href="Exportaciones.html">Exportaciones</a>
+    <a href="CafePorMayor.html">Café por Mayor</a>
+  </nav>
+
+  <!-- Hero: imagen de portada con flecha de desplazamiento -->
+  <div class="hero">
+    <img src="img/banner.jpeg" alt="Banner Buitron Coffee — Café especial del Huila" />
+    <div class="hero-arrow" onclick="document.querySelector('.products-section').scrollIntoView({behavior:'smooth'})">&#8964;</div>
+  </div>
+
+  <!-- Sección de productos: tabs y grilla de tarjetas -->
+  <section class="products-section">
+
+    <!--
+      Tabs: permiten alternar entre vista de productos individuales
+      y la vista de paquetes Café por Mayor.
+    -->
+    <div class="tabs">
+      <span class="tab active" onclick="mostrarTab('ideales', this)">Ideales para ti</span>
+      <span class="tab" onclick="mostrarTab('mayor', this)">Café Por Mayor</span>
+    </div>
+
+    <!-- Tab: productos individuales -->
+    <div id="tab-ideales" class="products-grid">
+
+      <div class="product-card">
+        <img src="img/cafe1.jpeg" alt="Café Molido Buitron">
+        <div class="product-name">Café Molido</div>
+        <div class="product-price">Desde $ 60.000</div>
+        <button class="btn-ver" onclick="location.href='IndexProductos.html'">VER</button>
+      </div>
+
+      <div class="product-card">
+        <img src="img/cafe2.jpeg" alt="Café en Grano Buitron">
+        <div class="product-name">Grano</div>
+        <div class="product-price">Desde $ 65.000</div>
+        <button class="btn-ver" onclick="location.href='IndexProductos.html'">VER</button>
+      </div>
+
+      <div class="product-card">
+        <img src="img/cafe3.jpeg" alt="Grano Especial Buitron">
+        <div class="product-name">Grano Especial</div>
+        <div class="product-price">Desde $ 70.000</div>
+        <button class="btn-ver" onclick="location.href='IndexProductos.html'">VER</button>
+      </div>
+
+    </div>
+
+    <!-- Tab: café por mayor (oculto por defecto) -->
+    <div id="tab-mayor" class="products-grid" style="display:none;">
+
+      <div class="product-card">
+        <img src="img/cafe2.jpeg" alt="Pack x5 Café Molido">
+        <div class="product-name">Café Molido x5</div>
+        <div class="product-price">$ 280.000</div>
+        <button class="btn-ver" onclick="location.href='CafePorMayor.html'">VER</button>
+      </div>
+
+      <div class="product-card">
+        <img src="img/cafe3.jpeg" alt="Pack x5 Grano">
+        <div class="product-name">Grano x5</div>
+        <div class="product-price">$ 300.000</div>
+        <button class="btn-ver" onclick="location.href='CafePorMayor.html'">VER</button>
+      </div>
+
+      <div class="product-card">
+        <img src="img/cafe4.jpeg" alt="Pack x5 Grano Especial">
+        <div class="product-name">Grano Especial x5</div>
+        <div class="product-price">$ 350.000</div>
+        <button class="btn-ver" onclick="location.href='CafePorMayor.html'">VER</button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Footer con información básica del sitio -->
+  <footer>
+    <p>© 2024 Buitrón Coffee — Pitalito, Huila, Colombia | Finca Las Brisas Montecristo</p>
+    <p><a href="inisesi_reg_volini.html">Iniciar sesión</a> · <a href="CafePorMayor.html">Distribuidores</a> · <a href="Nosotros.html">Nosotros</a></p>
+  </footer>
+
+  <!-- Botón flotante de WhatsApp para contacto directo -->
+  <a
+    class="whatsapp-btn"
+    href="https://wa.me/573001234567"
+    target="_blank"
+    title="Contáctanos por WhatsApp"
+  >
+    <img src="img/whatsapp.jpeg" alt="WhatsApp" width="52" height="52">
+  </a>
+
+  <script>
+    // Alterna entre los dos tabs de la sección de productos
+    function mostrarTab(tab, el) {
+      document.getElementById('tab-ideales').style.display = 'none';
+      document.getElementById('tab-mayor').style.display   = 'none';
+      document.getElementById('tab-' + tab).style.display  = 'flex';
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

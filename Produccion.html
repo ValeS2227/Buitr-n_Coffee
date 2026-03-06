@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buitron Coffee — Producción</title>
+
+  <!--
+    Archivo: Produccion.html
+    Ubicación: raíz del proyecto
+    Propósito: Página que muestra el proceso de producción y empaque
+    del café Buitrón. Incluye un reproductor de video demostrativo
+    y un texto descriptivo del proceso.
+    Proyecto: Buitrón Coffee — Pitalito, Huila, Colombia
+  -->
+
+  <link rel="stylesheet" href="estilos/Index.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- Banner superior: mensaje promocional compartido en todo el sitio -->
+  <div class="top-banner">
+    Encontrarás descuentos por el día de hoy
+  </div>
+
+  <!-- Header: logo e íconos de navegación rápida -->
+  <header>
+    <div class="header-spacer"></div>
+    <div class="header-logo">
+      <h1><i>Buitron Coffee</i></h1>
+    </div>
+    <div class="header-icons">
+      <a href="inisesi_reg_volini.html" title="Usuario">&#128100;</a>
+      <a href="IndexProductos.html" title="Ver productos">&#128269;</a>
+      <a href="Buitron_Coffee.html" title="Carrito">&#128722;</a>
+    </div>
+  </header>
+
+  <!-- Navegación principal: enlace activo en "Producción" -->
+  <nav>
+    <a href="Buitron_Coffee.html">Inicio</a>
+    <a href="Produccion.html" class="active">Producción</a>
+    <a href="Nosotros.html">Nosotros</a>
+    <a href="Exportaciones.html">Exportaciones</a>
+    <a href="CafePorMayor.html">Café por Mayor</a>
+  </nav>
+
+  <!-- Hero: imagen de portada compartida -->
+  <div class="hero">
+    <img src="img/banner.jpeg" alt="Banner Buitron Coffee" />
+    <div class="hero-arrow">&#8964;</div>
+  </div>
+
+  <!-- Título de sección -->
+  <h2 class="produccion-title">Nuestra Producción</h2>
+
+  <!--
+    Contenido principal: video del proceso productivo a la izquierda
+    y texto descriptivo a la derecha.
+    Para usar un video propio, reemplaza el src del elemento <video>.
+    También puedes cambiar <video> por <iframe> si usas YouTube o Vimeo.
+  -->
+  <div class="produccion-content">
+
+    <!-- Video de producción y empaque del café -->
+    <div class="produccion-video">
+      <video controls poster="img/cafe2.jpeg">
+        <source src="video/produccion.mp4" type="video/mp4">
+        Tu navegador no soporta video HTML5. Descarga el video
+        <a href="video/produccion.mp4">aquí</a>.
+      </video>
+    </div>
+
+    <!-- Descripción del proceso productivo -->
+    <div class="produccion-text">
+      Podrás encontrar un breve video de cómo llevamos a cabo nuestra
+      producción y empaque. Cultivamos el café a 1.750 m.s.n.m. en
+      Pitalito, Huila, garantizando la más alta calidad en cada etapa,
+      desde la cosecha hasta el empaque final.
+    </div>
+
+  </div>
+
+  <!-- Footer informativo del sitio -->
+  <footer>
+    <p>© 2024 Buitrón Coffee — Pitalito, Huila, Colombia | Finca Las Brisas Montecristo</p>
+    <p><a href="inisesi_reg_volini.html">Iniciar sesión</a> · <a href="CafePorMayor.html">Distribuidores</a> · <a href="Nosotros.html">Nosotros</a></p>
+  </footer>
+
+  <!-- Botón flotante de WhatsApp -->
+  <a
+    class="whatsapp-btn"
+    href="https://wa.me/573001234567"
+    target="_blank"
+    title="Contáctanos por WhatsApp"
+  >
+    <img src="img/whatsapp.jpeg" alt="WhatsApp" width="52" height="52">
+  </a>
+
+</body>
+</html>

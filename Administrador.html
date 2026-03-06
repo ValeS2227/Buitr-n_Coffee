@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buitrón Coffee — Administrador</title>
+
+  <!--
+    Archivo: Administrador.html
+    Ubicación: raíz del proyecto
+    Propósito: Panel de acceso para el administrador del sitio.
+    Contiene dos pantallas: login de administrador y bienvenida.
+    Credenciales demo: usuario "admin" / contraseña "admin123"
+    Desde la bienvenida se puede acceder a gestión básica del sitio
+    o volver al sitio principal.
+    Proyecto: Buitrón Coffee — Pitalito, Huila, Colombia
+  -->
+
+  <link rel="stylesheet" href="estilos/Index.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="auth-body">
+
+  <div class="card">
+
+    <!-- PANTALLA 1: Login del administrador -->
+    <div id="pantallaLogin">
+      <div class="logo">Buitrón Coffee</div>
+      <h2>Acceso Administrador</h2>
+      <div class="mensaje">
+        Esta área es exclusiva para el administrador del sitio.
+        Credenciales demo: usuario "admin" / contraseña "admin123"
+      </div>
+
+      <label for="admin-user">Usuario</label>
+      <input type="text" id="admin-user" placeholder="Ingrese usuario admin">
+
+      <label for="admin-pass">Contraseña</label>
+      <input type="password" id="admin-pass" placeholder="Ingrese contraseña">
+
+      <button onclick="loginAdmin()">Iniciar sesión</button>
+      <button onclick="location.href='Buitron_Coffee.html'">Volver al sitio</button>
+    </div>
+
+    <!-- PANTALLA 2: Panel de bienvenida del administrador -->
+    <div id="pantallaBienvenida" class="hidden">
+      <div class="logo">Buitrón Coffee</div>
+      <div class="big">
+        Bienvenido a la<br>Administración
+      </div>
+      <div class="mensaje">
+        Panel de gestión del sitio Buitrón Coffee.
+        Desde aquí puedes administrar los contenidos del sitio.
+      </div>
+      <button onclick="location.href='IndexProductos.html'">Ver productos</button>
+      <button onclick="location.href='Buitron_Coffee.html'">Ir al sitio</button>
+      <button onclick="cerrarSesionAdmin()">Cerrar sesión</button>
+    </div>
+
+  </div>
+
+  <script>
+    // Valida credenciales de administrador
+    // Credenciales demo: usuario "admin" / contraseña "admin123"
+    function loginAdmin() {
+      var usuario  = document.getElementById('admin-user').value.trim();
+      var password = document.getElementById('admin-pass').value;
+
+      if (usuario === 'admin' && password === 'admin123') {
+        document.getElementById('pantallaLogin').classList.add('hidden');
+        document.getElementById('pantallaBienvenida').classList.remove('hidden');
+      } else {
+        alert('Credenciales incorrectas.\nDemo: usuario "admin" / contraseña "admin123"');
+      }
+    }
+
+    // Cierra sesión del administrador
+    function cerrarSesionAdmin() {
+      document.getElementById('admin-user').value  = '';
+      document.getElementById('admin-pass').value  = '';
+      document.getElementById('pantallaBienvenida').classList.add('hidden');
+      document.getElementById('pantallaLogin').classList.remove('hidden');
+    }
+
+    // Permitir Enter para iniciar sesión
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') loginAdmin();
+    });
+  </script>
+
+</body>
+</html>

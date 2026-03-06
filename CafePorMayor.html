@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buitron Coffee — Café por Mayor</title>
+
+  <!--
+    Archivo: CafePorMayor.html
+    Ubicación: raíz del proyecto
+    Propósito: Página dedicada a distribuidores y compradores mayoristas.
+    Muestra paquetes de 5 y 10 unidades de cada variedad de café, los
+    beneficios del servicio mayorista (envío, origen, precio distribuidor,
+    pedidos personalizados) y un modal de confirmación al agregar al carrito.
+    Proyecto: Buitrón Coffee — Pitalito, Huila, Colombia
+  -->
+
+  <link rel="stylesheet" href="estilos/Index.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- Banner superior: mensaje promocional -->
+  <div class="top-banner">
+    Encontrarás descuentos por el día de hoy
+  </div>
+
+  <!-- Header: logo y contador de carrito en tiempo real -->
+  <header>
+    <div class="header-spacer"></div>
+    <div class="header-logo">
+      <h1><i>Buitron Coffee</i></h1>
+    </div>
+    <div class="header-icons">
+      <a href="inisesi_reg_volini.html" title="Usuario">&#128100;</a>
+      <a href="IndexProductos.html" title="Ver todos los productos">&#128269;</a>
+      <a href="#" title="Carrito">&#128722; <span id="contador-header" style="font-size:13px;font-family:'Lato',sans-serif;font-weight:700;">0</span></a>
+    </div>
+  </header>
+
+  <!-- Navegación: enlace activo en "Café por Mayor" -->
+  <nav>
+    <a href="Buitron_Coffee.html">Inicio</a>
+    <a href="Produccion.html">Producción</a>
+    <a href="Nosotros.html">Nosotros</a>
+    <a href="Exportaciones.html">Exportaciones</a>
+    <a href="CafePorMayor.html" class="active">Café por Mayor</a>
+  </nav>
+
+  <!--
+    Hero de la sección: fondo crema con título y descripción del servicio.
+    Orientado a negocios, restaurantes, hoteles y distribuidores.
+  -->
+  <div class="mayor-hero">
+    <h2>Café por Mayor</h2>
+    <p>Distribuye el mejor café del Huila. Contamos con paquetes especiales para
+    negocios, restaurantes, hoteles y distribuidores.
+    ¡Precios directos desde el origen!</p>
+  </div>
+
+  <!-- Sección de paquetes mayoristas -->
+  <section class="mayor-section">
+
+    <h3>Paquetes disponibles</h3>
+
+    <!--
+      Grilla de tarjetas: cada tarjeta muestra imagen, nombre, presentación,
+      calificación, precio y botón "Agregar al carrito".
+    -->
+    <div class="mayor-grid">
+
+      <!-- Pack x5 Café Molido -->
+      <div class="mayor-card">
+        <span class="badge">POPULAR</span>
+        <img src="img/cafe2.jpeg" alt="Pack x5 Café Molido">
+        <div class="nombre">Café Molido</div>
+        <div class="presentacion">Pack × 5 unidades</div>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <div class="precio">$ 280.000</div>
+        <button class="btn-cotizar" onclick="agregarCarrito('Café Molido x5', 280000)">🛒 Agregar</button>
+      </div>
+
+      <!-- Pack x10 Café Molido -->
+      <div class="mayor-card">
+        <img src="img/cafe2.jpeg" alt="Pack x10 Café Molido">
+        <div class="nombre">Café Molido</div>
+        <div class="presentacion">Pack × 10 unidades</div>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <div class="precio">$ 520.000</div>
+        <button class="btn-cotizar" onclick="agregarCarrito('Café Molido x10', 520000)">🛒 Agregar</button>
+      </div>
+
+      <!-- Pack x5 Grano -->
+      <div class="mayor-card">
+        <img src="img/cafe3.jpeg" alt="Pack x5 Grano">
+        <div class="nombre">Grano</div>
+        <div class="presentacion">Pack × 5 unidades</div>
+        <div class="stars">⭐⭐⭐⭐</div>
+        <div class="precio">$ 300.000</div>
+        <button class="btn-cotizar" onclick="agregarCarrito('Grano x5', 300000)">🛒 Agregar</button>
+      </div>
+
+      <!-- Pack x5 Grano Especial -->
+      <div class="mayor-card">
+        <span class="badge">PREMIUM</span>
+        <img src="img/cafe4.jpeg" alt="Pack x5 Grano Especial">
+        <div class="nombre">Grano Especial</div>
+        <div class="presentacion">Pack × 5 unidades</div>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <div class="precio">$ 350.000</div>
+        <button class="btn-cotizar" onclick="agregarCarrito('Grano Especial x5', 350000)">🛒 Agregar</button>
+      </div>
+
+    </div>
+
+    <!--
+      Sección de beneficios: íconos con descripción de las ventajas
+      del servicio mayorista de Buitrón Coffee.
+    -->
+    <div class="beneficios">
+      <div class="beneficio-item">
+        <div class="icono">🚚</div>
+        <h4>Envío a todo Colombia</h4>
+        <p>Despachamos a cualquier ciudad del país con pedidos mayores a 5 unidades.</p>
+      </div>
+      <div class="beneficio-item">
+        <div class="icono">☕</div>
+        <h4>Origen Certificado</h4>
+        <p>Café 100% del Huila, cultivado en Pitalito con las mejores prácticas cafeteras.</p>
+      </div>
+      <div class="beneficio-item">
+        <div class="icono">💼</div>
+        <h4>Precio Distribuidor</h4>
+        <p>Precios directos del productor. Sin intermediarios, mejor rentabilidad para tu negocio.</p>
+      </div>
+      <div class="beneficio-item">
+        <div class="icono">📦</div>
+        <h4>Pedidos Personalizados</h4>
+        <p>¿Necesitas una cantidad especial? Contáctanos y hacemos un paquete a tu medida.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Footer del sitio -->
+  <footer>
+    <p>© 2024 Buitrón Coffee — Pitalito, Huila, Colombia | Finca Las Brisas Montecristo</p>
+    <p><a href="inisesi_reg_volini.html">Iniciar sesión</a> · <a href="CafePorMayor.html">Distribuidores</a> · <a href="Nosotros.html">Nosotros</a></p>
+  </footer>
+
+  <!-- Botón flotante de WhatsApp -->
+  <a
+    class="whatsapp-btn"
+    href="https://wa.me/573001234567"
+    target="_blank"
+    title="Contáctanos por WhatsApp"
+  >
+    <img src="img/whatsapp.jpeg" alt="WhatsApp" width="52" height="52">
+  </a>
+
+  <!-- Modal: confirmación al agregar producto al carrito -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h3>¡Añadido al carrito!</h3>
+      <p id="modal-texto">Producto agregado correctamente.</p>
+      <button onclick="cerrarModal()">Seguir comprando</button>
+    </div>
+  </div>
+
+  <script>
+    // Contador de ítems en el carrito (en memoria durante la sesión)
+    let contador = 0;
+
+    // Agrega producto al carrito y muestra modal de confirmación
+    function agregarCarrito(nombre, precio) {
+      contador++;
+      document.getElementById('contador-header').textContent = contador;
+      document.getElementById('modal-texto').textContent =
+        nombre + ' — $' + precio.toLocaleString('es-CO') + ' agregado con éxito.';
+      document.getElementById('modal').classList.add('show');
+    }
+
+    // Cierra el modal de confirmación
+    function cerrarModal() {
+      document.getElementById('modal').classList.remove('show');
+    }
+
+    // Cerrar modal al hacer clic fuera del contenido
+    document.getElementById('modal').addEventListener('click', function(e) {
+      if (e.target === this) cerrarModal();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1246 @@
+/* ============================================================
+   INDEX.CSS — Buitrón Coffee
+   Archivo: estilos/Index.css
+   Propósito: Hoja de estilos global compartida por TODAS las vistas
+   del proyecto. Contiene: reset, header, nav, hero, productos,
+   producción, nosotros, exportaciones, autenticación y responsive.
+   Proyecto: Buitrón Coffee — Pitalito, Huila, Colombia
+   ============================================================ */
+
+
+/* ============================================================
+   1. RESET Y BASE
+   Elimina márgenes y rellenos por defecto del navegador.
+   Define la fuente principal y color de fondo para todo el sitio.
+   ============================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: #fff;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+/* ============================================================
+   2. COMPONENTES COMPARTIDOS
+   Estos estilos aplican a TODAS las páginas del sitio:
+   banner superior, header, navegación, hero y botón de WhatsApp.
+   ============================================================ */
+
+/* Banner superior: franja roja con mensaje promocional */
+.top-banner {
+  background-color: #c0392b;
+  color: #fff;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+/* Header: contiene el espaciador, el logo y los íconos de acción */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.header-spacer {
+  flex: 1;
+}
+
+.header-logo {
+  flex: 1;
+  text-align: center;
+}
+
+.header-logo h1 {
+  font-family: 'Dancing Script', cursive;
+  font-size: 32px;
+  color: #222;
+}
+
+/* Íconos de usuario, búsqueda y carrito en el header */
+.header-icons {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.header-icons a {
+  font-size: 20px;
+  color: #444;
+  transition: color 0.2s;
+}
+
+.header-icons a:hover {
+  color: #c0392b;
+}
+
+/* Navegación principal: barra roja con enlaces a las secciones */
+nav {
+  background-color: #c0392b;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: #fff;
+  border: 1.5px solid #fff;
+  border-radius: 20px;
+  padding: 6px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+
+nav a:hover,
+nav a.active {
+  background-color: #fff;
+  color: #c0392b;
+}
+
+/* Hero: imagen de banner principal con flecha de desplazamiento */
+.hero {
+  position: relative;
+  width: 100%;
+  max-height: 240px;
+  overflow: hidden;
+}
+
+.hero img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+
+.hero-arrow {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Botón flotante de WhatsApp en esquina inferior derecha */
+.whatsapp-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  z-index: 999;
+  transition: transform 0.2s;
+  overflow: hidden;
+}
+
+.whatsapp-btn:hover {
+  transform: scale(1.1);
+}
+
+.whatsapp-btn img {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Pie de página */
+footer {
+  background-color: #1a1a1a;
+  color: #ccc;
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+  margin-top: 40px;
+}
+
+footer a {
+  color: #e87b6b;
+}
+
+
+/* ============================================================
+   3. PÁGINA INICIO — Buitron_Coffee.html
+   Muestra el hero principal, tabs de productos y grilla de tarjetas.
+   ============================================================ */
+
+/* Sección que contiene tabs y grilla de productos */
+.products-section {
+  padding: 30px 20px 50px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Pestañas: "Ideales para ti" y "Café por Mayor" */
+.tabs {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 28px;
+}
+
+.tab {
+  font-size: 16px;
+  font-weight: 700;
+  color: #999;
+  cursor: pointer;
+}
+
+.tab.active {
+  color: #c0392b;
+  border-bottom: 2px solid #c0392b;
+}
+
+/* Grilla de tarjetas de productos */
+.products-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Tarjeta individual de producto */
+.product-card {
+  background-color: #fdf5f0;
+  border-radius: 16px;
+  padding: 20px 24px;
+  width: 190px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+.product-card img {
+  width: 90px;
+  height: 140px;
+  object-fit: cover;
+  margin-bottom: 14px;
+  border-radius: 8px;
+}
+
+.product-name {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.product-price {
+  margin-bottom: 16px;
+  color: #c0392b;
+  font-weight: 600;
+}
+
+/* Botón "VER" en tarjeta de producto */
+.btn-ver {
+  background-color: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 28px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Lato', sans-serif;
+}
+
+.btn-ver:hover {
+  background-color: #a93226;
+}
+
+
+/* ============================================================
+   4. PÁGINA PRODUCCIÓN — Produccion.html
+   Muestra un video del proceso productivo junto a texto descriptivo.
+   ============================================================ */
+
+.produccion-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #222;
+  padding: 36px 20px 28px;
+}
+
+.produccion-content {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  max-width: 860px;
+  margin: 0 auto 60px;
+  padding: 0 30px;
+  flex-wrap: wrap;
+}
+
+/* Contenedor del video de producción */
+.produccion-video {
+  flex: 1 1 360px;
+  min-width: 280px;
+  max-width: 340px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  background: #000;
+  position: relative;
+}
+
+.produccion-video video,
+.produccion-video iframe {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+}
+
+/* Caja de texto descriptivo de la producción */
+.produccion-text {
+  flex: 1 1 240px;
+  background-color: #f5e6d3;
+  border-radius: 20px;
+  padding: 30px 28px;
+  font-size: 18px;
+  color: #444;
+  line-height: 1.7;
+  text-align: center;
+  min-width: 220px;
+}
+
+
+/* ============================================================
+   5. PÁGINA NOSOTROS — Nosotros.html
+   Presenta información de la empresa y logo de Pitalito.
+   ============================================================ */
+
+.nosotros-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  max-width: 860px;
+  margin: 0 auto 60px;
+  padding: 0 30px;
+  flex-wrap: wrap;
+}
+
+/* Tarjeta con datos clave de la empresa */
+.nosotros-card {
+  background-color: #f5e6d3;
+  border-radius: 20px;
+  padding: 30px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 16px;
+  color: #444;
+  min-width: 240px;
+}
+
+.nosotros-card p {
+  margin: 0;
+}
+
+/* Contenedor de la imagen/logo representativo */
+.nosotros-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nosotros-logo img {
+  max-width: 460px;
+  width: 100%;
+  object-fit: contain;
+}
+
+
+/* ============================================================
+   6. PÁGINA EXPORTACIONES — Exportaciones.html
+   Muestra el mapa de Colombia y texto sobre exportaciones.
+   ============================================================ */
+
+.exportaciones-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  max-width: 860px;
+  margin: 0 auto 60px;
+  padding: 0 30px;
+  flex-wrap: wrap;
+}
+
+/* Imagen del mapa de Colombia */
+.exportaciones-mapa img {
+  max-width: 260px;
+  width: 100%;
+  object-fit: contain;
+}
+
+
+/* ============================================================
+   7. PÁGINA CAFÉ POR MAYOR — CafePorMayor.html
+   Sección para distribuidores y compradores mayoristas.
+   ============================================================ */
+
+.mayor-hero {
+  background-color: #f5e6d3;
+  text-align: center;
+  padding: 40px 20px 30px;
+}
+
+.mayor-hero h2 {
+  font-family: 'Dancing Script', cursive;
+  font-size: 42px;
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.mayor-hero p {
+  font-size: 15px;
+  color: #666;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.mayor-section {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+}
+
+.mayor-section h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 24px;
+  border-left: 4px solid #c0392b;
+  padding-left: 12px;
+}
+
+.mayor-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+/* Tarjeta de producto mayorista */
+.mayor-card {
+  background-color: #fdf5f0;
+  border-radius: 18px;
+  width: 210px;
+  padding: 24px 18px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.mayor-card:hover {
+  transform: translateY(-4px);
+}
+
+.mayor-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+
+.mayor-card .badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background-color: #c0392b;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 3px 10px;
+}
+
+.mayor-card .nombre {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 4px;
+  color: #222;
+}
+
+.mayor-card .presentacion {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.mayor-card .stars {
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: #e6a817;
+}
+
+.mayor-card .precio {
+  font-size: 18px;
+  font-weight: 700;
+  color: #c0392b;
+  margin-bottom: 14px;
+}
+
+.mayor-card .btn-cotizar {
+  background-color: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 9px 22px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  font-family: 'Lato', sans-serif;
+  transition: background 0.2s;
+}
+
+.mayor-card .btn-cotizar:hover {
+  background-color: #a93226;
+}
+
+/* Beneficios del servicio mayorista */
+.beneficios {
+  background-color: #f5e6d3;
+  border-radius: 20px;
+  padding: 32px 36px;
+  max-width: 860px;
+  margin: 0 auto 60px;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.beneficio-item {
+  text-align: center;
+  min-width: 150px;
+  flex: 1;
+}
+
+.beneficio-item .icono {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.beneficio-item h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.beneficio-item p {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   8. PÁGINA ÍNDICE DE PRODUCTOS — IndexProductos.html
+   Lista vertical detallada de cada producto con opción de carrito.
+   ============================================================ */
+
+.productos-hero {
+  background-color: #f5e6d3;
+  text-align: center;
+  padding: 32px 20px 24px;
+}
+
+.productos-hero h2 {
+  font-family: 'Dancing Script', cursive;
+  font-size: 38px;
+  color: #222;
+  margin-bottom: 6px;
+}
+
+.productos-hero p {
+  font-size: 14px;
+  color: #666;
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.productos-vertical {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 36px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.producto-container {
+  background-color: #fdf5f0;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.producto-card {
+  display: flex;
+  gap: 0;
+}
+
+.producto-card img {
+  width: 220px;
+  height: 180px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.producto-card .info {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.producto-card .info h2 {
+  font-size: 20px;
+  color: #222;
+  margin-bottom: 4px;
+}
+
+.producto-card .detalle {
+  font-size: 14px;
+  color: #666;
+}
+
+.btn-carrito {
+  margin-top: 12px;
+  background-color: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Lato', sans-serif;
+  align-self: flex-start;
+  transition: background 0.2s;
+}
+
+.btn-carrito:hover {
+  background-color: #a93226;
+}
+
+
+/* ============================================================
+   9. MODAL COMPARTIDO — Carrito / Confirmaciones
+   Ventana emergente reutilizable en varias páginas.
+   ============================================================ */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 20px;
+  padding: 36px 40px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  max-width: 340px;
+  width: 90%;
+}
+
+.modal-content h3 {
+  font-family: 'Dancing Script', cursive;
+  font-size: 26px;
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.modal-content p {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.modal-content button {
+  background-color: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 30px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Lato', sans-serif;
+  transition: background 0.2s;
+}
+
+.modal-content button:hover {
+  background-color: #a93226;
+}
+
+
+/* ============================================================
+   10. PÁGINAS DE AUTENTICACIÓN
+   inisesi_reg_volini.html | Registro.html
+   Administrador.html | Recuperar_Contrasena.html
+   Fondo con imagen, tarjeta central y formularios de acceso.
+   ============================================================ */
+
+/* Fondo con imagen de banner para páginas de auth */
+.auth-body {
+  background-image: url(../img/banner.jpeg);
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+}
+
+/* Tarjeta central de formulario */
+.card {
+  background: #e9e9e9;
+  width: 420px;
+  padding: 50px;
+  border-radius: 40px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Logo dentro de la tarjeta de auth */
+.card .logo {
+  font-family: 'Dancing Script', cursive;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.card h1 {
+  font-family: 'Dancing Script', cursive;
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+.card h2 {
+  font-weight: normal;
+  font-size: 18px;
+  margin-bottom: 24px;
+  color: #444;
+}
+
+.card label {
+  display: block;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+/* Campos de entrada en formularios de auth */
+.card input[type="text"],
+.card input[type="password"],
+.card input[type="email"],
+.card input[type="number"],
+.card input[type="tel"] {
+  width: 100%;
+  padding: 15px;
+  margin: 0 0 20px 0;
+  border: none;
+  border-radius: 25px;
+  background: #d79b9b;
+  font-size: 16px;
+  outline: none;
+  font-family: 'Lato', sans-serif;
+}
+
+/* Botones en tarjetas de auth */
+.card button {
+  display: block;
+  margin: 10px auto;
+  padding: 14px;
+  width: 80%;
+  border: none;
+  border-radius: 25px;
+  background: #a93232;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Lato', sans-serif;
+  transition: background 0.2s;
+}
+
+.card button:hover {
+  background: #8e2a2a;
+}
+
+/* Links dentro de la tarjeta */
+.links-login {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.links-login a {
+  color: #a93232;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* Control de visibilidad de secciones (inisesi_reg_volini) */
+.seccion {
+  display: none;
+}
+
+#inicio {
+  display: block;
+}
+
+/* Clase utilitaria para ocultar elementos */
+.hidden {
+  display: none;
+}
+
+/* Texto grande de bienvenida */
+.card .big,
+.bienvenida h2 {
+  font-family: Georgia, serif;
+  font-size: 30px;
+  line-height: 1.4;
+  margin: 30px 0;
+  font-weight: normal;
+  color: #333;
+}
+
+/* Mensajes informativos (Recuperar Contraseña) */
+.card .mensaje {
+  background: #f5e6d3;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* Mensajes de confirmación exitosa */
+.card .confirmacion {
+  background: #f5e6d3;
+  border-radius: 14px;
+  padding: 20px 18px;
+  font-size: 16px;
+  color: #444;
+  margin: 20px 0;
+  line-height: 1.5;
+}
+
+/* Contenedor de 4 inputs para código de verificación */
+.codigo-container {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+/* Input individual de código (1 dígito) */
+.codigo-container .codigo {
+  width: 55px;
+  padding: 14px 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  border-radius: 14px;
+  background: #d79b9b;
+  margin: 0;
+}
+
+
+/* ============================================================
+   11. RESPONSIVE — TABLET (≤768px)
+   Ajustes para pantallas medianas como tablets.
+   ============================================================ */
+@media (max-width: 768px) {
+
+  header {
+    padding: 10px 16px;
+  }
+
+  .header-logo h1 {
+    font-size: 24px;
+  }
+
+  .header-icons {
+    gap: 10px;
+  }
+
+  .header-icons a {
+    font-size: 18px;
+  }
+
+  nav {
+    gap: 6px;
+    padding: 8px 12px;
+  }
+
+  nav a {
+    padding: 5px 14px;
+    font-size: 13px;
+  }
+
+  .hero img {
+    height: 180px;
+  }
+
+  .hero {
+    max-height: 180px;
+  }
+
+  .products-section {
+    padding: 24px 16px 40px;
+  }
+
+  .products-grid {
+    gap: 14px;
+  }
+
+  .product-card {
+    width: 160px;
+    padding: 16px;
+  }
+
+  .product-card img {
+    width: 75px;
+    height: 115px;
+  }
+
+  .produccion-content {
+    gap: 24px;
+    padding: 0 20px;
+  }
+
+  .produccion-video {
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .produccion-text {
+    font-size: 17px;
+    flex: 1 1 100%;
+  }
+
+  .nosotros-content {
+    gap: 30px;
+    padding: 0 20px;
+  }
+
+  .nosotros-logo img {
+    max-width: 280px;
+  }
+
+  .exportaciones-content {
+    gap: 30px;
+    padding: 0 20px;
+  }
+
+  .exportaciones-mapa img {
+    max-width: 200px;
+  }
+
+  .card {
+    width: 90%;
+    padding: 36px 28px;
+  }
+
+  .producto-card img {
+    width: 160px;
+    height: 140px;
+  }
+}
+
+
+/* ============================================================
+   12. RESPONSIVE — MOBILE (≤480px)
+   Ajustes para teléfonos móviles pequeños.
+   ============================================================ */
+@media (max-width: 480px) {
+
+  .top-banner {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  header {
+    padding: 8px 12px;
+  }
+
+  .header-logo h1 {
+    font-size: 20px;
+  }
+
+  .header-icons a {
+    font-size: 16px;
+  }
+
+  /* Navegación con scroll horizontal en móvil */
+  nav {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding: 8px 10px;
+    gap: 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  nav a {
+    flex-shrink: 0;
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+
+  .hero img {
+    height: 140px;
+  }
+
+  .hero {
+    max-height: 140px;
+  }
+
+  .tabs {
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .tab {
+    font-size: 14px;
+  }
+
+  /* 2 columnas en móvil para productos */
+  .products-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .product-card {
+    width: 100%;
+    padding: 14px 12px;
+  }
+
+  .product-card img {
+    width: 65px;
+    height: 100px;
+  }
+
+  .product-name {
+    font-size: 13px;
+  }
+
+  .product-price {
+    font-size: 12px;
+  }
+
+  .btn-ver {
+    padding: 6px 18px;
+    font-size: 12px;
+  }
+
+  .produccion-title {
+    font-size: 20px;
+    padding: 24px 16px 20px;
+  }
+
+  .produccion-content {
+    flex-direction: column;
+    padding: 0 14px;
+    gap: 20px;
+  }
+
+  .produccion-video video,
+  .produccion-video iframe {
+    height: 220px;
+  }
+
+  .produccion-text {
+    font-size: 15px;
+    padding: 22px 20px;
+  }
+
+  .nosotros-content {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 14px;
+    gap: 20px;
+  }
+
+  .nosotros-card {
+    width: 100%;
+    padding: 22px;
+    font-size: 15px;
+  }
+
+  .nosotros-logo img {
+    max-width: 220px;
+  }
+
+  .exportaciones-content {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 14px;
+    gap: 20px;
+  }
+
+  .exportaciones-mapa img {
+    max-width: 160px;
+  }
+
+  .mayor-hero h2 {
+    font-size: 30px;
+  }
+
+  .mayor-card {
+    width: 155px;
+    padding: 18px 14px;
+  }
+
+  .mayor-card img {
+    height: 130px;
+  }
+
+  .beneficios {
+    padding: 24px 20px;
+    gap: 20px;
+  }
+
+  /* Producto vertical apilado en móvil */
+  .producto-card {
+    flex-direction: column;
+  }
+
+  .producto-card img {
+    width: 100%;
+    height: 180px;
+  }
+
+  .producto-card .info {
+    padding: 18px 20px;
+  }
+
+  .whatsapp-btn {
+    bottom: 14px;
+    right: 14px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .auth-body {
+    padding: 24px 14px;
+    align-items: flex-start;
+  }
+
+  .card {
+    width: 100%;
+    padding: 30px 22px;
+    border-radius: 28px;
+  }
+
+  .card h1 {
+    font-size: 26px;
+  }
+
+  .card h2 {
+    font-size: 16px;
+  }
+
+  .card input[type="text"],
+  .card input[type="password"],
+  .card input[type="email"],
+  .card input[type="number"],
+  .card input[type="tel"] {
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .card button {
+    padding: 12px;
+    font-size: 15px;
+    width: 90%;
+  }
+
+  .card .big,
+  .bienvenida h2 {
+    font-size: 24px;
+    margin: 24px 0;
+  }
+
+  .codigo-container {
+    gap: 8px;
+  }
+
+  .codigo-container .codigo {
+    width: 42px;
+    font-size: 18px;
+    padding: 10px 0;
+  }
+}

@@ -3,6 +3,7 @@ import logob from "../assets/logob.png"
 import cafe1 from "../assets/cafe1.jpeg"
 import cafe2 from "../assets/cafe2.jpeg"
 import cafe3 from "../assets/cafe3.jpeg"
+import { Link } from "react-router-dom"
 
 function IndexRegistrado() {
   return (
@@ -31,9 +32,10 @@ function IndexRegistrado() {
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
 
+          <Link to="/usuario">
+            <i className="fa-solid fa-user"></i>
+          </Link>
           <i className="fa-solid fa-cart-shopping"></i>
-          <i className="fa-solid fa-user"></i>
-
         </div>
 
       </header>

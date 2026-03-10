@@ -1,0 +1,39 @@
+.producto-container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:80vh;
+}
+
+.producto-card{
+    display:flex;
+    gap:40px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.producto-img{
+    width:350px;
+    border-radius:15px;
+}
+
+.producto-info h1{
+    margin-bottom:10px;
+}
+
+.producto-info h2{
+    color:#c62f1e;
+}
+
+.btn-carrito{
+    margin-top:20px;
+    background:#c62f1e;
+    color:white;
+    border:none;
+    padding:12px 30px;
+    border-radius:25px;
+    cursor:pointer;
+    font-weight:bold;
+}

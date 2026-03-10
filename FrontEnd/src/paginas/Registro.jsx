@@ -1,6 +1,6 @@
-import {useState} from "react"
+import { useState } from "react"
 import axios from "axios"
-import "../estilos/login.css";
+import "../estilos/login.css"
 
 function Registro(){
 
@@ -38,22 +38,38 @@ function Registro(){
 
   return(
 
-    <div className="container">
+    <div className="auth-body">
 
-      <h2>Registro</h2>
+      <div className="card">
 
-      <form onSubmit={registrar}>
+        <h1>Buitrón Coffee</h1>
+        <h2>Crear cuenta</h2>
 
-        <input name="Nombre_usuario" placeholder="Nombre" onChange={handleChange} required/> 
-        <input name="Apellido" placeholder="Apellido" onChange={handleChange}required/>
-        <input name="Correo" placeholder="Correo" onChange={handleChange}required/>
-        <input name="Documento" placeholder="Documento" onChange={handleChange}required/>
-        <input name="Telefono" placeholder="Telefono" onChange={handleChange}required/>
-        <input type="password" name="Clave" placeholder="Contraseña" onChange={handleChange}required/>
+        <form onSubmit={registrar}>
 
-        <button>Registrarse</button>
+          <label>Nombre</label>
+          <input name="Nombre_usuario" placeholder="Nombre" onChange={handleChange} required/>
 
-      </form>
+          <label>Apellido</label>
+          <input name="Apellido" placeholder="Apellido" onChange={handleChange} required/>
+
+          <label>Correo</label>
+          <input name="Correo" placeholder="Correo" onChange={handleChange} required/>
+
+          <label>Documento</label>
+          <input name="Documento" placeholder="Documento" onChange={handleChange} required/>
+
+          <label>Telefono</label>
+          <input name="Telefono" placeholder="Telefono" onChange={handleChange} required/>
+
+          <label>Contraseña</label>
+          <input type="password" name="Clave" placeholder="Contraseña" onChange={handleChange} required/>
+
+          <button>Registrarse</button>
+
+        </form>
+
+      </div>
 
     </div>
 

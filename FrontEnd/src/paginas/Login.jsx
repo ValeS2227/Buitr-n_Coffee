@@ -1,7 +1,8 @@
-import {useState} from "react"
+import { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
-import "../estilos/login.css";
+import "../estilos/login.css"
+
 function Login(){
 
   const navigate = useNavigate()
@@ -34,27 +35,44 @@ function Login(){
 
   return(
 
-    <div className="container">
+    <div className="auth-body">
 
-      <h2>Login</h2>
+      <div className="card">
 
-      <form onSubmit={login}>
+        <h1>Buitrón Coffee</h1>
+        <h2>Iniciar sesión</h2>
 
-        <input
-        type="email"
-        placeholder="Correo"
-        onChange={(e)=>setCorreo(e.target.value)}
-        />
+        <form onSubmit={login}>
 
-        <input
-        type="password"
-        placeholder="Contraseña"
-        onChange={(e)=>setClave(e.target.value)}
-        />
+          <label>Correo</label>
+          <input
+            type="email"
+            placeholder="Correo"
+            onChange={(e)=>setCorreo(e.target.value)}
+          />
 
-        <button>Iniciar sesión</button>
-      </form>
-    <button onClick={() => navigate("/registro")}> Registrarse </button>
+          <label>Contraseña</label>
+          <input
+            type="password"
+            placeholder="Contraseña"
+            onChange={(e)=>setClave(e.target.value)}
+          />
+
+          <button>Iniciar sesión</button>
+
+        </form>
+
+        <div className="links-login">
+          <button
+            className="btn-secundario"
+            onClick={() => navigate("/registro")}
+          >
+            Registrarse
+          </button>
+        </div>
+
+      </div>
+
     </div>
 
   )

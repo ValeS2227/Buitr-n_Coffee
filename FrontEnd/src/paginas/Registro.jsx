@@ -43,7 +43,7 @@ function Registro(){
       <div className="card">
 
         <h1>Buitrón Coffee</h1>
-        <h2>Crear cuenta</h2>
+        <h2>Crea una Cuenta</h2>
 
         <form onSubmit={registrar}>
 

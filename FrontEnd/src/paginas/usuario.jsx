@@ -1,18 +1,94 @@
 import "../estilos/usuario.css"
 import { useNavigate } from "react-router-dom"
+import { useEffect,useState } from "react"
+import axios from "axios"
 import perfil from "../assets/perfil.jpg"
 
 function Usuario() {
 
   const navigate = useNavigate()
 
+  const [usuario,setUsuario] = useState({
+    Nombre_usuario:"",
+    Correo:"",
+    Documento:"",
+    Telefono:""
+  })
+
+  useEffect(()=>{
+
+    const cargarPerfil = async ()=>{
+
+      try{
+
+        const token = localStorage.getItem("token")
+
+        const res = await axios.get(
+          "http://localhost:3001/api/auth/perfil",
+          {
+            headers:{
+              Authorization:`Bearer ${token}`
+            }
+          }
+        )
+
+        setUsuario(res.data)
+
+      }catch(error){
+        console.log(error)
+      }
+
+    }
+
+    cargarPerfil()
+
+  },[])
+
+
+  const guardarCambios = async ()=>{
+
+    try{
+
+      const token = localStorage.getItem("token")
+
+      await axios.put(
+        "http://localhost:3001/api/auth/perfil",
+        usuario,
+        {
+          headers:{
+            Authorization:`Bearer ${token}`
+          }
+        }
+      )
+
+      alert("Datos actualizados")
+
+    }catch(error){
+      alert("Error al actualizar")
+    }
+
+  }
+
+
+  const cerrarSesion = ()=>{
+
+    localStorage.removeItem("token")
+    localStorage.removeItem("usuario")
+
+    navigate("/")
+
+  }
+
   return (
+
     <div className="usuario-page">
 
       <header className="nav">
+
         <button onClick={() => navigate("/catalogo")}>
           Regresar al Inicio
         </button>
+
       </header>
 
       <div className="perfil-container">
@@ -31,7 +107,7 @@ function Usuario() {
 
             <input type="file" accept="image/*"/>
 
-            <button onClick={() => navigate("/")}>
+            <button onClick={cerrarSesion}>
               Cerrar Sesión
             </button>
 
@@ -40,21 +116,37 @@ function Usuario() {
           <div className="info-section">
 
             <label>Nombre de Usuario</label>
-            <input type="text" defaultValue="elkin"/>
+            <input
+              type="text"
+              value={usuario.Nombre_usuario}
+              onChange={(e)=>setUsuario({...usuario,Nombre_usuario:e.target.value})}
+            />
 
             <label>Número de Documento</label>
-            <input type="text" defaultValue="1023864852"/>
+            <input
+              type="text"
+              value={usuario.Documento}
+              onChange={(e)=>setUsuario({...usuario,Documento:e.target.value})}
+            />
 
             <label>Número de Teléfono</label>
-            <input type="text" defaultValue="3118597822"/>
+            <input
+              type="text"
+              value={usuario.Telefono}
+              onChange={(e)=>setUsuario({...usuario,Telefono:e.target.value})}
+            />
 
             <label>Correo Electrónico</label>
-            <input type="email" defaultValue="elkinl1023@msn.com"/>
+            <input
+              type="email"
+              value={usuario.Correo}
+              onChange={(e)=>setUsuario({...usuario,Correo:e.target.value})}
+            />
 
-            <label>Contraseña</label>
-            <input type="password" defaultValue="*********"/>
-
-            <button className="btn-guardar">
+            <button
+              className="btn-guardar"
+              onClick={guardarCambios}
+            >
               Guardar Cambios
             </button>
 
@@ -65,6 +157,7 @@ function Usuario() {
       </div>
 
     </div>
+
   )
 }
 

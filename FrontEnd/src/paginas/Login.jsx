@@ -24,6 +24,7 @@ function Login(){
       alert("Login correcto")
 
       localStorage.setItem("token",res.data.token)
+      localStorage.setItem("usuario",JSON.stringify(res.data.usuario))
 
       navigate("/catalogo")
 
@@ -58,17 +59,19 @@ function Login(){
             onChange={(e)=>setClave(e.target.value)}
           />
 
-          <button>Iniciar sesión</button>
+          <button>Inicio de Sesión</button>
 
         </form>
 
         <div className="links-login">
+
           <button
             className="btn-secundario"
             onClick={() => navigate("/registro")}
           >
             Registrarse
           </button>
+
         </div>
 
       </div>

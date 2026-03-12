@@ -68,8 +68,91 @@ router.post("/login",(req,res)=>{
 
     res.json({
       message:"Login exitoso",
-      token
+      token,
+      usuario:{
+        ID_Usuario:user.ID_Usuario,
+        Nombre_usuario:user.Nombre_usuario,
+        Apellido:user.Apellido,
+        Correo:user.Correo,
+        Documento:user.Documento,
+        Telefono:user.Telefono
+      }
     })
+
+  })
+
+})
+
+
+// OBTENER PERFIL
+router.get("/perfil",(req,res)=>{
+
+  const token = req.headers.authorization?.split(" ")[1]
+
+  if(!token){
+    return res.status(401).json({message:"Token requerido"})
+  }
+
+  jwt.verify(token,"secreto123",(err,decoded)=>{
+
+    if(err){
+      return res.status(401).json({message:"Token inválido"})
+    }
+
+    const sql = "SELECT * FROM usuario WHERE ID_Usuario=?"
+
+    db.query(sql,[decoded.id],(err,result)=>{
+
+      if(err) return res.status(500).json(err)
+
+      res.json(result[0])
+
+    })
+
+  })
+
+})
+
+
+// ACTUALIZAR PERFIL
+router.put("/perfil",(req,res)=>{
+
+  const token = req.headers.authorization?.split(" ")[1]
+
+  if(!token){
+    return res.status(401).json({message:"Token requerido"})
+  }
+
+  jwt.verify(token,"secreto123",(err,decoded)=>{
+
+    if(err){
+      return res.status(401).json({message:"Token inválido"})
+    }
+
+    const {Nombre_usuario,Correo,Documento,Telefono} = req.body
+
+    const sql = `
+      UPDATE usuario
+      SET Nombre_usuario=?,Correo=?,Documento=?,Telefono=?
+      WHERE ID_Usuario=?
+    `
+
+    db.query(sql,
+      [
+        Nombre_usuario,
+        Correo,
+        Documento,
+        Telefono,
+        decoded.id
+      ],
+      (err,result)=>{
+
+        if(err) return res.status(500).json(err)
+
+        res.json({message:"Usuario actualizado"})
+
+      }
+    )
 
   })
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import './App.css';
 import { useState } from "react";
 import Registro from './Registro';
@@ -79,8 +80,34 @@ function App() {
         </div>
       )}
 
+=======
+import logo from './logo.svg';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+>>>>>>> f9845ac725ffef7be7343cded33d02932dc5d2d0
     </div>
   );
 }
 
+<<<<<<< HEAD
 export default App;
+=======
+export default App;
+>>>>>>> f9845ac725ffef7be7343cded33d02932dc5d2d0

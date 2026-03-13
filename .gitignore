@@ -1,3 +1,47 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+*.tsbuildinfo
+
+.eslintcache
+
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+
+# Vitest
+__screenshots__/
+
+# Vite
+*.timestamp-*-*.mjs
+=======
+>>>>>>> f9845ac725ffef7be7343cded33d02932dc5d2d0
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -21,3 +65,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
+=======
+>>>>>>> d6d54ee (Initialize project using Create React App)
+>>>>>>> f9845ac725ffef7be7343cded33d02932dc5d2d0

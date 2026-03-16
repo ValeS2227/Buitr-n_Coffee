@@ -1,4 +1,4 @@
-import './Recuperar_contra.css';
+import './recuperar_contra.css';
 import { useState } from "react";
 
 function Recuperar({ volverLogin }) {

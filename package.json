@@ -1,28 +1,4 @@
 {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-  "name": "proyecto3",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "vue": "^3.5.29"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.4",
-    "vite": "^7.3.1",
-    "vite-plugin-vue-devtools": "^8.0.6"
-  },
-  "engines": {
-    "node": "^20.19.0 || >=22.12.0"
-=======
->>>>>>> f9845ac725ffef7be7343cded33d02932dc5d2d0
   "name": "proyecto4",
   "version": "0.1.0",
   "private": true,
@@ -31,13 +7,11 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^13.5.0",
-<<<<<<< HEAD
     "axios": "^1.13.6",
     "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "mysql2": "^3.19.1",
-=======
->>>>>>> f9845ac725ffef7be7343cded33d02932dc5d2d0
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-scripts": "5.0.1",
@@ -66,15 +40,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-<<<<<<< HEAD
-  },
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "index.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
-=======
->>>>>>> d6d54ee (Initialize project using Create React App)
   }
->>>>>>> f9845ac725ffef7be7343cded33d02932dc5d2d0
 }

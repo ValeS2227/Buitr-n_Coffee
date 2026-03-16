@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-* 
+*
 {
     margin: 0;
     padding: 0;
@@ -90,7 +89,6 @@ button:hover {
     background: #b52b1e;
     color: white;
 }
-=======
 .App {
   text-align: center;
 }
@@ -129,4 +127,3 @@ button:hover {
     transform: rotate(360deg);
   }
 }
->>>>>>> f9845ac725ffef7be7343cded33d02932dc5d2d0

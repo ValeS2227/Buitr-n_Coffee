@@ -2,7 +2,6 @@ import "../estilos/usuario.css"
 import { useNavigate } from "react-router-dom"
 import { useEffect,useState } from "react"
 import axios from "axios"
-import perfil from "../assets/perfil.jpg"
 
 function Usuario() {
 
@@ -99,11 +98,7 @@ function Usuario() {
 
           <div className="foto-section">
 
-            <img
-              src={perfil}
-              className="foto-perfil"
-              alt="perfil"
-            />
+           
 
             <input type="file" accept="image/*"/>
 

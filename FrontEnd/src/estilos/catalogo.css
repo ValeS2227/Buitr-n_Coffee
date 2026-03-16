@@ -21,7 +21,7 @@
   background:#c0392b;
   padding:15px 40px;
   display:flex;
-  justify-content:right;
+  justify-content:flex-end;
   align-items:center;
   color:white;
   position:relative;
@@ -31,7 +31,6 @@
   font-size:28px;
   font-weight:bold;
   margin-right:18%;
-  
 }
 
 .catalogo .logo-img{
@@ -86,17 +85,20 @@
   background:#c0392b;
   display:flex;
   justify-content:center;
-  gap:20px;
-  padding-bottom:15px;
+  align-items:center;
+  gap:10px;
+  padding:10px;
 }
 
 .catalogo .nav button{
   background:rgb(168, 27, 27);
   border:none;
-  padding:8px 20px;
+  padding:6px 16px;
   border-radius:20px;
   cursor:pointer;
   font-weight:bold;
+  font-size:14px;
+  color:white;
 }
 
 .catalogo .nav button:hover{
@@ -144,22 +146,59 @@
   flex-wrap:wrap;
 }
 
+/* CARD */
+
 .catalogo .card{
   background:#f7ebe9;
   padding:20px;
   border-radius:15px;
-  width:200px;
+  width:220px;
   box-shadow:0 10px 20px rgba(0,0,0,0.1);
-  transition:opacity 0.3s ease;
+  transition:transform 0.2s ease;
+  text-align:center;
 }
+
+.catalogo .card:hover{
+  transform:translateY(-5px);
+}
+
+/* IMAGEN PRODUCTO */
 
 .catalogo .card img{
-  width:50%;
+  width:120px;
+  height:220px;
+  object-fit:cover;
   border-radius:10px;
+  margin-bottom:10px;
 }
 
+/* TITULO */
+
+.catalogo .card h3{
+  font-size:18px;
+  margin:10px 0;
+}
+
+/* DESCRIPCION */
+
+.catalogo .card p{
+  font-size:14px;
+  color:#555;
+}
+
+/* PRECIO */
+
+.catalogo .card strong{
+  display:block;
+  margin-top:5px;
+  font-size:16px;
+  color:#c0392b;
+}
+
+/* BOTON */
+
 .catalogo .card button{
-  margin-top:10px;
+  margin-top:12px;
   background:#c0392b;
   color:white;
   border:none;
@@ -221,12 +260,12 @@
 .catalogo .boton:hover{
   background:#8c2721;
 }
+
 /* ============================= */
 /* RESPONSIVE */
 /* ============================= */
 
-/* Tablets */
-@media (max-width: 900px){
+@media (max-width:900px){
 
   .catalogo .header{
     flex-direction:column;
@@ -244,18 +283,13 @@
     margin-right:0;
   }
 
-  .catalogo .nav{
-    flex-wrap:wrap;
-  }
-
   .catalogo .cards{
     gap:20px;
   }
 
 }
 
-/* Celulares */
-@media (max-width: 600px){
+@media (max-width:600px){
 
   .catalogo .header{
     padding:20px;

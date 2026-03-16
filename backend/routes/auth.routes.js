@@ -4,7 +4,7 @@ const db = require("../config/db")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
-// REGISTRO
+// POST - REGISTRO
 router.post("/register", async (req,res)=>{
 
   const {Nombre_usuario,Apellido,Correo,Documento,Telefono,Clave} = req.body
@@ -37,7 +37,7 @@ router.post("/register", async (req,res)=>{
 })
 
 
-// LOGIN
+//  GET - LOGIN
 router.post("/login",(req,res)=>{
 
   const {Correo,Clave} = req.body
@@ -84,7 +84,7 @@ router.post("/login",(req,res)=>{
 })
 
 
-// OBTENER PERFIL
+// GET
 router.get("/perfil",(req,res)=>{
 
   const token = req.headers.authorization?.split(" ")[1]
@@ -114,7 +114,7 @@ router.get("/perfil",(req,res)=>{
 })
 
 
-// ACTUALIZAR PERFIL
+// PUT
 router.put("/perfil",(req,res)=>{
 
   const token = req.headers.authorization?.split(" ")[1]

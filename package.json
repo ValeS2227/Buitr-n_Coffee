@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "crud-proyecto",
+=======
+  "name": "admincrud",
+>>>>>>> e89bac0eccd5d91e7d4183e6fb7b1a1eb9c0e58c
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,7 +13,10 @@
     "@testing-library/user-event": "^13.5.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+<<<<<<< HEAD
     "react-router-dom": "^7.13.1",
+=======
+>>>>>>> e89bac0eccd5d91e7d4183e6fb7b1a1eb9c0e58c
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },

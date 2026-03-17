@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crear Producto</title>
+  <link rel="stylesheet" href="css/estilos_crear_producto.css">
+  <link rel="stylesheet" href="css/estilos_navbar.css">
+
+  <style>
+    html, body {
+      display: block;
+      align-items: unset;
+      justify-content: unset;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .pagina-crear {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+
+<div class="pagina-crear">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <button class="btn-back" onclick="window.location.href='Crub_Admin_Inicio.html'">Volver al Inicio</button>
+    <div class="navbar-titulo">CREAR PRODUCTO</div>
+    <div class="navbar-usuario">
+      <span>AdminLauris</span>
+      <div class="navbar-avatar">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="14" r="8" stroke="#2E2E2E" stroke-width="2.5"/>
+          <path d="M4 36c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="#2E2E2E" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="vista-crear">
+    <div class="formulario-producto">
+
+      <!-- Columna izquierda: imagen + unidades -->
+      <div class="columna-izquierda">
+        <div class="caja-imagen">
+          <span class="texto-imagen">Insertar Imagen Png...</span>
+          <input type="file" accept="image/png" style="display:none" id="inputImagen"/>
+        </div>
+        <button class="campo-unidades" onclick="document.getElementById('inputImagen').click()">Insertar<br>Imagen</button>
+      </div>
+
+      <!-- Columna derecha: campos -->
+      <div class="columna-derecha">
+        <input class="campo-texto" type="text" placeholder="Ingrese el nombre del Café"/>
+        <input class="campo-texto" type="text" placeholder="Nivel de Tostado"/>
+        <input class="campo-texto" type="text" placeholder="Estado"/>
+        <input class="campo-texto" type="decimal" placeholder="Precio"/>
+        <input class="campo-texto" type="text" placeholder="Ingrese descripción"/>
+        <input class="campo-texto" type="number" placeholder="Unidades disponibles"/>
+
+        <button class="btn-crear-producto">Crear Producto</button>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+/* =============================================
+   estilos_navbar.css — Navbar compartido
+   ============================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    background-color: #4B2E2B;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    gap: 16px;
+}
+
+.navbar .btn-back {
+    background-color: #F3E9DC;
+    color: #2E2E2E;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-family: Arial, sans-serif;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.navbar .btn-back:hover {
+    background-color: #D9C2A7;
+}
+
+.navbar-titulo {
+    background-color: #F3E9DC;
+    border: 3px solid #C0582B;
+    color: #2E2E2E;
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 10px 30px;
+    border-radius: 20px;
+    text-align: center;
+    flex: 1;
+    max-width: 480px;
+}
+
+.navbar-usuario {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #F3E9DC;
+    font-size: 0.95rem;
+    font-weight: bold;
+}
+
+.navbar-avatar {
+    width: 44px;
+    height: 44px;
+    background-color: #F3E9DC;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+}
+
+.navbar-avatar svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsive navbar */
+@media (max-width: 640px) {
+    .navbar-titulo { font-size: 0.85rem; padding: 8px 14px; }
+}

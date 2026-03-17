@@ -1,0 +1,134 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* TOP */
+.header-top {
+  background: #b11226;
+  color: white;
+  text-align: center;
+  padding: 6px;
+  font-size: 14px;
+}
+
+/* HEADER */
+.header-main {
+  background: #c21833;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 15px;
+}
+
+.logo {
+  width: 60px;
+}
+
+.buscador {
+  display: flex;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.buscador input {
+  border: none;
+  padding: 8px;
+  outline: none;
+}
+
+.buscador button {
+  border: none;
+  background: white;
+  cursor: pointer;
+}
+
+/* NAV */
+.nav {
+  background: #c21833;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding-bottom: 15px;
+}
+
+.nav button {
+  background: #eee;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* BANNER */
+.banner {
+  height: 220px;
+  background: url("https://images.unsplash.com/photo-1509042239860-f550ce710b93") center/cover;
+}
+
+/* PRODUCTO */
+.contenedor {
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.card-producto {
+  background: #f5f5f5;
+  border-radius: 20px;
+  padding: 30px;
+  display: flex;
+  gap: 30px;
+  width: 800px;
+}
+
+/* IMAGEN */
+.imagen {
+  width: 200px;
+  border-radius: 15px;
+}
+
+/* INFO */
+.estado {
+  margin: 10px 0;
+}
+
+.activo {
+  background: #b2f2bb;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin-right: 10px;
+}
+
+.rating {
+  margin: 10px 0;
+}
+
+.precio {
+  color: red;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.volver {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: 1px solid red;
+  background: transparent;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* RESEÑAS */
+.reseñas {
+  padding: 40px;
+}
+
+.review {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+}

@@ -1,8 +1,11 @@
 import { useState } from "react"
 import axios from "axios"
+import { useNavigate } from "react-router-dom"
 import "../estilos/login.css"
 
 function Registro(){
+
+  const navigate = useNavigate() // 👈 FALTABA ESTO
 
   const [form,setForm] = useState({
     Nombre_usuario:"",
@@ -68,6 +71,12 @@ function Registro(){
           <button>Registrarse</button>
 
         </form>
+        <button
+            className="btn-secundario"
+            onClick={() => navigate("/login")}
+          >
+            Inicia Sesión
+          </button>
 
       </div>
 

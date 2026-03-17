@@ -35,9 +35,7 @@ function Catalogo() {
             <i className="fa-solid fa-user"></i>
           </Link>
 
-          <Link to="/carrito">
-            <i className="fa-solid fa-cart-shopping"></i>
-          </Link>
+          <i className="fa-solid fa-cart-shopping"></i>
         </div>
       </header>
 

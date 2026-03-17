@@ -63,8 +63,6 @@ function Login(){
 
         </form>
 
-        <div className="links-login">
-
           <button
             className="btn-secundario"
             onClick={() => navigate("/registro")}
@@ -76,7 +74,6 @@ function Login(){
 
       </div>
 
-    </div>
 
   )
 

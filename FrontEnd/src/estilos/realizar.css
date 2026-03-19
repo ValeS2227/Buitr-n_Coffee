@@ -119,81 +119,6 @@
   text-align:center;
 }
 
-/* TABS */
-
-.catalogo .tabs{
-  margin-bottom:30px;
-  font-size:18px;
-}
-
-.catalogo .tabs span{
-  margin:0 20px;
-  cursor:pointer;
-}
-
-.catalogo .tabs .active{
-  color:#c0392b;
-  border-bottom:2px solid #c0392b;
-  padding-bottom:5px;
-}
-
-/* CARDS */
-
-.catalogo .cards{
-  display:flex;
-  justify-content:center;
-  gap:30px;
-  flex-wrap:wrap;
-}
-
-/* CARD */
-
-.catalogo .card{
-  background:#f7ebe9;
-  padding:20px;
-  border-radius:15px;
-  width:220px;
-  box-shadow:0 10px 20px rgba(0,0,0,0.1);
-  transition:transform 0.2s ease;
-  text-align:center;
-}
-
-.catalogo .card:hover{
-  transform:translateY(-5px);
-}
-
-/* IMAGEN PRODUCTO */
-
-.catalogo .card img{
-  width:120px;
-  height:220px;
-  object-fit:cover;
-  border-radius:10px;
-  margin-bottom:10px;
-}
-
-/* TITULO */
-
-.catalogo .card h3{
-  font-size:18px;
-  margin:10px 0;
-}
-
-/* DESCRIPCION */
-
-.catalogo .card p{
-  font-size:14px;
-  color:#555;
-}
-
-/* PRECIO */
-
-.catalogo .card strong{
-  display:block;
-  margin-top:5px;
-  font-size:16px;
-  color:#c0392b;
-}
 
 /* BOTON */
 
@@ -260,12 +185,18 @@
 .catalogo .boton:hover{
   background:#8c2721;
 }
-footer{
-  background:#c0392b;
-  color:white;
-  text-align:center;
-  padding:15px;
-  margin-top:40px;
+.pqrs-form{
+    background-color: #7e0501;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+.pqrs-form label{
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: white;
 }
 
 /* ============================= */

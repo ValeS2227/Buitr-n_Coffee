@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import "../estilos/catalogo.css";
+import "../estilos/pqrs.css";
 import { Link } from "react-router-dom";
 
-function Catalogo() {
+function PQRS() {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
@@ -52,34 +52,32 @@ function Catalogo() {
 
       <section className="section">
         <div className="tabs">
-          <span className="active">Productos</span>
+          <span className="active">¿Qué quieres hacer?</span>
         </div>
-
         <div className="cards">
-          {productos.map((producto) => (
-            <div key={producto.ID_Producto} className="card">
-              <img
-                src={`http://localhost:3001/imagenes/${producto.imagen}`}
-                alt={producto.Nombre_producto}
-              />
-
-              <h3>{producto.Nombre_producto}</h3>
-
-              <p>{producto.Descripcion}</p>
-
-              <strong>${producto.Precio}</strong>
-
-              <button>Ver más</button>
+            <div className="card">
+                <h3>Realizar una PQRS</h3>
+                <p>Si tienes alguna queja, reclamo, sugerencia o felicitación, no dudes en contactarnos.
+                    Estamos aquí para escucharte y mejorar tu experiencia con Buitrón Coffee.</p>
+                <Link to="/realizarpqrs">
+                  <button>Realizar PQRS</button>
+                </Link>
             </div>
-          ))}
+            <div className="card">
+                <h3>Consultar estado de PQRS</h3>
+                <p>Si ya has realizado una PQRS y deseas conocer su estado, puedes hacerlo aquí. 
+                    Ingresa tu número de referencia para obtener información actualizada sobre tu solicitud.</p>
+                <Link to="/consultarpqrs">
+                  <button>Consultar estado</button>
+                </Link>
+            </div>
         </div>
       </section>
       <footer className="footer">
-      <p>&copy; 2026 Buitrón Coffee. Todos los derechos reservados</p>
+      <p>&copy; 2026 Buitrón Coffee. Todos los derechos reservados.</p>
     </footer>
     </div>
-    
   );
 }
 
-export default Catalogo;
+export default PQRS;

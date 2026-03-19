@@ -1,17 +1,8 @@
 import { useEffect, useState } from "react";
-import "../estilos/catalogo.css";
+import "../estilos/consulta.css";
 import { Link } from "react-router-dom";
 
-function Catalogo() {
-  const [productos, setProductos] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:3001/api/productos")
-      .then((res) => res.json())
-      .then((data) => setProductos(data))
-      .catch((err) => console.log(err));
-  }, []);
-
+function Consultarpqrs() {
   return (
     <div className="catalogo">
       <div className="topbar">ENVÍOS GRATIS DESDE $50.000</div>
@@ -44,42 +35,34 @@ function Catalogo() {
           <button>Inicio</button>
         </Link>
         <Link to="/pqrs">
-          <button >PQRS</button>
+          <button>PQRS</button>
         </Link>
       </nav>
-
       <div className="hero"></div>
-
+      
+        <section className="section">
+        <div className="tabs">
+          <span className="active">Bienvenido a tu Consulta PQRS</span>
+        </div>
+        <p>Ingresa tu número de referencia para consultar el estado de tu PQRS:</p>
+        <form className="pqrs-form">
+          <label htmlFor="referencia">Número de referencia:</label>
+            <input type="text" id="referencia" name="referencia" placeholder="0856391325" />
+            <button type="submit">Consultar</button>
+        </form>
+      </section>
       <section className="section">
         <div className="tabs">
-          <span className="active">Productos</span>
+          <span className="active">Estado de tu PQRS:</span>
         </div>
-
-        <div className="cards">
-          {productos.map((producto) => (
-            <div key={producto.ID_Producto} className="card">
-              <img
-                src={`http://localhost:3001/imagenes/${producto.imagen}`}
-                alt={producto.Nombre_producto}
-              />
-
-              <h3>{producto.Nombre_producto}</h3>
-
-              <p>{producto.Descripcion}</p>
-
-              <strong>${producto.Precio}</strong>
-
-              <button>Ver más</button>
-            </div>
-          ))}
-        </div>
+        <p>Aquí podrás ver el estado actual de tu PQRS una vez que hayas ingresado tu número de referencia.</p>
       </section>
+
       <footer className="footer">
-      <p>&copy; 2026 Buitrón Coffee. Todos los derechos reservados</p>
-    </footer>
+          <p>&copy; 2026 Buitrón Coffee. Todos los derechos reservados</p>
+        </footer>
     </div>
-    
   );
 }
 
-export default Catalogo;
+export default Consultarpqrs;

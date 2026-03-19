@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom"
 import "../estilos/login.css"
 
 function Registro(){
-
-  const navigate = useNavigate() // 👈 FALTABA ESTO
+  const navigate = useNavigate()
 
   const [form,setForm] = useState({
     Nombre_usuario:"",
@@ -69,15 +68,16 @@ function Registro(){
           <input type="password" name="Clave" placeholder="Contraseña" onChange={handleChange} required/>
 
           <button>Registrarse</button>
-
         </form>
-        <button
+        <div className="links-login">
+
+          <button
             className="btn-secundario"
             onClick={() => navigate("/login")}
           >
-            Inicia Sesión
+            Iniciar Sesión
           </button>
-
+      </div>
       </div>
 
     </div>

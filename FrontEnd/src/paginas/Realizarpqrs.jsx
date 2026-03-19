@@ -1,17 +1,7 @@
-import { useEffect, useState } from "react";
-import "../estilos/catalogo.css";
+import "../estilos/realizar.css";
 import { Link } from "react-router-dom";
 
-function Catalogo() {
-  const [productos, setProductos] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:3001/api/productos")
-      .then((res) => res.json())
-      .then((data) => setProductos(data))
-      .catch((err) => console.log(err));
-  }, []);
-
+function Realizarpqrs() {
   return (
     <div className="catalogo">
       <div className="topbar">ENVÍOS GRATIS DESDE $50.000</div>
@@ -44,42 +34,38 @@ function Catalogo() {
           <button>Inicio</button>
         </Link>
         <Link to="/pqrs">
-          <button >PQRS</button>
+          <button>PQRS</button>
         </Link>
       </nav>
-
       <div className="hero"></div>
-
       <section className="section">
         <div className="tabs">
-          <span className="active">Productos</span>
+          <span className="active">Describe tu PQRS:</span>
         </div>
-
-        <div className="cards">
-          {productos.map((producto) => (
-            <div key={producto.ID_Producto} className="card">
-              <img
-                src={`http://localhost:3001/imagenes/${producto.imagen}`}
-                alt={producto.Nombre_producto}
-              />
-
-              <h3>{producto.Nombre_producto}</h3>
-
-              <p>{producto.Descripcion}</p>
-
-              <strong>${producto.Precio}</strong>
-
-              <button>Ver más</button>
-            </div>
-          ))}
-        </div>
+        <form className="pqrs-form">
+          <label htmlFor="tipo">Tipo de PQRS:</label>
+          <select id="tipo" name="tipo">
+            <option value="queja">Queja</option>
+            <option value="reclamo">Reclamo</option>
+            <option value="sugerencia">Sugerencia</option>
+            <option value="felicitacion">Felicitación</option>
+          </select>
+        </form>
+      </section>
+      <section className="section">
+        <form className="pqrs-form">
+          <label htmlFor="descripcion">Descripción:</label>
+          <textarea
+            placeholder="Escribe aquí tu Queja, Reclamo, Sugerencia o Felicitación..."
+          ></textarea>
+        </form>
+        <button className="submit-button">Enviar PQRS</button>
       </section>
       <footer className="footer">
-      <p>&copy; 2026 Buitrón Coffee. Todos los derechos reservados</p>
-    </footer>
+          <p>&copy; 2026 Buitrón Coffee. Todos los derechos reservados</p>
+        </footer>
     </div>
-    
   );
 }
 
-export default Catalogo;
+export default Realizarpqrs;

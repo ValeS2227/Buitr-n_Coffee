@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-03-2026 a las 03:49:29
+-- Tiempo de generación: 19-03-2026 a las 13:03:42
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -166,7 +166,7 @@ CREATE TABLE `producto` (
   `Categoria` varchar(100) NOT NULL COMMENT 'Nivel de tostado o clasificación técnica del producto',
   `Precio` decimal(10,2) NOT NULL COMMENT 'Precio unitario del producto',
   `Stock` int(100) NOT NULL COMMENT 'Cantidad de productos disponibles',
-  `imagen` varchar(500) DEFAULT NULL
+  `imagen` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -174,10 +174,9 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`ID_Producto`, `Nombre_producto`, `Descripcion`, `Categoria`, `Precio`, `Stock`, `imagen`) VALUES
-(1, 'Cafe tostado', 'Cafe con toston medio', 'Tostado', 12000.00, 30, 'cafe1.jpeg'),
-(2, 'Cafe fino', 'Cafe fino en maquina', 'Fino', 18000.00, 10, 'cafe2.jpeg'),
-(3, 'Cafe molido', 'molido por una maquina', 'Molido', 25000.00, 10, 'cafe3.jpeg'),
-(5, 'Cafe Geisha', 'Cafe con un toque picante', 'Cafe Molido', 160000.00, 67, NULL);
+(1, 'Cafe tostado', 'Cafe con toston medio', 'Tostado', 12000.00, 30, 'cafe1.jpg'),
+(2, 'Cafe fino', 'Cafe fino en maquina', 'Fino', 18000.00, 10, 'cafe2.jpg'),
+(3, 'Cafe molido', 'molido por una maquina', 'Molido', 25000.00, 10, 'cafe3.jpg');
 
 -- --------------------------------------------------------
 
@@ -202,6 +201,20 @@ INSERT INTO `proveedor` (`ID_Proveedor`, `Nombre_proveedor`, `Apellido`, `Telefo
 (1, 'Juan', 'Buitron', '31478952', 'Juan1970@gmail.com', 'Cra 67a 22-66 sur'),
 (2, 'Jorge', 'Gonzales', '178694785', 'jagojites1082@gmail.com', 'Calle 45b #43-12'),
 (3, 'Michael', 'Merlano', '314782475', 'maicolgeovany@gmail.com', 'Diagonal 49b #55-33');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `reseñas`
+--
+
+CREATE TABLE `reseñas` (
+  `id` int(11) NOT NULL,
+  `producto_id` int(11) DEFAULT NULL,
+  `nombre` varchar(100) DEFAULT NULL,
+  `comentario` text DEFAULT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -250,9 +263,7 @@ INSERT INTO `usuario` (`ID_Usuario`, `Nombre_usuario`, `Apellido`, `Correo`, `Do
 (2, 'Fabian', 'Parra', 'foparra@gmail.com', '12234567', '3233726512', 'foparrita', 2),
 (3, 'Juan', 'Buitron', 'Juan1970@gmail.com', '4587698514', '314789524', 'micuentaesJuan', 3),
 (4, 'Jorge', 'Gonzales', 'jagojites1082@gmail.com', '103766205', '1786947855', 'gorgiño', 3),
-(5, 'Michael', 'Merlano', 'maicolgeovany@gmail.com', '125478965', '314782475', 'ayjesucrito', 3),
-(6, 'Rodrigo', 'Camargo', 'elkinl1023@msn.com', '1023864852', '3118597822', '$2b$10$/43iY14jPvsRAzfczFLRiujVgXkFj09wTdey4DG01xG5SM4j3vgZy', 2),
-(8, 'Carlos', 'Gorvanchov', 'gorvanchovpro@gmail.com', '1265478894', '3147854962', '$2b$10$e67xxra59B9DnjTkLYLfBuEMTPpYR.Y3HkKmhbCaJZZwCozeWK2Im', 2);
+(5, 'Michael', 'Merlano', 'maicolgeovany@gmail.com', '125478965', '314782475', 'ayjesucrito', 3);
 
 --
 -- Índices para tablas volcadas
@@ -317,6 +328,12 @@ ALTER TABLE `proveedor`
   ADD UNIQUE KEY `Correo` (`Correo`);
 
 --
+-- Indices de la tabla `reseñas`
+--
+ALTER TABLE `reseñas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `rol`
 --
 ALTER TABLE `rol`
@@ -378,13 +395,19 @@ ALTER TABLE `pedido`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del producto', AUTO_INCREMENT=6;
+  MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del producto', AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedor`
 --
 ALTER TABLE `proveedor`
   MODIFY `ID_Proveedor` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del proveedor', AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `reseñas`
+--
+ALTER TABLE `reseñas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
@@ -396,7 +419,7 @@ ALTER TABLE `rol`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del usuario dentro del sistema', AUTO_INCREMENT=9;
+  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del usuario dentro del sistema', AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas

@@ -2,21 +2,27 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 
-// Obtener todos los productos
+// 🟢 OBTENER TODOS LOS PRODUCTOS
 router.get("/", (req, res) => {
+  db.query("SELECT * FROM producto", (err, results) => {
+    if (err) return res.status(500).json(err);
 
-  const sql = "SELECT * FROM producto";
-
-  db.query(sql, (err, result) => {
-
-    if (err) {
-      return res.status(500).json(err);
-    }
-
-    res.json(result);
-
+    res.json(results);
   });
+});
 
+router.get("/buscar/:texto", (req, res) => {
+  const texto = req.params.texto;
+
+  db.query(
+    "SELECT * FROM producto WHERE Nombre_producto LIKE ?",
+    [`%${texto}%`],
+    (err, results) => {
+      if (err) return res.status(500).json(err);
+
+      res.json(results);
+    }
+  );
 });
 
 module.exports = router;

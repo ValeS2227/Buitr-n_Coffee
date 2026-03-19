@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import "../estilos/catalogo.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // ✅ agregado
 
 function Catalogo() {
   const [productos, setProductos] = useState([]);
+  const navigate = useNavigate(); // ✅ agregado
 
   useEffect(() => {
     fetch("http://localhost:3001/api/productos")
@@ -23,7 +24,13 @@ function Catalogo() {
           alt="logo"
         />
 
-        <div className="logo-header">Buitrón Coffee</div>
+        <div 
+          className="logo-header" 
+          onClick={() => navigate("/catalogo")} 
+          style={{ cursor: "pointer" }}
+        >
+          Buitrón Coffee
+        </div>
 
         <div className="icons">
           <div className="search-box">
@@ -44,7 +51,7 @@ function Catalogo() {
           <button>Inicio</button>
         </Link>
         <Link to="/pqrs">
-          <button >PQRS</button>
+          <button>PQRS</button>
         </Link>
       </nav>
 
@@ -69,16 +76,19 @@ function Catalogo() {
 
               <strong>${producto.Precio}</strong>
 
-              <button>Ver más</button>
+              {/* ✅ CORREGIDO */}
+              <button onClick={() => navigate(`/producto/${producto.ID_Producto}`)}>
+                Ver más
+              </button>
             </div>
           ))}
         </div>
       </section>
+
       <footer className="footer">
-      <p>&copy; 2026 Buitrón Coffee. Todos los derechos reservados</p>
-    </footer>
+        <p>&copy; 2026 Buitrón Coffee. Todos los derechos reservados</p>
+      </footer>
     </div>
-    
   );
 }
 

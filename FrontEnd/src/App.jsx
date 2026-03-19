@@ -6,6 +6,8 @@ import Usuario from "./paginas/Usuario"
 import PQRS from "./paginas/PQRS"
 import Realizarpqrs from "./paginas/Realizarpqrs"
 import Consultarpqrs from "./paginas/Consultarpqrs"
+import ProductoDetalle from "./paginas/ProductoDetalle.jsx";
+
 
 function App(){
 
@@ -20,6 +22,7 @@ function App(){
 <Route path="/registro" element={<Registro/>}/>
 <Route path="/catalogo" element={<Catalogo/>}/>
 <Route path="/usuario" element={<Usuario/>}/>
+<Route path="/producto/:id" element={<ProductoDetalle/>}/>
 <Route path="/pqrs" element={<PQRS/>}/>
 <Route path="/realizarpqrs" element={<Realizarpqrs/>}/>
 <Route path="/consultarpqrs" element={<Consultarpqrs/>}/>

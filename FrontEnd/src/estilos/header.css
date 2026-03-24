@@ -1,0 +1,117 @@
+/* TOPBAR */
+.topbar{
+  background:#b52b1e;
+  color:white;
+  text-align:center;
+  padding:6px;
+  font-size:14px;
+}
+
+/* HEADER */
+.header{
+  background:#c0392b;
+  padding:15px 40px;
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  color:white;
+  position:relative;
+}
+
+.logo-header{
+  position: absolute;
+  right: 190px;
+  font-size:28px;
+  font-weight:bold;
+  margin-right:28px;
+}
+
+.logo-img{
+  position:absolute;
+  left:50px;
+  bottom: -55px;
+  height:100px;
+}
+
+.icons{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.icons i{
+  cursor:pointer;
+  padding:5px;
+  font-size:20px;
+  color:white;
+}
+
+/* SEARCH */
+.search-box{
+  position:relative;
+}
+
+.search-box input{
+  padding:6px 30px 6px 10px;
+  border-radius:20px;
+  border:none;
+  font-size:16px;
+  outline:none;
+}
+
+.search-box input::placeholder{
+  color:#999;
+}
+
+.search-box .fa-magnifying-glass{
+  position:absolute;
+  right:8px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#b52b1e;
+  cursor:pointer;
+}
+
+/* NAV */
+.nav{
+  background:#c0392b;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+}
+
+.nav button{
+  background:rgb(168, 27, 27);
+  border:none;
+  padding:6px 16px;
+  border-radius:20px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:14px;
+  color:white;
+}
+
+.nav button:hover{
+  background:#91716e;
+}
+
+.carrito-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.carrito-contador {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: #c49a6c;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 18px;
+  text-align: center;
+}

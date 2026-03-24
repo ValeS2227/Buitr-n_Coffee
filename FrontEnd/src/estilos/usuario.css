@@ -1,0 +1,203 @@
+.usuario-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.nav {
+  background: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-regresar {
+  background: none;
+  border: none;
+  color: #C49A6C;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.btn-regresar:hover {
+  background: #f0f0f0;
+}
+
+.btn-cerrar-sesion {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-cerrar-sesion:hover {
+  background: #c82333;
+}
+
+.perfil-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.perfil-container h1 {
+  margin-bottom: 2rem;
+  color: #333;
+  text-align: center;
+}
+
+.tabs-usuario {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tab-btn i {
+  font-size: 1.1rem;
+}
+
+.tab-btn:hover {
+  color: #000000;
+  background-color: #d45e5c47;
+}
+
+.tab-btn.active {
+  color: #000000;
+  border-bottom: 2px solid #a00e0b96;
+  margin-bottom: -2px;
+}
+
+.perfil-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 2rem;
+}
+
+.foto-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar-placeholder {
+  width: 150px;
+  height: 150px;
+  background: #C49A6C;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: white;
+  font-weight: bold;
+}
+
+.btn-cambiar-foto {
+  background: #9f0707;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 0.9rem;
+}
+
+.btn-cambiar-foto:hover {
+  background: #c6b9b9;
+  color: black;
+}
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.campo-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.campo-formulario label {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.campo-formulario input {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.campo-formulario input:focus {
+  outline: none;
+  border-color: #C49A6C;
+}
+
+.btn-guardar {
+  background: #9f0707;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 1rem;
+  transition: background 0.3s;
+}
+
+.btn-guardar:hover {
+  background: #c6b9b9;
+  color:black;
+}
+
+@media (max-width: 768px) {
+  .perfil-card {
+    grid-template-columns: 1fr;
+  }
+  
+  .tabs-usuario {
+    justify-content: center;
+  }
+  
+  .tab-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

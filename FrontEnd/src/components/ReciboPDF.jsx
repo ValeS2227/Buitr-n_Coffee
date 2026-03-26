@@ -171,7 +171,7 @@ const ReciboPDF = ({ compra, usuario, fecha, numeroRecibo }) => {
         </View>
 
         {/* Título */}
-        <Text style={styles.tituloRecibo}>FACTURA DE VENTA</Text>
+        <Text style={styles.tituloRecibo}>RECIBO DE TU PEDIDO</Text>
 
         {/* Información del cliente */}
         <View style={styles.infoCliente}>
@@ -182,9 +182,9 @@ const ReciboPDF = ({ compra, usuario, fecha, numeroRecibo }) => {
           <Text style={styles.infoClienteTexto}>Correo: {usuario.Correo}</Text>
         </View>
 
-        {/* Datos de la factura */}
+        {/* Datos del recibo */}
         <View style={styles.infoCliente}>
-          <Text style={styles.infoClienteTexto}>Factura N°: {numeroRecibo}</Text>
+          <Text style={styles.infoClienteTexto}>Recibo N°: {numeroRecibo}</Text>
           <Text style={styles.infoClienteTexto}>Fecha: {fecha}</Text>
         </View>
 
@@ -235,13 +235,13 @@ const ReciboPDF = ({ compra, usuario, fecha, numeroRecibo }) => {
 
         {/* Agradecimiento */}
         <Text style={styles.agradecimiento}>
-          ¡Gracias por tu compra! Disfruta de nuestro café de especialidad ☕
+          ¡Gracias por tu pedido! Te recordamos ir a nuestro punto de venta para obtener tus productos
         </Text>
 
         {/* Footer */}
         <View style={styles.footer}>
           <Text>Buitrón Coffee - Calidad y tradición en cada taza</Text>
-          <Text>© 2024 Buitrón Coffee - Todos los derechos reservados</Text>
+          <Text>© 2026 Buitrón Coffee - Todos los derechos reservados</Text>
         </View>
       </Page>
     </Document>

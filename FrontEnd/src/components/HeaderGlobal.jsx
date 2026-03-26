@@ -50,10 +50,14 @@ function GlobalHeader() {
         <Link to="/catalogo">
           <button>Inicio</button>
         </Link>
+        <Link to="/nosotros">
+          <button>Nosotros</button>
+        </Link>
         <Link to="/pqrs">
           <button>PQRS</button>
         </Link>
       </nav>
+
     </>
   );
 }

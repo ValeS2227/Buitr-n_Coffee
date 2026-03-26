@@ -38,10 +38,9 @@ function ConfirmacionCompra() {
       <div className="confirmacion-container">
         <div className="confirmacion-card">
           <div className="icono-exito">✅</div>
-          <h1>¡Compra Exitosa!</h1>
+          <h1>¡Recibo Exitoso!</h1>
           <p className="mensaje">
-            Tu pedido ha sido registrado correctamente. 
-            Recibirás un correo con los detalles de tu compra.
+            Tu pedido ha sido registrado correctamente. A continuación encontrarás los detalles de tu compra y podrás descargar tu recibo en formato PDF.
           </p>
 
           <div className="info-pedido">
@@ -91,7 +90,7 @@ function ConfirmacionCompra() {
               onClick={() => navigate("/catalogo")}
               className="btn-secundario"
             >
-              Seguir comprando
+              Seguir Explorando
             </button>
           </div>
         </div>

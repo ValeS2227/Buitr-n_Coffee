@@ -19,8 +19,12 @@ function Catalogo() {
     <div className="catalogo">
       
       <HeaderGlobal />
-
-      <div className="hero"></div>
+            <div className="pqrs-hero">
+        <div className="pqrs-hero-content">
+          <h1>Productos</h1>
+          <p>Encontraras nuestros productos de la mejor calidad para tu mesa</p>
+        </div>
+      </div>
 
       <section className="section">
         <div className="tabs">
@@ -41,7 +45,6 @@ function Catalogo() {
 
               <strong>${producto.Precio}</strong>
 
-              {/* ✅ CORREGIDO */}
               <button onClick={() => navigate(`/producto/${producto.ID_Producto}`)}>
                 Ver más
               </button>

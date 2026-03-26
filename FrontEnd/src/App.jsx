@@ -10,6 +10,7 @@ import Consultarpqrs from "./paginas/Consultarpqrs";
 import ProductoDetalle from "./paginas/ProductoDetalle";
 import Carrito from "./paginas/Carrito";
 import ConfirmacionCompra from "./paginas/ConfirmacionCompra";
+import Nosotros from "./paginas/Nosotros";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/realizarpqrs" element={<Realizarpqrs />} />
           <Route path="/consultarpqrs" element={<Consultarpqrs />} />
           <Route path="/confirmacion" element={<ConfirmacionCompra />} />
+          <Route path="/nosotros" element={<Nosotros />} />
         </Routes>
       </BrowserRouter>
     </CarritoProvider>

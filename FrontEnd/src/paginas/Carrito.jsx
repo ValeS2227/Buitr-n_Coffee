@@ -27,11 +27,6 @@ function Carrito() {
   };
 
   const confirmarCompra = async () => {
-    if (!direccion) {
-      alert("Por favor ingresa una dirección de envío");
-      return;
-    }
-
     setProcesando(true);
 
     try {
@@ -153,14 +148,6 @@ function Carrito() {
               </button>
             ) : (
               <div className="formulario-pago">
-                <h3>Datos de envío</h3>
-                <textarea
-                  placeholder="Dirección de envío completa"
-                  value={direccion}
-                  onChange={(e) => setDireccion(e.target.value)}
-                  rows="3"
-                  style={{ width: '100%', marginBottom: '1rem', padding: '0.5rem' }}
-                />
                 <select
                   value={metodoPago}
                   onChange={(e) => setMetodoPago(e.target.value)}

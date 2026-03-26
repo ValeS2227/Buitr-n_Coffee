@@ -4,14 +4,6 @@
   background:#f3f3f3;
   min-height:100vh;
 }
-
-/* HERO */
-
-.catalogo .hero{
-  height:280px;
-  background:url('https://images.unsplash.com/photo-1509042239860-f550ce710b93') no-repeat center center/cover;
-}
-
 /* SECTION */
 
 .catalogo .section{

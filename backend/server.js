@@ -8,6 +8,8 @@
   const productoRoutes = require("./routes/producto.routes");
   const carritoRoutes = require("./routes/carrito.routes");
   const pedidoRoutes = require("./routes/pedido.routes");
+  const pqrsRoutes = require("./routes/pqrs.routes");
+  const resenasRoutes = require("./routes/resenas.routes");
 
 
   const app = express();
@@ -24,6 +26,10 @@
   app.use("/api/productos", productoRoutes);
 
   app.use("/api/carrito", carritoRoutes);
+
+  app.use("/api/pqrs", pqrsRoutes);
+
+  app.use("/api/resenas", resenasRoutes);
 
   app.get("/api/productos/:id", (req, res) => {
     const id = req.params.id;

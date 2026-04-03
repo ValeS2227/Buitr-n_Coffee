@@ -114,3 +114,28 @@ button:hover{
 .links-login{
     margin-top:15px;
 }
+/* ===== MENSAJE DE ERROR ===== */
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  text-align: center;
+  border-left: 3px solid #c62828;
+}
+
+/* ===== BOTÓN DESHABILITADO ===== */
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+button:disabled:hover {
+  transform: none;
+  background: #b52b1e;
+}

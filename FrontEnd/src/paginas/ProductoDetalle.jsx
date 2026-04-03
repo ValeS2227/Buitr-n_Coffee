@@ -1,142 +1,101 @@
-import { useParams, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useCarrito } from "../context/CarritoContext";
-import "../estilos/detalle.css";
+import { useParams, useNavigate } from "react-router-dom";
 import HeaderGlobal from "../components/HeaderGlobal";
 import Footer from "../components/Footer";
+import ResenasProducto from "../components/ResenasProducto";
+import "../estilos/productoDetalle.css";
 
 function ProductoDetalle() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { agregarAlCarrito } = useCarrito();
-
   const [producto, setProducto] = useState(null);
-  const [resenas, setResenas] = useState([]);
-  const [nombre, setNombre] = useState("");
-  const [comentario, setComentario] = useState("");
   const [cantidad, setCantidad] = useState(1);
 
   useEffect(() => {
     fetch(`http://localhost:3001/api/productos/${id}`)
-      .then(res => res.json())
-      .then(data => setProducto(data));
+      .then((res) => res.json())
+      .then((data) => setProducto(data))
+      .catch((err) => console.log(err));
   }, [id]);
 
-  const cargarResenas = () => {
-    fetch(`http://localhost:3001/api/resenas/${id}`)
-      .then(res => res.json())
-      .then(data => setResenas(data));
+  const renderEstrellas = (calificacion) => {
+    const estrellas = [];
+    const num = Number(calificacion) || 0;
+    for (let i = 1; i <= 5; i++) {
+      estrellas.push(
+        <span key={i} className={i <= Math.round(num) ? 'estrella-llena' : 'estrella-vacia'}>
+          ★
+        </span>
+      );
+    }
+    return estrellas;
   };
 
-  useEffect(() => {
-    cargarResenas();
-  }, [id]);
-
-  const enviarResena = () => {
-    if (!nombre || !comentario) return;
-
-    fetch("http://localhost:3001/api/resenas", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        producto_id: id,
-        nombre,
-        comentario
-      })
-    })
-    .then(res => res.json())
-    .then(() => {
-      setNombre("");
-      setComentario("");
-      cargarResenas();
-    });
-  };
-
-  const handleAgregarCarrito = async () => {
-    await agregarAlCarrito(id, cantidad);
-  };
-
-  if (!producto) return <p>Cargando...</p>;
+  if (!producto) {
+    return (
+      <div className="producto-detalle">
+        <HeaderGlobal />
+        <div className="loading">Cargando producto...</div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
-    <div className="catalogo">
-      
+    <div className="producto-detalle">
       <HeaderGlobal />
-
-      <div className="hero"></div>
-
-      <div className="detalle-card">
-        <img
-          src={`http://localhost:3001/imagenes/${producto.imagen}`}
-          alt={producto.Nombre_producto}
-        />
-
-        <div>
+      
+      <div className="detalle-container">
+        <div className="detalle-imagen">
+          <img 
+            src={`http://localhost:3001/imagenes/${producto.imagen}`} 
+            alt={producto.Nombre_producto}
+            onError={(e) => {
+              e.target.src = 'https://via.placeholder.com/400x400?text=Sin+imagen';
+            }}
+          />
+        </div>
+        
+        <div className="detalle-info">
           <h1>{producto.Nombre_producto}</h1>
-
-          <p>Estado: <span className="activo">ACTIVO</span></p>
-
-          <p>Nivel tostado: {producto.Categoria}</p>
-
-          <p>⭐⭐⭐⭐☆ 4.5</p>
-
-          <div className="precio">
-            ${producto.Precio}
+          
+          <div className="producto-calificacion">
+            <div className="estrellas">{renderEstrellas(producto.calificacion_promedio)}</div>
+            <span className="calificacion-numero">{Number(producto.calificacion_promedio || 0).toFixed(1)}</span>
+            <span className="total-resenas">({producto.total_resenas || 0} reseñas)</span>
           </div>
-
-          {/* Selector de cantidad */}
-          <div className="cantidad-selector">
-            <label>Cantidad: </label>
-            <input
-              type="number"
-              min="1"
-              value={cantidad}
+          
+          <p className="detalle-descripcion">{producto.Descripcion || "Sin descripción disponible"}</p>
+          
+          <p className="detalle-categoria">📂 Categoría: {producto.Categoria}</p>
+          <p className="detalle-stock">📦 Stock disponible: {producto.Stock} unidades</p>
+          
+          <p className="detalle-precio">${Number(producto.Precio).toLocaleString()}</p>
+          
+          <div className="detalle-cantidad">
+            <label>Cantidad:</label>
+            <input 
+              type="number" 
+              min="1" 
+              max={producto.Stock} 
+              value={cantidad} 
               onChange={(e) => setCantidad(parseInt(e.target.value))}
-              style={{ width: "60px", marginRight: "10px" }}
             />
           </div>
-
-          {/* Botones */}
-          <div style={{ marginTop: "20px" }}>
-            <button onClick={handleAgregarCarrito} style={{ marginRight: "10px" }}>
-              🛒 Añadir al carrito
-            </button>
-            <button onClick={() => navigate(-1)}>
-              ← Regresar
-            </button>
-          </div>
+          
+          <button 
+            className="btn-agregar-carrito"
+            onClick={() => {
+              alert(`Agregaste ${cantidad} unidad(es) de ${producto.Nombre_producto} al carrito`);
+            }}
+          >
+            🛒 Agregar al carrito
+          </button>
         </div>
       </div>
-
-      <div className="reseñas">
-        <h2>Reseñas</h2>
-        {resenas.map((r) => (
-          <div key={r.id} className="review">
-            <strong>{r.nombre}</strong>
-            <p>{r.comentario}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="form">
-        <h3>Deja tu reseña</h3>
-        <input
-          placeholder="Tu nombre"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-        />
-        <textarea
-          placeholder="Escribe tu opinión..."
-          value={comentario}
-          onChange={(e) => setComentario(e.target.value)}
-        />
-        <button onClick={enviarResena}>
-          Comentar
-        </button>
-      </div>
-
+      
+      <ResenasProducto productoId={producto.ID_Producto} />
+      
       <Footer />
     </div>
   );

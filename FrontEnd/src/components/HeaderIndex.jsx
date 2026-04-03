@@ -1,14 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useCarrito } from "../context/CarritoContext";
 import { useState } from "react";
 import "../estilos/header.css";
 
-function GlobalHeader() {
+function HeaderIndex() {
   const navigate = useNavigate();
-  const { carrito } = useCarrito();
   const [busqueda, setBusqueda] = useState("");
 
-  const totalItems = carrito.items.reduce((sum, item) => sum + item.Cantidad, 0);
+  const handleUserClick = () => {
+    navigate("/login");
+  };
 
   const handleBuscar = () => {
     if (busqueda.trim()) {
@@ -57,32 +57,19 @@ function GlobalHeader() {
             ></i>
           </div>
 
-          <Link to="/usuario">
+          <div onClick={handleUserClick} style={{ cursor: "pointer" }}>
             <i className="fa-solid fa-user"></i>
-          </Link>
-
-          <Link to="/carrito" className="carrito-icon">
-            <i className="fa-solid fa-cart-shopping"></i>
-            {totalItems > 0 && (
-              <span className="carrito-contador">{totalItems}</span>
-            )}
-          </Link>
+          </div>
         </div>
       </header>
 
       <nav className="nav">
-        <Link to="/catalogo">
+        <Link to="/">
           <button>Inicio</button>
-        </Link>
-        <Link to="/nosotros">
-          <button>Nosotros</button>
-        </Link>
-        <Link to="/pqrs">
-          <button>PQRS</button>
         </Link>
       </nav>
     </>
   );
 }
 
-export default GlobalHeader;
+export default HeaderIndex;

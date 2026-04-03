@@ -53,7 +53,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-
 // =========================
 // 🔵 LOGIN
 // =========================
@@ -82,9 +81,14 @@ router.post("/login", (req, res) => {
       return res.status(401).json({ message: "Contraseña incorrecta" });
     }
 
+    // ✅ VERIFICAR SI EL USUARIO ESTÁ INHABILITADO
+    if (user.Estado === 0) {
+      return res.status(401).json({ message: "Tu cuenta ha sido inhabilitada. Contacta al administrador." });
+    }
+
     // 🎟 Token
     const token = jwt.sign(
-      { id: user.ID_Usuario },
+      { id: user.ID_Usuario, rol: user.ID_Rol },
       SECRET,
       { expiresIn: "1d" }
     );
@@ -98,12 +102,13 @@ router.post("/login", (req, res) => {
         Apellido: user.Apellido,
         Correo: user.Correo,
         Documento: user.Documento,
-        Telefono: user.Telefono
+        Telefono: user.Telefono,
+        ID_Rol: user.ID_Rol,
+        Estado: user.Estado
       }
     });
   });
 });
-
 
 // =========================
 // 🟡 PERFIL (GET)
@@ -166,4 +171,282 @@ router.put("/perfil", (req, res) => {
   });
 });
 
+
+// =========================
+// 🔵 OBTENER TODOS LOS USUARIOS (SOLO ADMIN)
+// =========================
+router.get("/usuarios", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "Token requerido" });
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+
+    // Verificar que el usuario es administrador (ID_Rol = 1)
+    const checkAdminSql = "SELECT ID_Rol FROM usuario WHERE ID_Usuario = ?";
+    
+    db.query(checkAdminSql, [decoded.id], (err, result) => {
+      if (err) return res.status(500).json(err);
+      
+      if (result.length === 0 || result[0].ID_Rol !== 1) {
+        return res.status(403).json({ message: "No tienes permisos para ver usuarios" });
+      }
+
+      // Si es admin, obtener todos los usuarios incluyendo Estado
+      const sql = `
+        SELECT u.ID_Usuario, u.Nombre_usuario, u.Apellido, u.Correo, u.Documento, u.Telefono, r.Tipo_rol, u.ID_Rol, u.Estado
+        FROM usuario u
+        INNER JOIN rol r ON u.ID_Rol = r.ID_Rol
+        ORDER BY u.ID_Usuario DESC
+      `;
+      
+      db.query(sql, (err, results) => {
+        if (err) return res.status(500).json(err);
+        res.json(results);
+      });
+    });
+  });
+});
+
+// =========================
+// 🔵 OBTENER PROVEEDORES (SOLO ADMIN)
+// =========================
+router.get("/proveedores", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "Token requerido" });
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+
+    // Verificar que el usuario es administrador
+    const checkAdminSql = "SELECT ID_Rol FROM usuario WHERE ID_Usuario = ?";
+    
+    db.query(checkAdminSql, [decoded.id], (err, result) => {
+      if (err) return res.status(500).json(err);
+      
+      if (result.length === 0 || result[0].ID_Rol !== 1) {
+        return res.status(403).json({ message: "No tienes permisos para ver proveedores" });
+      }
+
+      // Obtener usuarios con rol de proveedor (ID_Rol = 3)
+      const sql = `
+        SELECT ID_Usuario, Nombre_usuario, Apellido, Correo, Telefono
+        FROM usuario
+        WHERE ID_Rol = 3 AND Estado = 1
+        ORDER BY Nombre_usuario ASC
+      `;
+      
+      db.query(sql, (err, results) => {
+        if (err) return res.status(500).json(err);
+        res.json(results);
+      });
+    });
+  });
+});
+
+// =========================
+// 🔵 OBTENER UN USUARIO POR ID
+// =========================
+router.get("/usuarios/:id", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const id = req.params.id;
+
+  if (!token) {
+    return res.status(401).json({ message: "Token requerido" });
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+
+    // Verificar que el usuario es administrador
+    const checkAdminSql = "SELECT ID_Rol FROM usuario WHERE ID_Usuario = ?";
+    
+    db.query(checkAdminSql, [decoded.id], (err, result) => {
+      if (err) return res.status(500).json(err);
+      
+      if (result.length === 0 || result[0].ID_Rol !== 1) {
+        return res.status(403).json({ message: "No tienes permisos para ver usuarios" });
+      }
+
+      // Si es admin, obtener el usuario específico
+      const sql = `
+        SELECT u.ID_Usuario, u.Nombre_usuario, u.Apellido, u.Correo, u.Documento, u.Telefono, r.Tipo_rol, u.ID_Rol
+        FROM usuario u
+        INNER JOIN rol r ON u.ID_Rol = r.ID_Rol
+        WHERE u.ID_Usuario = ?
+      `;
+      
+      db.query(sql, [id], (err, results) => {
+        if (err) return res.status(500).json(err);
+        if (results.length === 0) {
+          return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+        res.json(results[0]);
+      });
+    });
+  });
+});
+// =========================
+// 🟠 INHABILITAR USUARIO
+// =========================
+router.patch("/usuarios/:id/inhabilitar", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const id = req.params.id;
+
+  if (!token) {
+    return res.status(401).json({ message: "Token requerido" });
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+
+    // Verificar que el usuario es administrador
+    const checkAdminSql = "SELECT ID_Rol FROM usuario WHERE ID_Usuario = ?";
+    
+    db.query(checkAdminSql, [decoded.id], (err, result) => {
+      if (err) return res.status(500).json(err);
+      
+      if (result.length === 0 || result[0].ID_Rol !== 1) {
+        return res.status(403).json({ message: "No tienes permisos para inhabilitar usuarios" });
+      }
+
+      // Verificar que no se está inhabilitando a sí mismo
+      if (decoded.id == id) {
+        return res.status(400).json({ message: "No puedes inhabilitar tu propio usuario" });
+      }
+
+      // Inhabilitar usuario
+      const sql = "UPDATE usuario SET Estado = 0 WHERE ID_Usuario = ?";
+      
+      db.query(sql, [id], (err, result) => {
+        if (err) return res.status(500).json(err);
+        
+        if (result.affectedRows === 0) {
+          return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+        
+        res.json({ message: "Usuario inhabilitado correctamente" });
+      });
+    });
+  });
+});
+
+
+// =========================
+// 🟢 HABILITAR USUARIO
+// =========================
+router.patch("/usuarios/:id/habilitar", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const id = req.params.id;
+
+  if (!token) {
+    return res.status(401).json({ message: "Token requerido" });
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+
+    // Verificar que el usuario es administrador
+    const checkAdminSql = "SELECT ID_Rol FROM usuario WHERE ID_Usuario = ?";
+    
+    db.query(checkAdminSql, [decoded.id], (err, result) => {
+      if (err) return res.status(500).json(err);
+      
+      if (result.length === 0 || result[0].ID_Rol !== 1) {
+        return res.status(403).json({ message: "No tienes permisos para habilitar usuarios" });
+      }
+
+      // Habilitar usuario
+      const sql = "UPDATE usuario SET Estado = 1 WHERE ID_Usuario = ?";
+      
+      db.query(sql, [id], (err, result) => {
+        if (err) return res.status(500).json(err);
+        
+        if (result.affectedRows === 0) {
+          return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+        
+        res.json({ message: "Usuario habilitado correctamente" });
+      });
+    });
+  });
+});
+
+// =========================
+// 🔄 CAMBIAR ROL DE USUARIO
+// =========================
+router.patch("/usuarios/:id/cambiar-rol", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const id = req.params.id;
+  const { nuevoRol } = req.body;
+
+  if (!token) {
+    return res.status(401).json({ message: "Token requerido" });
+  }
+
+  if (!nuevoRol || (nuevoRol !== 1 && nuevoRol !== 2 && nuevoRol !== 3)) {
+    return res.status(400).json({ message: "Rol inválido. Debe ser 1 (Admin), 2 (Usuario) o 3 (Proveedor)" });
+  }
+
+  jwt.verify(token, SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+
+    // Verificar que el usuario es administrador
+    const checkAdminSql = "SELECT ID_Rol FROM usuario WHERE ID_Usuario = ?";
+    
+    db.query(checkAdminSql, [decoded.id], (err, result) => {
+      if (err) return res.status(500).json(err);
+      
+      if (result.length === 0 || result[0].ID_Rol !== 1) {
+        return res.status(403).json({ message: "No tienes permisos para cambiar roles" });
+      }
+
+      // Verificar que no se está cambiando el rol a sí mismo
+      if (decoded.id == id) {
+        return res.status(400).json({ message: "No puedes cambiar tu propio rol" });
+      }
+
+      // Verificar que el usuario existe
+      const checkUserSql = "SELECT ID_Usuario, Nombre_usuario FROM usuario WHERE ID_Usuario = ?";
+      
+      db.query(checkUserSql, [id], (err, result) => {
+        if (err) return res.status(500).json(err);
+        
+        if (result.length === 0) {
+          return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        // Cambiar el rol
+        const sql = "UPDATE usuario SET ID_Rol = ? WHERE ID_Usuario = ?";
+        
+        db.query(sql, [nuevoRol, id], (err, result) => {
+          if (err) return res.status(500).json(err);
+          
+          res.json({ 
+            message: `Rol cambiado correctamente a ${nuevoRol === 1 ? 'Administrador' : nuevoRol === 2 ? 'Usuario' : 'Proveedor'}`,
+            usuario: result[0]
+          });
+        });
+      });
+    });
+  });
+});
 module.exports = router;

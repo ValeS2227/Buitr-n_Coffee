@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-03-2026 a las 01:40:54
+-- Tiempo de generación: 03-04-2026 a las 02:40:23
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -35,13 +35,6 @@ CREATE TABLE `carrito` (
   `Fecha_Agregado` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `carrito`
---
-
-INSERT INTO `carrito` (`ID_Carrito`, `ID_Usuario`, `ID_Producto`, `Cantidad`, `Fecha_Agregado`) VALUES
-(8, 8, 1, 12, '2026-03-23 01:08:46');
-
 -- --------------------------------------------------------
 
 --
@@ -63,7 +56,9 @@ CREATE TABLE `detalle_pedido` (
 INSERT INTO `detalle_pedido` (`ID_Detalle`, `ID_Pedido`, `ID_Producto`, `Cantidad`, `PrecioUnitario`) VALUES
 (1, 1, 3, 5, 25000.00),
 (2, 2, 2, 1, 18000.00),
-(3, 3, 2, 6, 18000.00);
+(3, 3, 2, 6, 18000.00),
+(4, 4, 3, 2, 25000.00),
+(5, 5, 3, 2, 25000.00);
 
 -- --------------------------------------------------------
 
@@ -102,7 +97,37 @@ CREATE TABLE `pedido` (
 INSERT INTO `pedido` (`ID_Pedido`, `ID_Usuario`, `Fecha`, `Subtotal`, `Envio`, `Total`, `Estado`, `Direccion`, `MetodoPago`) VALUES
 (1, 8, '2026-03-22 17:59:51', 125000.00, 0.00, 125000.00, 'Pendiente', 'kokokoko', 'Efectivo'),
 (2, 8, '2026-03-22 18:03:59', 18000.00, 5000.00, 23000.00, 'Pendiente', 'eSDASDQAE ADA', 'Efectivo'),
-(3, 8, '2026-03-22 20:08:13', 108000.00, 0.00, 108000.00, 'Pendiente', 'asdasd', 'Efectivo');
+(3, 8, '2026-03-22 20:08:13', 108000.00, 0.00, 108000.00, 'Pendiente', 'asdasd', 'Efectivo'),
+(4, 8, '2026-03-25 18:31:53', 50000.00, 0.00, 50000.00, 'Pendiente', 'DG 24 cra 05 sur', 'Tarjeta'),
+(5, 8, '2026-03-25 18:37:48', 50000.00, 0.00, 50000.00, 'Pendiente', 'No especificada', 'Transferencia');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pqrs`
+--
+
+CREATE TABLE `pqrs` (
+  `ID_PQRS` int(11) NOT NULL,
+  `Codigo_Referencia` varchar(50) NOT NULL,
+  `ID_Usuario` int(11) DEFAULT NULL,
+  `Nombre` varchar(100) NOT NULL,
+  `Email` varchar(100) NOT NULL,
+  `Telefono` varchar(20) DEFAULT NULL,
+  `Tipo` enum('pregunta','queja','reclamo','sugerencia','felicitacion') NOT NULL,
+  `Descripcion` text NOT NULL,
+  `Estado` enum('pendiente','en proceso','resuelta','cerrada') DEFAULT 'pendiente',
+  `Fecha_Creacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  `Fecha_Actualizacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `Respuesta` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pqrs`
+--
+
+INSERT INTO `pqrs` (`ID_PQRS`, `Codigo_Referencia`, `ID_Usuario`, `Nombre`, `Email`, `Telefono`, `Tipo`, `Descripcion`, `Estado`, `Fecha_Creacion`, `Fecha_Actualizacion`, `Respuesta`) VALUES
+(1, 'PQRS-20260402-095021', 10, 'Santiago Rodriguez', 'santidavila233@gmail.com', '3214569874', 'reclamo', 'No me gusto el café, estuvo en mal estado y sabia feo', 'resuelta', '2026-04-02 21:47:16', '2026-04-02 21:54:40', 'feo jajaja');
 
 -- --------------------------------------------------------
 
@@ -117,17 +142,23 @@ CREATE TABLE `producto` (
   `Categoria` varchar(100) NOT NULL COMMENT 'Nivel de tostado o clasificación técnica del producto',
   `Precio` decimal(10,2) NOT NULL COMMENT 'Precio unitario del producto',
   `Stock` int(100) NOT NULL COMMENT 'Cantidad de productos disponibles',
-  `imagen` varchar(255) DEFAULT NULL
+  `imagen` varchar(255) DEFAULT NULL,
+  `Estado` tinyint(1) DEFAULT 1,
+  `ID_Proveedor` int(11) DEFAULT NULL,
+  `calificacion_promedio` decimal(3,2) DEFAULT 0.00,
+  `total_resenas` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `producto`
 --
 
-INSERT INTO `producto` (`ID_Producto`, `Nombre_producto`, `Descripcion`, `Categoria`, `Precio`, `Stock`, `imagen`) VALUES
-(1, 'Cafe tostado', 'Cafe con toston medio', 'Tostado', 12000.00, 30, 'cafe1.jpeg'),
-(2, 'Cafe fino', 'Cafe fino en maquina', 'Fino', 18000.00, 10, 'cafe2.jpeg'),
-(3, 'Cafe molido', 'molido por una maquina', 'Molido', 25000.00, 10, 'cafe3.jpeg');
+INSERT INTO `producto` (`ID_Producto`, `Nombre_producto`, `Descripcion`, `Categoria`, `Precio`, `Stock`, `imagen`, `Estado`, `ID_Proveedor`, `calificacion_promedio`, `total_resenas`) VALUES
+(1, 'Cafe tostado', 'Cafe con toston medio', 'Tostado', 12000.00, 30, 'cafe1.jpeg', 1, 5, 0.00, 0),
+(2, 'Cafe fino', 'Cafe fino en maquina', 'Fino', 18000.00, 10, 'cafe2.jpeg', 1, 5, 0.00, 0),
+(3, 'Cafe molido', 'molido por una maquina', 'Molido', 25000.00, 7, 'cafe3.jpeg', 1, 5, 0.00, 0),
+(4, 'Café Geisha', 'Un Café muy suave y con un toque de sabor picante', 'Molido', 19000.00, 18, 'cafe3.jpeg', 1, 4, 5.00, 1),
+(6, 'prueba', 'añañañañañañaña', 'Molido', 1000.00, 100, 'cafe1.jpeg', 0, 4, 0.00, 0);
 
 -- --------------------------------------------------------
 
@@ -161,11 +192,21 @@ INSERT INTO `proveedor` (`ID_Proveedor`, `Nombre_proveedor`, `Apellido`, `Telefo
 
 CREATE TABLE `reseñas` (
   `id` int(11) NOT NULL,
-  `producto_id` int(11) DEFAULT NULL,
-  `nombre` varchar(100) DEFAULT NULL,
-  `comentario` text DEFAULT NULL,
-  `fecha` timestamp NOT NULL DEFAULT current_timestamp()
+  `producto_id` int(11) NOT NULL,
+  `usuario_id` int(11) NOT NULL,
+  `nombre_usuario` varchar(100) NOT NULL,
+  `calificacion` int(11) NOT NULL,
+  `comentario` text NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
+  `estado` enum('pendiente','aprobada','rechazada') DEFAULT 'pendiente'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `reseñas`
+--
+
+INSERT INTO `reseñas` (`id`, `producto_id`, `usuario_id`, `nombre_usuario`, `calificacion`, `comentario`, `fecha`, `estado`) VALUES
+(1, 4, 9, 'Laura', 5, 'Estaba muy rico, Muchas gracias! ', '2026-04-03 00:23:13', 'aprobada');
 
 -- --------------------------------------------------------
 
@@ -202,18 +243,21 @@ CREATE TABLE `usuario` (
   `Documento` varchar(10) NOT NULL COMMENT 'Número de documento de identidad del usuario',
   `Telefono` varchar(20) NOT NULL COMMENT 'Número de teléfono de contacto',
   `Clave` varchar(255) NOT NULL COMMENT 'Contraseña de acceso del usuario (encriptada)',
-  `ID_Rol` int(11) NOT NULL COMMENT 'Llave foránea que indica el rol o tipo de usuario dentro del sistema'
+  `ID_Rol` int(11) NOT NULL COMMENT 'Llave foránea que indica el rol o tipo de usuario dentro del sistema',
+  `Estado` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`ID_Usuario`, `Nombre_usuario`, `Apellido`, `Correo`, `Documento`, `Telefono`, `Clave`, `ID_Rol`) VALUES
-(4, 'Jorge', 'Gonzales', 'jagojites1082@gmail.com', '103766205', '1786947855', 'gorgiño', 3),
-(5, 'Michael', 'Merlano', 'maicolgeovany@gmail.com', '125478965', '314782475', 'ayjesucrito', 3),
-(8, 'Elkin', 'Camargo', 'elkinl1023@msn.com', '1023864852', '3147854962', '$2b$10$QYyWAjtPcMcJvgbqe3qViuF9wRpoBZaluAvYXE.ZAL7zuD9rDB.Zy', 2),
-(9, 'Laura', 'Marroquin', 'lauris07@gmail.com', '1028863203', '3256748903', '$2b$10$0b/IuGOtLHper3ebaB0EoeT7pG1cSYOJidk8M3BK833gKEAUhufr6', 2);
+INSERT INTO `usuario` (`ID_Usuario`, `Nombre_usuario`, `Apellido`, `Correo`, `Documento`, `Telefono`, `Clave`, `ID_Rol`, `Estado`) VALUES
+(4, 'Jorge', 'Gonzales', 'jagojites1082@gmail.com', '103766205', '1786947855', 'gorgiño', 3, 1),
+(5, 'Michael', 'Merlano', 'maicolgeovany@gmail.com', '125478965', '314782475', 'ayjesucrito', 3, 1),
+(8, 'Elkin', 'Camargo', 'elkinl1023@msn.com', '1023864852', '3147854962', '$2b$10$QYyWAjtPcMcJvgbqe3qViuF9wRpoBZaluAvYXE.ZAL7zuD9rDB.Zy', 1, 1),
+(9, 'Laura', 'Marroquin', 'lauris07@gmail.com', '1028863203', '3256748903', '$2b$10$0b/IuGOtLHper3ebaB0EoeT7pG1cSYOJidk8M3BK833gKEAUhufr6', 2, 1),
+(10, 'Santiago', 'Rodriguez', 'santidavila233@gmail.com', '1070598502', '3214569874', '$2b$10$7QhdTwmpptLN7ij3M8o9VO5kXaTV70kAf0EMZ4vYcUktAgeLaxSbO', 2, 1),
+(11, 'Admin', 'Sistema', 'admin@buitron.com', '123456789', '3000000000', '$2b$10$QYyWAjtPcMcJvgbqe3qViuF9wRpoBZaluAvYXE.ZAL7zuD9rDB.Zy', 2, 0);
 
 --
 -- Índices para tablas volcadas
@@ -250,10 +294,19 @@ ALTER TABLE `pedido`
   ADD KEY `ID_Usuario` (`ID_Usuario`);
 
 --
+-- Indices de la tabla `pqrs`
+--
+ALTER TABLE `pqrs`
+  ADD PRIMARY KEY (`ID_PQRS`),
+  ADD UNIQUE KEY `Codigo_Referencia` (`Codigo_Referencia`),
+  ADD KEY `ID_Usuario` (`ID_Usuario`);
+
+--
 -- Indices de la tabla `producto`
 --
 ALTER TABLE `producto`
-  ADD PRIMARY KEY (`ID_Producto`);
+  ADD PRIMARY KEY (`ID_Producto`),
+  ADD KEY `ID_Proveedor` (`ID_Proveedor`);
 
 --
 -- Indices de la tabla `proveedor`
@@ -266,7 +319,9 @@ ALTER TABLE `proveedor`
 -- Indices de la tabla `reseñas`
 --
 ALTER TABLE `reseñas`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `producto_id` (`producto_id`),
+  ADD KEY `usuario_id` (`usuario_id`);
 
 --
 -- Indices de la tabla `rol`
@@ -294,13 +349,13 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `carrito`
 --
 ALTER TABLE `carrito`
-  MODIFY `ID_Carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID_Carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_pedido`
 --
 ALTER TABLE `detalle_pedido`
-  MODIFY `ID_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `entrada`
@@ -312,13 +367,19 @@ ALTER TABLE `entrada`
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `ID_Pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_Pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `pqrs`
+--
+ALTER TABLE `pqrs`
+  MODIFY `ID_PQRS` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del producto', AUTO_INCREMENT=4;
+  MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del producto', AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedor`
@@ -330,7 +391,7 @@ ALTER TABLE `proveedor`
 -- AUTO_INCREMENT de la tabla `reseñas`
 --
 ALTER TABLE `reseñas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
@@ -342,7 +403,7 @@ ALTER TABLE `rol`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del usuario dentro del sistema', AUTO_INCREMENT=10;
+  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador único del usuario dentro del sistema', AUTO_INCREMENT=12;
 
 --
 -- Restricciones para tablas volcadas
@@ -373,6 +434,25 @@ ALTER TABLE `entrada`
 --
 ALTER TABLE `pedido`
   ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`ID_Usuario`) REFERENCES `usuario` (`ID_Usuario`);
+
+--
+-- Filtros para la tabla `pqrs`
+--
+ALTER TABLE `pqrs`
+  ADD CONSTRAINT `pqrs_ibfk_1` FOREIGN KEY (`ID_Usuario`) REFERENCES `usuario` (`ID_Usuario`) ON DELETE SET NULL;
+
+--
+-- Filtros para la tabla `producto`
+--
+ALTER TABLE `producto`
+  ADD CONSTRAINT `producto_ibfk_1` FOREIGN KEY (`ID_Proveedor`) REFERENCES `usuario` (`ID_Usuario`);
+
+--
+-- Filtros para la tabla `reseñas`
+--
+ALTER TABLE `reseñas`
+  ADD CONSTRAINT `reseñas_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `producto` (`ID_Producto`) ON DELETE CASCADE,
+  ADD CONSTRAINT `reseñas_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`ID_Usuario`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `usuario`

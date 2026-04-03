@@ -12,8 +12,7 @@
 }
 
 /* Hero Sections */
-.pqrs-hero,
-.pqrs-hero-small {
+.pqrs-hero {
   background: linear-gradient(rgba(44, 24, 16, 0.7), rgba(44, 24, 16, 0.8)),
               url('https://images.unsplash.com/photo-1509042239860-f550ce710b93') no-repeat center center/cover;
   display: flex;
@@ -21,14 +20,9 @@
   justify-content: center;
   text-align: center;
   color: white;
-}
-
-.pqrs-hero {
   height: 350px;
-}
-
-.pqrs-hero-small {
-  height: 250px;
+  position: relative;
+  top: -30px;
 }
 
 .pqrs-hero-content h1 {

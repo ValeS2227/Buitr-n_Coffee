@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import HistorialCompras from "../components/HistorialCompras"
+import MisPqrs from "./MisPqrs"
 
 function Usuario() {
   const navigate = useNavigate()
@@ -77,7 +78,7 @@ function Usuario() {
   const cerrarSesion = () => {
     localStorage.removeItem("token")
     localStorage.removeItem("usuario")
-    navigate("/login")
+    navigate("/index")
   }
 
   return (
@@ -99,15 +100,19 @@ function Usuario() {
             className={`tab-btn ${seccionActiva === "perfil" ? "active" : ""}`}
             onClick={() => setSeccionActiva("perfil")}
           >
-            <i className="fa-solid fa-user"></i>
             Mi Perfil
           </button>
           <button 
             className={`tab-btn ${seccionActiva === "historial" ? "active" : ""}`}
             onClick={() => setSeccionActiva("historial")}
           >
-            <i className="fa-solid fa-history"></i>
-            Mis Compras
+            Mis Pedidos
+          </button>
+          <button 
+            className={`tab-btn ${seccionActiva === "pqrs" ? "active" : ""}`}
+            onClick={() => setSeccionActiva("pqrs")}
+          >
+            Mis PQRS
           </button>
         </div>
 
@@ -118,9 +123,6 @@ function Usuario() {
                 {usuario.Nombre_usuario?.charAt(0).toUpperCase()}
               </div>
               <input type="file" accept="image/*" style={{ display: 'none' }} id="foto-perfil" />
-              <label htmlFor="foto-perfil" className="btn-cambiar-foto">
-                Cambiar foto
-              </label>
             </div>
 
             <div className="info-section">
@@ -177,8 +179,10 @@ function Usuario() {
               </button>
             </div>
           </div>
-        ) : (
+        ) : seccionActiva === "historial" ? (
           <HistorialCompras usuario={usuario} />
+        ) : (
+          <MisPqrs />
         )}
       </div>
     </div>

@@ -115,53 +115,6 @@ function Nosotros() {
                 2 años de experiencia en la industria del café.
               </p>
             </div>
-            <div className="equipo-card">
-              <div className="equipo-imagen">
-                <img src="/pictures/colaborador2.jpeg" />
-              </div>
-              <h3>Laura</h3>
-              <p>Desarrolladora de la página</p>
-            </div>
-            <div className="equipo-card">
-              <div className="equipo-imagen">
-                <img src="/pictures/colaborador6.png" />
-              </div>
-              <h3>Saray</h3>
-              <p>Apoyo moral</p>
-              <p className="equipo-descripcion">
-                Siempre dio apoyo moral al equipo (no hizo nada pero estuvo ahí para apoyarnos)
-              </p>
-            </div>
-            <div className="equipo-card">
-              <div className="equipo-imagen">
-                <img src="/pictures/colaborador4.png" />
-              </div>
-              <h3>Josue Alexander</h3>
-              <p>Sobrino del fundador y acosador</p>
-              <p className="equipo-descripcion">
-                Experto esclavizar a Diego por ser negro, siempre estuvo ahí para acosar a Diego y hacerle la vida imposible
-              </p>
-            </div>
-            <div className="equipo-card">
-              <div className="equipo-imagen">
-                <img src="/pictures/colaborador3.png" />
-              </div>
-              <h3>Diego</h3>
-              <p>Esclavo de Alex</p>
-              <p className="equipo-descripcion">
-                Esclavizado por alex y acosado sexualmente
-              </p>
-            </div>
-            <div className="equipo-card">
-              <div className="equipo-imagen">
-                <img src="/pictures/colaborador5.png" />
-              </div>
-              <h3>Sharon</h3>
-              <p>Esposa de Alex</p>
-              <p className="equipo-descripcion">
-                Desarrolladora profesional y patrona
-              </p>
-            </div>
           </div>
         </div>
       </section>

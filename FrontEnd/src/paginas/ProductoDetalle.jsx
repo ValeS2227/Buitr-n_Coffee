@@ -11,7 +11,7 @@ function ProductoDetalle() {
   const navigate = useNavigate();
   const [producto, setProducto] = useState(null);
   const [cantidad, setCantidad] = useState(1);
-    const { agregarAlCarrito } = useCarrito();
+  const { agregarAlCarrito } = useCarrito();
 
   useEffect(() => {
     fetch(`http://localhost:3001/api/productos/${id}`)
@@ -25,9 +25,12 @@ function ProductoDetalle() {
     const num = Number(calificacion) || 0;
     for (let i = 1; i <= 5; i++) {
       estrellas.push(
-        <span key={i} className={i <= Math.round(num) ? 'estrella-llena' : 'estrella-vacia'}>
+        <span
+          key={i}
+          className={i <= Math.round(num) ? "estrella-llena" : "estrella-vacia"}
+        >
           ★
-        </span>
+        </span>,
       );
     }
     return estrellas;
@@ -46,56 +49,70 @@ function ProductoDetalle() {
   return (
     <div className="producto-detalle">
       <HeaderGlobal />
-      
+
       <div className="detalle-container">
         <div className="detalle-imagen">
-          <img 
-            src={`http://localhost:3001/imagenes/${producto.imagen}`} 
+          <img
+            src={`http://localhost:3001/imagenes/${producto.imagen}`}
             alt={producto.Nombre_producto}
             onError={(e) => {
-              e.target.src = 'https://via.placeholder.com/400x400?text=Sin+imagen';
+              e.target.src =
+                "https://via.placeholder.com/400x400?text=Sin+imagen";
             }}
           />
         </div>
-        
+
         <div className="detalle-info">
           <h1>{producto.Nombre_producto}</h1>
-          
+
           <div className="producto-calificacion">
-            <div className="estrellas">{renderEstrellas(producto.calificacion_promedio)}</div>
-            <span className="calificacion-numero">{Number(producto.calificacion_promedio || 0).toFixed(1)}</span>
-            <span className="total-resenas">({producto.total_resenas || 0} reseñas)</span>
+            <div className="estrellas">
+              {renderEstrellas(producto.calificacion_promedio)}
+            </div>
+            <span className="calificacion-numero">
+              {Number(producto.calificacion_promedio || 0).toFixed(1)}
+            </span>
+            <span className="total-resenas">
+              ({producto.total_resenas || 0} reseñas)
+            </span>
           </div>
-          
-          <p className="detalle-descripcion">{producto.Descripcion || "Sin descripción disponible"}</p>
-          
-          <p className="detalle-categoria">📂 Categoría: {producto.Categoria}</p>
-          <p className="detalle-stock">📦 Stock disponible: {producto.Stock} unidades</p>
-          
-          <p className="detalle-precio">${Number(producto.Precio).toLocaleString()}</p>
-          
+
+          <p className="detalle-descripcion">
+            {producto.Descripcion || "Sin descripción disponible"}
+          </p>
+
+          <p className="detalle-categoria">
+            📂 Categoría: {producto.Categoria}
+          </p>
+          <p className="detalle-stock">
+            📦 Stock disponible: {producto.Stock} unidades
+          </p>
+
+          <p className="detalle-precio">
+            ${Number(producto.Precio).toLocaleString()}
+          </p>
+
           <div className="detalle-cantidad">
             <label>Cantidad:</label>
-            <input 
-              type="number" 
-              min="1" 
-              max={producto.Stock} 
-              value={cantidad} 
+            <input
+              type="number"
+              min="1"
+              max={producto.Stock}
+              value={cantidad}
               onChange={(e) => setCantidad(parseInt(e.target.value))}
             />
           </div>
-          
-          <button 
-            className="btn-agregar-carrito"
+
+          <button
             onClick={() => agregarAlCarrito(producto.ID_Producto, cantidad)}
           >
-            🛒 Agregar al carrito
+            Agregar al carrito
           </button>
         </div>
       </div>
-      
+
       <ResenasProducto productoId={producto.ID_Producto} />
-      
+
       <Footer />
     </div>
   );

@@ -26,26 +26,58 @@ function Carrito() {
     setMostrarFormulario(true);
   };
 
-  const confirmarCompra = async () => {
-    setProcesando(true);
+const procesarCompra = async () => {
+  if (!direccion.trim()) {
+    alert("Por favor ingresa una dirección de envío");
+    return;
+  }
 
-    try {
-      const res = await axios.post(
-        "http://localhost:3001/api/pedidos/registrar",
-        { direccion, metodoPago },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Debes iniciar sesión para continuar");
+    navigate("/login");
+    return;
+  }
 
-      // Redirigir a la página de confirmación con los datos de la compra
-      navigate("/confirmacion", { state: { compra: res.data } });
-      
-    } catch (error) {
-      console.error("Error al procesar compra:", error);
-      alert(error.response?.data?.message || "Error al procesar la compra");
-    } finally {
-      setProcesando(false);
-    }
-  };
+  setProcesando(true);
+
+  try {
+    const usuarioRes = await axios.get("http://localhost:3001/api/auth/perfil", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const usuario = usuarioRes.data;
+
+    const pedidoData = {
+      ID_Usuario: usuario.ID_Usuario,
+      items: carrito.items,
+      subtotal: carrito.total,
+      envio: costoEnvio,
+      total: totalConEnvio,
+      direccion: direccion,
+      metodoPago: metodoPago
+    };
+
+    const pedidoRes = await axios.post("http://localhost:3001/api/pedidos", pedidoData, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    await vaciarCarrito();
+
+    navigate("/confirmacion", { 
+      state: { 
+        pedido: pedidoRes.data,
+        direccion,
+        metodoPago,
+        total: totalConEnvio
+      } 
+    });
+  } catch (error) {
+    console.error("Error al procesar compra:", error);
+    alert(error.response?.data?.message || "Error al procesar la compra");
+  } finally {
+    setProcesando(false);
+  }
+};
 
   if (cargando) {
     return <div className="cargando">Cargando carrito...</div>;
@@ -144,7 +176,7 @@ function Carrito() {
 
             {!mostrarFormulario ? (
               <button onClick={handleProcederPago} className="btn-primary btn-checkout">
-                Proceder al pago
+                Proceder recibo
               </button>
             ) : (
               <div className="formulario-pago">
@@ -162,7 +194,7 @@ function Carrito() {
                   className="btn-primary"
                   disabled={procesando}
                 >
-                  {procesando ? "Procesando..." : "Confirmar compra"}
+                  {procesando ? "Procesando..." : "Confirmar Recibo"}
                 </button>
                 <button 
                   onClick={() => setMostrarFormulario(false)} 

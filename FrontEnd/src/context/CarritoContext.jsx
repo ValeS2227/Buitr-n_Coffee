@@ -34,26 +34,33 @@ export const CarritoProvider = ({ children }) => {
   }
 };
 
-  const agregarAlCarrito = async (productoId, cantidad = 1) => {
-    if (!token) {
-      alert('Debes iniciar sesión para agregar productos al carrito');
-      return false;
-    }
+const agregarAlCarrito = async (productoId, cantidad = 1) => {
+  const token = localStorage.getItem('token');
+  console.log("🔑 Token:", token); 
+  console.log("📦 Producto ID:", productoId); 
+  
+  if (!token) {
+    alert('Debes iniciar sesión para agregar productos al carrito');
+    return false;
+  }
 
-    try {
-      await axios.post('http://localhost:3001/api/carrito/agregar', 
-        { productoId, cantidad },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      await obtenerCarrito();
-      alert('Producto agregado al carrito');
-      return true;
-    } catch (error) {
-      console.error('Error al agregar al carrito:', error);
-      alert('Error al agregar producto al carrito');
-      return false;
-    }
-  };
+  try {
+    const response = await axios.post('http://localhost:3001/api/carrito/agregar', 
+      { productoId, cantidad },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    console.log("✅ Respuesta:", response.data);
+    await obtenerCarrito();
+    alert('Producto agregado al carrito');
+    return true;
+  } catch (error) {
+    console.error("❌ Error completo:", error);
+    console.error("❌ Response error:", error.response?.data);
+    console.error("❌ Status:", error.response?.status);
+    alert(error.response?.data?.message || 'Error al agregar producto al carrito');
+    return false;
+  }
+};
 
   const actualizarCantidad = async (itemId, cantidad) => {
     if (!token) return;
@@ -83,17 +90,17 @@ export const CarritoProvider = ({ children }) => {
   };
 
   const vaciarCarrito = async () => {
-    if (!token) return;
+  if (!token) return;
 
-    try {
-      await axios.delete('http://localhost:3001/api/carrito/vaciar', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      await obtenerCarrito();
-    } catch (error) {
-      console.error('Error al vaciar carrito:', error);
-    }
-  };
+  try {
+    await axios.delete('http://localhost:3001/api/carrito/vaciar', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setCarrito({ items: [], total: 0 });
+  } catch (error) {
+    console.error('Error al vaciar carrito:', error);
+  }
+};
 
   useEffect(() => {
     obtenerCarrito();

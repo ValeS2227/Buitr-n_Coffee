@@ -37,7 +37,6 @@ router.get("/", verificarToken, (req, res) => {
   db.query(sql, [usuarioId], (err, results) => {
     if (err) return res.status(500).json(err);
     
-    // Calcular total
     const total = results.reduce((sum, item) => sum + (item.Precio * item.Cantidad), 0);
     
     res.json({
@@ -52,6 +51,11 @@ router.post("/agregar", verificarToken, (req, res) => {
   const usuarioId = req.usuarioId;
   const { productoId, cantidad = 1 } = req.body;
 
+  console.log("========== AGREGAR AL CARRITO ==========");
+  console.log("usuarioId:", usuarioId);
+  console.log("productoId:", productoId);
+  console.log("cantidad:", cantidad);
+
   if (!productoId) {
     return res.status(400).json({ message: "ID de producto requerido" });
   }
@@ -60,7 +64,10 @@ router.post("/agregar", verificarToken, (req, res) => {
   const checkSql = "SELECT * FROM carrito WHERE ID_Usuario = ? AND ID_Producto = ?";
   
   db.query(checkSql, [usuarioId, productoId], (err, results) => {
-    if (err) return res.status(500).json(err);
+    if (err) {
+      console.error("Error al verificar carrito:", err);
+      return res.status(500).json(err);
+    }
 
     if (results.length > 0) {
       // Actualizar cantidad
@@ -68,15 +75,23 @@ router.post("/agregar", verificarToken, (req, res) => {
       const updateSql = "UPDATE carrito SET Cantidad = ? WHERE ID_Carrito = ?";
       
       db.query(updateSql, [nuevaCantidad, results[0].ID_Carrito], (err) => {
-        if (err) return res.status(500).json(err);
+        if (err) {
+          console.error("Error al actualizar:", err);
+          return res.status(500).json(err);
+        }
+        console.log("✅ Cantidad actualizada a:", nuevaCantidad);
         res.json({ message: "Cantidad actualizada" });
       });
     } else {
       // Insertar nuevo producto
       const insertSql = "INSERT INTO carrito (ID_Usuario, ID_Producto, Cantidad) VALUES (?, ?, ?)";
       
-      db.query(insertSql, [usuarioId, productoId, cantidad], (err) => {
-        if (err) return res.status(500).json(err);
+      db.query(insertSql, [usuarioId, productoId, cantidad], (err, result) => {
+        if (err) {
+          console.error("Error al insertar:", err);
+          return res.status(500).json(err);
+        }
+        console.log("✅ Producto insertado, ID:", result.insertId);
         res.json({ message: "Producto agregado al carrito" });
       });
     }

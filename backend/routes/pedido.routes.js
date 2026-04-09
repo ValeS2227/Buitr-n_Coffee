@@ -219,5 +219,93 @@ router.post("/registrar", verificarToken, (req, res) => {
     });
   });
 });
+// =========================
+// 🔵 OBTENER TODOS LOS PEDIDOS (SOLO ADMIN)
+// =========================
+router.get("/admin/todos", verificarToken, (req, res) => {
+  // Verificar que es admin
+  const checkAdminSql = "SELECT ID_Rol FROM usuario WHERE ID_Usuario = ?";
+  
+  db.query(checkAdminSql, [req.usuarioId], (err, result) => {
+    if (err) return res.status(500).json(err);
+    if (result.length === 0 || result[0].ID_Rol !== 1) {
+      return res.status(403).json({ message: "No tienes permisos" });
+    }
+
+    const sql = `
+      SELECT p.*, u.Nombre_usuario, u.Apellido, u.Correo, u.Telefono,
+             (SELECT COUNT(*) FROM detalle_pedido WHERE ID_Pedido = p.ID_Pedido) as CantidadProductos
+      FROM pedido p
+      JOIN usuario u ON p.ID_Usuario = u.ID_Usuario
+      ORDER BY p.Fecha DESC
+    `;
+
+    db.query(sql, (err, results) => {
+      if (err) return res.status(500).json(err);
+      res.json(results);
+    });
+  });
+});
+
+// =========================
+// 🔵 OBTENER DETALLE DE UN PEDIDO (SOLO ADMIN)
+// =========================
+router.get("/admin/detalle/:pedidoId", verificarToken, (req, res) => {
+  const { pedidoId } = req.params;
+
+  // Verificar que es admin
+  const checkAdminSql = "SELECT ID_Rol FROM usuario WHERE ID_Usuario = ?";
+  
+  db.query(checkAdminSql, [req.usuarioId], (err, result) => {
+    if (err) return res.status(500).json(err);
+    if (result.length === 0 || result[0].ID_Rol !== 1) {
+      return res.status(403).json({ message: "No tienes permisos" });
+    }
+
+    const sql = `
+      SELECT dp.*, p.Nombre_producto, p.imagen, p.Descripcion
+      FROM detalle_pedido dp
+      JOIN producto p ON dp.ID_Producto = p.ID_Producto
+      WHERE dp.ID_Pedido = ?
+    `;
+
+    db.query(sql, [pedidoId], (err, results) => {
+      if (err) return res.status(500).json(err);
+      res.json(results);
+    });
+  });
+});
+
+// =========================
+// 🟡 ACTUALIZAR ESTADO DE PEDIDO (SOLO ADMIN)
+// =========================
+router.patch("/admin/estado/:pedidoId", verificarToken, (req, res) => {
+  const { pedidoId } = req.params;
+  const { estado } = req.body;
+
+  // Verificar que es admin
+  const checkAdminSql = "SELECT ID_Rol FROM usuario WHERE ID_Usuario = ?";
+  
+  db.query(checkAdminSql, [req.usuarioId], (err, result) => {
+    if (err) return res.status(500).json(err);
+    if (result.length === 0 || result[0].ID_Rol !== 1) {
+      return res.status(403).json({ message: "No tienes permisos" });
+    }
+
+    const estadosValidos = ['Pendiente', 'Enviado', 'Entregado', 'Cancelado'];
+    if (!estadosValidos.includes(estado)) {
+      return res.status(400).json({ message: "Estado no válido" });
+    }
+
+    const sql = "UPDATE pedido SET Estado = ? WHERE ID_Pedido = ?";
+    db.query(sql, [estado, pedidoId], (err, result) => {
+      if (err) return res.status(500).json(err);
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "Pedido no encontrado" });
+      }
+      res.json({ message: "Estado actualizado correctamente" });
+    });
+  });
+});
 
 module.exports = router;

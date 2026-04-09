@@ -114,6 +114,9 @@ const IndexAdmin = () => {
               <button className="menu-btn btn-resenas" onClick={() => irA('/resenas/ver')}>
               GESTIONAR RESEÑAS
               </button>
+              <button className="menu-btn btn-pedidos" onClick={() => irA('/admin/pedidos')}>
+              GESTIONAR PEDIDOS
+              </button>
             </div>
             
           </div>

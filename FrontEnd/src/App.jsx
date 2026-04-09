@@ -34,6 +34,7 @@ import InhabilitarUsuarios from "./Admin-paginas/InhabilitarUsuarios";
 import CambiarRolUsuario from "./Admin-paginas/CambiarRolUsuario";
 import VerPqrs from "./Admin-paginas/VerPqrs";
 import GestionResenas from "./Admin-paginas/GestionResenas";
+import GestionPedidos from "./Admin-paginas/GestionPedidos";
 
 function App() {
   return (
@@ -195,6 +196,14 @@ function App() {
             element={
               <AdminRoute>
                 <GestionResenas />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/pedidos"
+            element={
+              <AdminRoute>
+                <GestionPedidos />
               </AdminRoute>
             }
           />

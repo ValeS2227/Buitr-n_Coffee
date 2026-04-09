@@ -215,6 +215,14 @@ body {
   background: #7d3c98;
 }
 
+.btn-pedidos {
+  background: #16a085;
+}
+
+.btn-pedidos:hover {
+  background: #138d75;
+}
+
 /* Footer básico */
 .admin-footer-basico {
   background: #2c3e50;

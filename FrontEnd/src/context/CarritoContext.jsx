@@ -18,20 +18,21 @@ export const CarritoProvider = ({ children }) => {
   const token = localStorage.getItem('token');
 
   const obtenerCarrito = async () => {
-    if (!token) return;
-    
-    setCargando(true);
-    try {
-      const res = await axios.get('http://localhost:3001/api/carrito', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setCarrito(res.data);
-    } catch (error) {
-      console.error('Error al obtener carrito:', error);
-    } finally {
-      setCargando(false);
-    }
-  };
+  if (!token) return;
+  
+  setCargando(true);
+  try {
+    const res = await axios.get('http://localhost:3001/api/carrito', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    console.log("RESPUESTA DEL BACKEND:", res.data); // ← VER ESTO
+    setCarrito(res.data);
+  } catch (error) {
+    console.error('Error al obtener carrito:', error);
+  } finally {
+    setCargando(false);
+  }
+};
 
   const agregarAlCarrito = async (productoId, cantidad = 1) => {
     if (!token) {

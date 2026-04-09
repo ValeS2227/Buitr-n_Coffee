@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-04-2026 a las 02:40:23
+-- Tiempo de generación: 09-04-2026 a las 05:08:59
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -35,6 +35,13 @@ CREATE TABLE `carrito` (
   `Fecha_Agregado` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `carrito`
+--
+
+INSERT INTO `carrito` (`ID_Carrito`, `ID_Usuario`, `ID_Producto`, `Cantidad`, `Fecha_Agregado`) VALUES
+(21, 10, 2, 1, '2026-04-09 03:06:59');
+
 -- --------------------------------------------------------
 
 --
@@ -58,7 +65,10 @@ INSERT INTO `detalle_pedido` (`ID_Detalle`, `ID_Pedido`, `ID_Producto`, `Cantida
 (2, 2, 2, 1, 18000.00),
 (3, 3, 2, 6, 18000.00),
 (4, 4, 3, 2, 25000.00),
-(5, 5, 3, 2, 25000.00);
+(5, 5, 3, 2, 25000.00),
+(6, 6, 1, 2, 12000.00),
+(7, 7, 2, 1, 18000.00),
+(8, 8, 2, 2, 18000.00);
 
 -- --------------------------------------------------------
 
@@ -99,7 +109,10 @@ INSERT INTO `pedido` (`ID_Pedido`, `ID_Usuario`, `Fecha`, `Subtotal`, `Envio`, `
 (2, 8, '2026-03-22 18:03:59', 18000.00, 5000.00, 23000.00, 'Pendiente', 'eSDASDQAE ADA', 'Efectivo'),
 (3, 8, '2026-03-22 20:08:13', 108000.00, 0.00, 108000.00, 'Pendiente', 'asdasd', 'Efectivo'),
 (4, 8, '2026-03-25 18:31:53', 50000.00, 0.00, 50000.00, 'Pendiente', 'DG 24 cra 05 sur', 'Tarjeta'),
-(5, 8, '2026-03-25 18:37:48', 50000.00, 0.00, 50000.00, 'Pendiente', 'No especificada', 'Transferencia');
+(5, 8, '2026-03-25 18:37:48', 50000.00, 0.00, 50000.00, 'Pendiente', 'No especificada', 'Transferencia'),
+(6, 10, '2026-04-08 21:43:02', 24000.00, 5000.00, 29000.00, 'Pendiente', 'No especificada', 'Transferencia'),
+(7, 10, '2026-04-08 21:44:17', 18000.00, 5000.00, 23000.00, 'Pendiente', 'No especificada', 'Tarjeta'),
+(8, 10, '2026-04-08 21:56:13', 36000.00, 5000.00, 41000.00, 'Pendiente', 'No especificada', 'Efectivo');
 
 -- --------------------------------------------------------
 
@@ -127,7 +140,7 @@ CREATE TABLE `pqrs` (
 --
 
 INSERT INTO `pqrs` (`ID_PQRS`, `Codigo_Referencia`, `ID_Usuario`, `Nombre`, `Email`, `Telefono`, `Tipo`, `Descripcion`, `Estado`, `Fecha_Creacion`, `Fecha_Actualizacion`, `Respuesta`) VALUES
-(1, 'PQRS-20260402-095021', 10, 'Santiago Rodriguez', 'santidavila233@gmail.com', '3214569874', 'reclamo', 'No me gusto el café, estuvo en mal estado y sabia feo', 'resuelta', '2026-04-02 21:47:16', '2026-04-02 21:54:40', 'feo jajaja');
+(1, 'PQRS-20260402-095021', 10, 'Santiago Rodriguez', 'santidavila233@gmail.com', '3214569874', 'reclamo', 'No me gusto el café, estuvo en mal estado y sabia feo', 'resuelta', '2026-04-02 21:47:16', '2026-04-06 00:52:07', 'disculpe las molestias, estamos trabajando para verificar nuestros productos estén en excelente estado por favor discúlpenos! vuelva para proporcionarle un descuesto del 50%');
 
 -- --------------------------------------------------------
 
@@ -256,7 +269,7 @@ INSERT INTO `usuario` (`ID_Usuario`, `Nombre_usuario`, `Apellido`, `Correo`, `Do
 (5, 'Michael', 'Merlano', 'maicolgeovany@gmail.com', '125478965', '314782475', 'ayjesucrito', 3, 1),
 (8, 'Elkin', 'Camargo', 'elkinl1023@msn.com', '1023864852', '3147854962', '$2b$10$QYyWAjtPcMcJvgbqe3qViuF9wRpoBZaluAvYXE.ZAL7zuD9rDB.Zy', 1, 1),
 (9, 'Laura', 'Marroquin', 'lauris07@gmail.com', '1028863203', '3256748903', '$2b$10$0b/IuGOtLHper3ebaB0EoeT7pG1cSYOJidk8M3BK833gKEAUhufr6', 2, 1),
-(10, 'Santiago', 'Rodriguez', 'santidavila233@gmail.com', '1070598502', '3214569874', '$2b$10$7QhdTwmpptLN7ij3M8o9VO5kXaTV70kAf0EMZ4vYcUktAgeLaxSbO', 2, 1),
+(10, 'Santiago', 'Rodriguez', 'santidavila233@gmail.com', '1070598502', '3214569874', '$2b$10$CYSRDre8Y2jN1ImwsaJP/eZYwQk6.FQYnI2uLvy3sU1YP/RScNcCy', 2, 1),
 (11, 'Admin', 'Sistema', 'admin@buitron.com', '123456789', '3000000000', '$2b$10$QYyWAjtPcMcJvgbqe3qViuF9wRpoBZaluAvYXE.ZAL7zuD9rDB.Zy', 2, 0);
 
 --
@@ -349,13 +362,13 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `carrito`
 --
 ALTER TABLE `carrito`
-  MODIFY `ID_Carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ID_Carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_pedido`
 --
 ALTER TABLE `detalle_pedido`
-  MODIFY `ID_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_Detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `entrada`
@@ -367,7 +380,7 @@ ALTER TABLE `entrada`
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `ID_Pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_Pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `pqrs`

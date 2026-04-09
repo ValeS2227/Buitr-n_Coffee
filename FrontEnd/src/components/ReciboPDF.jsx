@@ -1,247 +1,169 @@
-import { Document, Page, Text, View, StyleSheet, Image, Font } from '@react-pdf/renderer';
-
-// Registrar fuentes (opcional, para mejor apariencia)
-Font.register({
-  family: 'Helvetica',
-  fonts: [
-    { src: 'https://fonts.gstatic.com/s/helvetica/v1/Helvetica.ttf' },
-    { fontWeight: 'bold', src: 'https://fonts.gstatic.com/s/helvetica/v1/Helvetica-Bold.ttf' }
-  ]
-});
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
   page: {
     padding: 40,
-    backgroundColor: '#FFFFFF',
     fontFamily: 'Helvetica'
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     marginBottom: 30,
-    borderBottom: '1px solid #E0E0E0',
-    paddingBottom: 20
+    textAlign: 'center',
+    borderBottom: 2,
+    borderBottomColor: '#c0392b',
+    paddingBottom: 10
   },
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  logo: {
-    width: 60,
-    height: 60,
-    marginRight: 10
-  },
-  empresaInfo: {
-    textAlign: 'right'
-  },
-  empresaNombre: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#C49A6C',
-    marginBottom: 5
-  },
-  empresaDetalle: {
-    fontSize: 10,
-    color: '#666666'
-  },
-  tituloRecibo: {
+  title: {
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 30,
-    color: '#333333'
+    color: '#c0392b'
   },
-  infoCliente: {
-    marginBottom: 30,
-    padding: 15,
-    backgroundColor: '#F9F9F9',
-    borderRadius: 5
-  },
-  infoClienteTitulo: {
+  subtitle: {
     fontSize: 12,
+    color: '#666',
+    marginTop: 5
+  },
+  section: {
+    marginBottom: 20
+  },
+  sectionTitle: {
+    fontSize: 14,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#C49A6C'
+    backgroundColor: '#f5f5f5',
+    padding: 5
   },
-  infoClienteTexto: {
+  row: {
+    flexDirection: 'row',
+    marginBottom: 5
+  },
+  label: {
+    width: 100,
     fontSize: 10,
-    marginBottom: 5,
-    color: '#333333'
-  },
-  tabla: {
-    marginBottom: 30
-  },
-  tablaHeader: {
-    flexDirection: 'row',
-    backgroundColor: '#F5F5F5',
-    padding: 10,
-    borderBottom: '1px solid #E0E0E0'
-  },
-  tablaHeaderTexto: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    color: '#666666'
-  },
-  tablaFila: {
-    flexDirection: 'row',
-    padding: 10,
-    borderBottom: '1px solid #F0F0F0'
-  },
-  tablaFilaTexto: {
-    fontSize: 9,
-    color: '#333333'
-  },
-  columnaProducto: { width: '40%' },
-  columnaCantidad: { width: '15%', textAlign: 'center' },
-  columnaPrecioUnitario: { width: '20%', textAlign: 'right' },
-  columnaSubtotal: { width: '25%', textAlign: 'right' },
-  resumen: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: '#F9F9F9',
-    borderRadius: 5
-  },
-  lineaResumen: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8
-  },
-  lineaResumenTotal: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-    paddingTop: 10,
-    borderTop: '2px solid #C49A6C',
     fontWeight: 'bold'
   },
-  textoResumen: {
-    fontSize: 10
+  value: {
+    fontSize: 10,
+    flex: 1
   },
-  textoResumenTotal: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#C49A6C'
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#f5f5f5',
+    padding: 8,
+    marginTop: 10,
+    fontSize: 10,
+    fontWeight: 'bold'
+  },
+  tableRow: {
+    flexDirection: 'row',
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    fontSize: 9
+  },
+  col1: { width: '40%' },
+  col2: { width: '20%', textAlign: 'right' },
+  col3: { width: '20%', textAlign: 'right' },
+  col4: { width: '20%', textAlign: 'right' },
+  total: {
+    marginTop: 15,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
+  },
+  totalText: {
+    fontSize: 14,
+    fontWeight: 'bold'
   },
   footer: {
     position: 'absolute',
     bottom: 30,
-    left: 40,
-    right: 40,
+    left: 30,
+    right: 30,
     textAlign: 'center',
-    borderTop: '1px solid #E0E0E0',
-    paddingTop: 15,
     fontSize: 8,
-    color: '#999999'
-  },
-  agradecimiento: {
-    textAlign: 'center',
-    marginTop: 20,
-    fontSize: 10,
-    color: '#C49A6C',
-    fontStyle: 'italic'
+    color: '#999'
   }
 });
 
 const ReciboPDF = ({ compra, usuario, fecha, numeroRecibo }) => {
-  const subtotal = compra.total;
-  const envio = subtotal >= 50000 ? 0 : 5000;
-  const total = subtotal + envio;
+  // Asegurar que los datos existen
+  const items = compra?.items || [];
+  const subtotal = compra?.subtotal || 0;
+  const envio = compra?.envio || 0;
+  const total = compra?.total || 0;
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Header con logo y empresa */}
+        {/* Encabezado */}
         <View style={styles.header}>
-          <View style={styles.logoContainer}>
-            <Image
-              style={styles.logo}
-              src="http://localhost:3001/imagenes/logob.png"
-            />
-            <View>
-              <Text style={styles.empresaNombre}>Buitrón Coffee</Text>
-              <Text style={styles.empresaDetalle}>Café de especialidad</Text>
-            </View>
-          </View>
-          <View style={styles.empresaInfo}>
-            <Text style={styles.empresaDetalle}>NIT: 901.234.567-8</Text>
-            <Text style={styles.empresaDetalle}>Tel: (601) 123 4567</Text>
-            <Text style={styles.empresaDetalle}>Calle 123 # 45-67</Text>
-            <Text style={styles.empresaDetalle}>Bogotá, Colombia</Text>
-          </View>
+          <Text style={styles.title}>Buitrón Coffee</Text>
+          <Text style={styles.subtitle}>Recibo de Compra</Text>
+          <Text style={styles.subtitle}>N° {numeroRecibo}</Text>
+          <Text style={styles.subtitle}>Fecha: {fecha}</Text>
         </View>
-
-        {/* Título */}
-        <Text style={styles.tituloRecibo}>RECIBO DE TU PEDIDO</Text>
 
         {/* Información del cliente */}
-        <View style={styles.infoCliente}>
-          <Text style={styles.infoClienteTitulo}>DATOS DEL CLIENTE</Text>
-          <Text style={styles.infoClienteTexto}>Nombre: {usuario.Nombre_usuario} {usuario.Apellido}</Text>
-          <Text style={styles.infoClienteTexto}>Documento: {usuario.Documento || 'No especificado'}</Text>
-          <Text style={styles.infoClienteTexto}>Teléfono: {usuario.Telefono || 'No especificado'}</Text>
-          <Text style={styles.infoClienteTexto}>Correo: {usuario.Correo}</Text>
-        </View>
-
-        {/* Datos del recibo */}
-        <View style={styles.infoCliente}>
-          <Text style={styles.infoClienteTexto}>Recibo N°: {numeroRecibo}</Text>
-          <Text style={styles.infoClienteTexto}>Fecha: {fecha}</Text>
-        </View>
-
-        {/* Tabla de productos */}
-        <View style={styles.tabla}>
-          <View style={styles.tablaHeader}>
-            <Text style={[styles.tablaHeaderTexto, styles.columnaProducto]}>DESCRIPCIÓN</Text>
-            <Text style={[styles.tablaHeaderTexto, styles.columnaCantidad]}>CANTIDAD</Text>
-            <Text style={[styles.tablaHeaderTexto, styles.columnaPrecioUnitario]}>PRECIO UNIT.</Text>
-            <Text style={[styles.tablaHeaderTexto, styles.columnaSubtotal]}>SUBTOTAL</Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Información del Cliente</Text>
+          <View style={styles.row}>
+            <Text style={styles.label}>Nombre:</Text>
+            <Text style={styles.value}>{usuario?.Nombre_usuario || ''} {usuario?.Apellido || ''}</Text>
           </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Documento:</Text>
+            <Text style={styles.value}>{usuario?.Documento || 'No especificado'}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Teléfono:</Text>
+            <Text style={styles.value}>{usuario?.Telefono || 'No especificado'}</Text>
+          </View>
+        </View>
 
-          {compra.items.map((item, index) => (
-            <View style={styles.tablaFila} key={index}>
-              <Text style={[styles.tablaFilaTexto, styles.columnaProducto]}>
-                {item.Nombre_producto}
-              </Text>
-              <Text style={[styles.tablaFilaTexto, styles.columnaCantidad]}>
-                {item.Cantidad}
-              </Text>
-              <Text style={[styles.tablaFilaTexto, styles.columnaPrecioUnitario]}>
-                ${item.Precio.toLocaleString()}
-              </Text>
-              <Text style={[styles.tablaFilaTexto, styles.columnaSubtotal]}>
-                ${(item.Precio * item.Cantidad).toLocaleString()}
-              </Text>
+        {/* Productos */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Productos</Text>
+          
+          <View style={styles.tableHeader}>
+            <Text style={styles.col1}>Producto</Text>
+            <Text style={styles.col2}>Precio</Text>
+            <Text style={styles.col3}>Cantidad</Text>
+            <Text style={styles.col4}>Subtotal</Text>
+          </View>
+          
+          {items.map((item, index) => (
+            <View key={index} style={styles.tableRow}>
+              <Text style={styles.col1}>{item.Nombre_producto}</Text>
+              <Text style={styles.col2}>${item.PrecioUnitario?.toLocaleString() || 0}</Text>
+              <Text style={styles.col3}>{item.Cantidad}</Text>
+              <Text style={styles.col4}>${(item.Cantidad * (item.PrecioUnitario || 0)).toLocaleString()}</Text>
             </View>
           ))}
         </View>
 
-        {/* Resumen de la compra */}
-        <View style={styles.resumen}>
-          <View style={styles.lineaResumen}>
-            <Text style={styles.textoResumen}>Subtotal:</Text>
-            <Text style={styles.textoResumen}>${subtotal.toLocaleString()}</Text>
+        {/* Totales */}
+        <View style={styles.section}>
+          <View style={styles.row}>
+            <Text style={[styles.label, { width: '80%', textAlign: 'right' }]}>Subtotal:</Text>
+            <Text style={[styles.value, { textAlign: 'right' }]}>${subtotal.toLocaleString()}</Text>
           </View>
-          <View style={styles.lineaResumen}>
-            <Text style={styles.textoResumen}>Envío:</Text>
-            <Text style={styles.textoResumen}>
-              {envio === 0 ? 'GRATIS' : `$${envio.toLocaleString()}`}
+          <View style={styles.row}>
+            <Text style={[styles.label, { width: '80%', textAlign: 'right' }]}>Envío:</Text>
+            <Text style={[styles.value, { textAlign: 'right' }]}>
+              {envio === 0 ? 'Gratis' : `$${envio.toLocaleString()}`}
             </Text>
           </View>
-          <View style={styles.lineaResumenTotal}>
-            <Text style={styles.textoResumenTotal}>TOTAL:</Text>
-            <Text style={styles.textoResumenTotal}>${total.toLocaleString()}</Text>
+          <View style={styles.total}>
+            <Text style={styles.totalText}>Total: ${total.toLocaleString()}</Text>
           </View>
         </View>
 
-        {/* Agradecimiento */}
-        <Text style={styles.agradecimiento}>
-          ¡Gracias por tu pedido! Te recordamos ir a nuestro punto de venta para obtener tus productos
-        </Text>
-
         {/* Footer */}
         <View style={styles.footer}>
-          <Text>Buitrón Coffee - Calidad y tradición en cada taza</Text>
-          <Text>© 2026 Buitrón Coffee - Todos los derechos reservados</Text>
+          <Text>¡Gracias por tu compra! Visítanos nuevamente en Buitrón Coffee</Text>
+          <Text>Si tienes alguna duda, contáctanos: atencion@buitroncoffee.com</Text>
         </View>
       </Page>
     </Document>

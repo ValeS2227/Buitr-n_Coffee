@@ -87,6 +87,12 @@ function Login() {
           >
             Registrarse
           </button>
+          <button
+            className="btn-link"
+            onClick={() => navigate("/olvido-contrasena")}
+          >
+            ¿Olvidaste tu contraseña?
+          </button>
         </div>
       </div>
     </div>

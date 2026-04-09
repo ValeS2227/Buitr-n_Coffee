@@ -9,6 +9,7 @@ function HistorialCompras({ usuario }) {
   const [cargando, setCargando] = useState(true);
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
   const [detallePedido, setDetallePedido] = useState(null);
+  const [pdfListo, setPdfListo] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -38,6 +39,7 @@ function HistorialCompras({ usuario }) {
       });
       setDetallePedido(res.data);
       setPedidoSeleccionado(pedidoId);
+      setTimeout(() => setPdfListo(true), 100);
     } catch (error) {
       console.error("Error al cargar detalle:", error);
       alert("Error al cargar el detalle del pedido");
@@ -226,27 +228,38 @@ function HistorialCompras({ usuario }) {
               </div>
 
               <div className="detalle-acciones">
-                <PDFDownloadLink
-                  document={
-                    <ReciboPDF
-                      compra={{
-                        items: detallePedido.items,
-                        total: detallePedido.Total,
-                        subtotal: detallePedido.Subtotal,
-                        envio: detallePedido.Envio
-                      }}
-                      usuario={usuario}
-                      fecha={formatearFecha(detallePedido.Fecha)}
-                      numeroRecibo={`F-${detallePedido.ID_Pedido.toString().padStart(6, '0')}`}
-                    />
-                  }
-                  fileName={`recibo_${detallePedido.ID_Pedido}.pdf`}
-                >
-                  {({ loading }) => 
-                    loading ? 'Generando PDF...' : '📄 Descargar Recibo'
-                  }
-                </PDFDownloadLink>
-              </div>
+            {pdfListo ? (
+              <PDFDownloadLink
+                document={
+                  <ReciboPDF
+                    compra={{
+                      items: detallePedido.items,
+                      total: detallePedido.Total,
+                      subtotal: detallePedido.Subtotal,
+                      envio: detallePedido.Envio
+                    }}
+                    usuario={usuario}
+                    fecha={formatearFecha(detallePedido.Fecha)}
+                    numeroRecibo={`F-${detallePedido.ID_Pedido.toString().padStart(6, '0')}`}
+                  />
+                }
+                fileName={`recibo_${detallePedido.ID_Pedido}.pdf`}
+              >
+                {({ loading, error }) => {
+                  if (error) return <button className="btn-pdf">❌ Error al generar</button>;
+                  return (
+                    <button className="btn-pdf" disabled={loading} style={{ backgroundColor: "transparent", margin: "0px" }}>
+                      {loading ? 'Generando PDF...' : '📄 Descargar Recibo'}
+                    </button>
+                  );
+                }}
+              </PDFDownloadLink>
+            ) : (
+              <button className="btn-pdf" disabled>
+                ⏳ Preparando recibo...
+              </button>
+            )}
+          </div>
             </div>
           </div>
         </div>

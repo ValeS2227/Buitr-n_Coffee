@@ -138,22 +138,6 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.btn-cambiar-foto {
-  background: #6c757d;
-  color: white;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 13px;
-  transition: all 0.2s;
-  display: inline-block;
-}
-
-.btn-cambiar-foto:hover {
-  background: #5a6268;
-}
-
 /* Sección de información */
 .info-section {
   flex: 1;

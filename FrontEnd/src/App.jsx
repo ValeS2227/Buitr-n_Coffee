@@ -11,6 +11,7 @@ import AdminRoute from "./components/AdminRoute";
 import Index from "./paginas/Index";
 import Login from "./paginas/Login";
 import Registro from "./paginas/Registro";
+import OlvidoContrasena from "./paginas/OlvidoContrasena";
 import Catalogo from "./paginas/catalogo";
 import Usuario from "./paginas/usuario";
 import MisPqrs from "./paginas/MisPqrs";
@@ -47,6 +48,7 @@ function App() {
           <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/nosotros" element={<Nosotros />} />
           <Route path="/producto/:id" element={<ProductoDetalle />} />
+          <Route path="/olvido-contrasena" element={<OlvidoContrasena />} />
 
           {/* RUTAS PROTEGIDAS PARA USUARIOS AUTENTICADOS */}
           <Route

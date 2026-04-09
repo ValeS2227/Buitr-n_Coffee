@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import HeaderGlobal from "../components/HeaderGlobal";
 import Footer from "../components/Footer";
 import ResenasProducto from "../components/ResenasProducto";
+import { useCarrito } from "../context/CarritoContext";
 import "../estilos/productoDetalle.css";
 
 function ProductoDetalle() {
@@ -10,6 +11,7 @@ function ProductoDetalle() {
   const navigate = useNavigate();
   const [producto, setProducto] = useState(null);
   const [cantidad, setCantidad] = useState(1);
+    const { agregarAlCarrito } = useCarrito();
 
   useEffect(() => {
     fetch(`http://localhost:3001/api/productos/${id}`)
@@ -85,9 +87,7 @@ function ProductoDetalle() {
           
           <button 
             className="btn-agregar-carrito"
-            onClick={() => {
-              alert(`Agregaste ${cantidad} unidad(es) de ${producto.Nombre_producto} al carrito`);
-            }}
+            onClick={() => agregarAlCarrito(producto.ID_Producto, cantidad)}
           >
             🛒 Agregar al carrito
           </button>

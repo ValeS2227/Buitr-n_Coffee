@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito - Buitrón Coffee</title>
+    <link href="css/carrito.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<header class="nav">
+    <button onclick="location.href='indexregistrado.html'">Regresar al Inicio</button>
+    <h2>Buitrón Coffee</h2>
+    <span>admin</span>
+</header>
+
+<main class="container">
+
+    <h2 class="titulo">Bienvenido al carrito</h2>
+
+    <div id="productos" class="productos"></div>
+
+    <div class="recibo">
+        <button onclick="generarRecibo()">Obtener recibo</button>
+        <div id="resultado"></div>
+    </div>
+
+</main>
+    <script src="js/carrito.js" type="text/javascript"></script>
+</body>
+</html>

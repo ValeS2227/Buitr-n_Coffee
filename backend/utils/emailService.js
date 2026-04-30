@@ -26,8 +26,7 @@ const enviarCorreoRecuperacion = async (email, nombre, codigo) => {
           <div style="background: #f5f5f5; padding: 15px; font-size: 24px; text-align: center;">
             <strong>${codigo}</strong>
           </div>
-          <p>Este código expirará en <strong>10 minutos</strong>.</p>
-          <p>Si no solicitaste esto, te estan hackiando</p>
+          <p>Este código expirará en <strong> 5 minutos</strong>.</p>
         </div>
       </div>
     `

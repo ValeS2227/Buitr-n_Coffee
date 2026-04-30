@@ -326,20 +326,6 @@
   margin-top: 1rem;
 }
 
-.detalle-acciones a {
-  background: #C49A6C;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background 0.3s;
-}
-
-.detalle-acciones a:hover {
-  background: #b0865a;
-}
-
 @media (max-width: 768px) {
   .pedido-header {
     flex-direction: column;

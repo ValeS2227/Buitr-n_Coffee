@@ -21,12 +21,32 @@ const GestionPedidos = () => {
     cargarPedidos();
   }, []);
 
+  const getTiempoRestante = (fechaLimite) => {
+    if (!fechaLimite) return "No definida";
+
+    const ahora = new Date();
+    const limite = new Date(fechaLimite);
+    const diff = limite - ahora;
+
+    if (diff <= 0) return "⏰ Vencido";
+
+    const horas = Math.floor(diff / (1000 * 60 * 60));
+    const dias = Math.floor(horas / 24);
+
+    if (dias > 0) return `${dias} día(s) restante(s)`;
+    if (horas > 0) return `${horas} hora(s) restante(s)`;
+    return "Menos de 1 hora";
+  };
+
   const cargarPedidos = async () => {
     try {
       setCargando(true);
-      const res = await axios.get("http://localhost:3001/api/pedidos/admin/todos", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await axios.get(
+        "http://localhost:3001/api/pedidos/admin/todos",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       setPedidos(res.data);
       setPedidosFiltrados(res.data);
       setCargando(false);
@@ -39,9 +59,12 @@ const GestionPedidos = () => {
 
   const verDetalle = async (pedidoId) => {
     try {
-      const res = await axios.get(`http://localhost:3001/api/pedidos/admin/detalle/${pedidoId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await axios.get(
+        `http://localhost:3001/api/pedidos/admin/detalle/${pedidoId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       setDetallePedido(res.data);
       setPedidoSeleccionado(pedidoId);
     } catch (error) {
@@ -55,7 +78,7 @@ const GestionPedidos = () => {
       await axios.patch(
         `http://localhost:3001/api/pedidos/admin/estado/${pedidoId}`,
         { estado: nuevoEstado },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       setExito(`Pedido #${pedidoId} actualizado a ${nuevoEstado}`);
       cargarPedidos();
@@ -68,7 +91,11 @@ const GestionPedidos = () => {
   };
 
   const handleCambioEstado = async (pedidoId, nuevoEstado) => {
-    if (window.confirm(`¿Cambiar estado del pedido #${pedidoId} a "${nuevoEstado}"?`)) {
+    if (
+      window.confirm(
+        `¿Cambiar estado del pedido #${pedidoId} a "${nuevoEstado}"?`,
+      )
+    ) {
       await actualizarEstado(pedidoId, nuevoEstado);
     }
   };
@@ -83,14 +110,17 @@ const GestionPedidos = () => {
     let filtrados = [...pedidos];
 
     if (filtroEstado !== "todos") {
-      filtrados = filtrados.filter(p => p.Estado === filtroEstado);
+      filtrados = filtrados.filter((p) => p.Estado === filtroEstado);
     }
 
     if (busquedaUsuario.trim()) {
-      filtrados = filtrados.filter(p =>
-        p.Nombre_usuario.toLowerCase().includes(busquedaUsuario.toLowerCase()) ||
-        p.Apellido.toLowerCase().includes(busquedaUsuario.toLowerCase()) ||
-        p.Correo.toLowerCase().includes(busquedaUsuario.toLowerCase())
+      filtrados = filtrados.filter(
+        (p) =>
+          p.Nombre_usuario.toLowerCase().includes(
+            busquedaUsuario.toLowerCase(),
+          ) ||
+          p.Apellido.toLowerCase().includes(busquedaUsuario.toLowerCase()) ||
+          p.Correo.toLowerCase().includes(busquedaUsuario.toLowerCase()),
       );
     }
 
@@ -98,12 +128,12 @@ const GestionPedidos = () => {
   }, [filtroEstado, busquedaUsuario, pedidos]);
 
   const formatearFecha = (fecha) => {
-    return new Date(fecha).toLocaleDateString('es-CO', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(fecha).toLocaleDateString("es-CO", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -122,7 +152,9 @@ const GestionPedidos = () => {
   return (
     <div className="gestion-pedidos-container">
       <div className="gestion-pedidos-header">
-        <button className="btn-volver" onClick={volver}>← Volver al Panel</button>
+        <button className="btn-volver" onClick={volver}>
+          ← Volver al Panel
+        </button>
         <h1>GESTIÓN DE PEDIDOS</h1>
       </div>
 
@@ -141,34 +173,31 @@ const GestionPedidos = () => {
         </div>
         <div className="filtro-estados">
           <button
-            className={`filtro-btn ${filtroEstado === 'todos' ? 'active' : ''}`}
-            onClick={() => setFiltroEstado('todos')}
+            className={`filtro-btn ${filtroEstado === "todos" ? "active" : ""}`}
+            onClick={() => setFiltroEstado("todos")}
           >
             Todos ({pedidos.length})
           </button>
           <button
-            className={`filtro-btn ${filtroEstado === 'Pendiente' ? 'active' : ''}`}
-            onClick={() => setFiltroEstado('Pendiente')}
+            className={`filtro-btn ${filtroEstado === "Pendiente" ? "active" : ""}`}
+            onClick={() => setFiltroEstado("Pendiente")}
           >
-            Pendientes ({pedidos.filter(p => p.Estado === 'Pendiente').length})
+            Pendientes ({pedidos.filter((p) => p.Estado === "Pendiente").length}
+            )
           </button>
           <button
-            className={`filtro-btn ${filtroEstado === 'Enviado' ? 'active' : ''}`}
-            onClick={() => setFiltroEstado('Enviado')}
+            className={`filtro-btn ${filtroEstado === "Entregado" ? "active" : ""}`}
+            onClick={() => setFiltroEstado("Entregado")}
           >
-            Enviados ({pedidos.filter(p => p.Estado === 'Enviado').length})
+            Entregados ({pedidos.filter((p) => p.Estado === "Entregado").length}
+            )
           </button>
           <button
-            className={`filtro-btn ${filtroEstado === 'Entregado' ? 'active' : ''}`}
-            onClick={() => setFiltroEstado('Entregado')}
+            className={`filtro-btn ${filtroEstado === "Cancelado" ? "active" : ""}`}
+            onClick={() => setFiltroEstado("Cancelado")}
           >
-            Entregados ({pedidos.filter(p => p.Estado === 'Entregado').length})
-          </button>
-          <button
-            className={`filtro-btn ${filtroEstado === 'Cancelado' ? 'active' : ''}`}
-            onClick={() => setFiltroEstado('Cancelado')}
-          >
-            Cancelados ({pedidos.filter(p => p.Estado === 'Cancelado').length})
+            Cancelados ({pedidos.filter((p) => p.Estado === "Cancelado").length}
+            )
           </button>
         </div>
       </div>
@@ -185,36 +214,59 @@ const GestionPedidos = () => {
               <th>Total</th>
               <th>Estado</th>
               <th>Acciones</th>
+              <th>Tiempo restante</th>
             </tr>
           </thead>
           <tbody>
             {pedidosFiltrados.length === 0 ? (
               <tr>
-                <td colSpan="7" className="sin-datos">No hay pedidos para mostrar</td>
+                <td colSpan="7" className="sin-datos">
+                  No hay pedidos para mostrar
+                </td>
               </tr>
             ) : (
               pedidosFiltrados.map((pedido) => (
                 <tr key={pedido.ID_Pedido}>
-                  <td className="pedido-id">#{pedido.ID_Pedido.toString().padStart(6, '0')}</td>
+                  <td className="pedido-id">
+                    #{pedido.ID_Pedido.toString().padStart(6, "0")}
+                  </td>
                   <td className="cliente-info">
-                    <div className="cliente-nombre">{pedido.Nombre_usuario} {pedido.Apellido}</div>
+                    <div className="cliente-nombre">
+                      {pedido.Nombre_usuario} {pedido.Apellido}
+                    </div>
                     <div className="cliente-correo">{pedido.Correo}</div>
                     <div className="cliente-telefono">{pedido.Telefono}</div>
                   </td>
                   <td>{formatearFecha(pedido.Fecha)}</td>
-                  <td className="productos-count">{pedido.CantidadProductos} artículos</td>
-                  <td className="pedido-total">${pedido.Total.toLocaleString()}</td>
+                  <td className="productos-count">
+                    {pedido.CantidadProductos} artículos
+                  </td>
+                  <td className="pedido-total">
+                    ${pedido.Total.toLocaleString()}
+                  </td>
                   <td>
                     <select
                       className={`estado-select ${pedido.Estado.toLowerCase()}`}
                       value={pedido.Estado}
-                      onChange={(e) => handleCambioEstado(pedido.ID_Pedido, e.target.value)}
+                      onChange={(e) =>
+                        handleCambioEstado(pedido.ID_Pedido, e.target.value)
+                      }
                     >
                       <option value="Pendiente">📋 Pendiente</option>
-                      <option value="Enviado">🚚 Enviado</option>
                       <option value="Entregado">✅ Entregado</option>
                       <option value="Cancelado">❌ Cancelado</option>
                     </select>
+                  </td>
+                  <td className="tiempo-restante">
+                    <span
+                      className={
+                        new Date(pedido.Fecha_Limite) < new Date()
+                          ? "vencido"
+                          : "activo"
+                      }
+                    >
+                      {getTiempoRestante(pedido.Fecha_Limite)}
+                    </span>
                   </td>
                   <td>
                     <button
@@ -236,8 +288,13 @@ const GestionPedidos = () => {
         <div className="modal-overlay" onClick={cerrarDetalle}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>Detalle del Pedido #{pedidoSeleccionado.toString().padStart(6, '0')}</h3>
-              <button onClick={cerrarDetalle} className="modal-close">×</button>
+              <h3>
+                Detalle del Pedido #
+                {pedidoSeleccionado.toString().padStart(6, "0")}
+              </h3>
+              <button onClick={cerrarDetalle} className="modal-close">
+                ×
+              </button>
             </div>
             <div className="modal-body">
               <div className="detalle-productos">
@@ -248,17 +305,25 @@ const GestionPedidos = () => {
                       <img
                         src={`http://localhost:3001/imagenes/${item.imagen}`}
                         alt={item.Nombre_producto}
-                        onError={(e) => e.target.src = 'https://via.placeholder.com/50'}
+                        onError={(e) =>
+                          (e.target.src = "https://via.placeholder.com/50")
+                        }
                       />
                       <div className="producto-info">
-                        <div className="producto-nombre">{item.Nombre_producto}</div>
-                        <div className="producto-descripcion">{item.Descripcion?.substring(0, 50)}...</div>
+                        <div className="producto-nombre">
+                          {item.Nombre_producto}
+                        </div>
+                        <div className="producto-descripcion">
+                          {item.Descripcion?.substring(0, 50)}...
+                        </div>
                         <div className="producto-precio">
-                          {item.Cantidad} x ${item.PrecioUnitario.toLocaleString()}
+                          {item.Cantidad} x $
+                          {item.PrecioUnitario.toLocaleString()}
                         </div>
                       </div>
                       <div className="producto-subtotal">
-                        ${(item.Cantidad * item.PrecioUnitario).toLocaleString()}
+                        $
+                        {(item.Cantidad * item.PrecioUnitario).toLocaleString()}
                       </div>
                     </div>
                   ))}
@@ -266,7 +331,9 @@ const GestionPedidos = () => {
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn-cerrar" onClick={cerrarDetalle}>Cerrar</button>
+              <button className="btn-cerrar" onClick={cerrarDetalle}>
+                Cerrar
+              </button>
             </div>
           </div>
         </div>

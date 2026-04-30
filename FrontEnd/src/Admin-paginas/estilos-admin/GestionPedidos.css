@@ -97,6 +97,7 @@
   background: #2c3e50;
   color: white;
   border-color: #2c3e50;
+  width: 380px;
 }
 
 /* Tabla */
@@ -104,6 +105,14 @@
   background: white;
   border-radius: 8px;
   overflow-x: auto;
+}
+.tiempo-restante .vencido {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.tiempo-restante .activo {
+  color: #27ae60;
 }
 
 .tabla-pedidos {

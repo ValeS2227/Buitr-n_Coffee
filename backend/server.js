@@ -1,5 +1,7 @@
   const express = require("express");
   const cors = require("cors");
+  const cron = require('node-cron');
+const axios = require('axios');
   require("dotenv").config();
 
   const connection = require("./config/db");
@@ -51,6 +53,18 @@
       }
     );
   });
+
+  cron.schedule('0 * * * *', async () => {
+  console.log('🔄 Verificando pedidos vencidos...', new Date().toLocaleString());
+  try {
+    const response = await axios.post('http://localhost:3001/api/pedidos/cancelar-vencidos');
+    console.log('✅', response.data.message, `(${response.data.actualizados} cancelados)`);
+  } catch (error) {
+    console.error('❌ Error al cancelar pedidos vencidos:', error.message);
+  }
+});
+
+console.log(' Cron job programado: verificar pedidos vencidos cada hora');
 
 
   // 🚀 SERVER

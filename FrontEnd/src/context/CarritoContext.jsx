@@ -17,47 +17,50 @@ export const CarritoProvider = ({ children }) => {
 
   const token = localStorage.getItem('token');
 
-  const obtenerCarrito = async () => {
+const obtenerCarrito = async () => {
   if (!token) return;
   
-  setCargando(true);
+  console.log("🟢 Obteniendo carrito...");
+  
   try {
-    const res = await axios.get('http://localhost:3001/api/carrito', {
+    const res = await axios.get("http://localhost:3001/api/carrito", {
       headers: { Authorization: `Bearer ${token}` }
     });
-    console.log("RESPUESTA DEL BACKEND:", res.data); // ← VER ESTO
+    console.log("✅ Carrito recibido:", res.data);
     setCarrito(res.data);
   } catch (error) {
-    console.error('Error al obtener carrito:', error);
-  } finally {
-    setCargando(false);
+    console.error("❌ Error al obtener carrito:", error);
   }
 };
 
 const agregarAlCarrito = async (productoId, cantidad = 1) => {
-  const token = localStorage.getItem('token');
-  console.log("🔑 Token:", token); 
-  console.log("📦 Producto ID:", productoId); 
-  
+  console.log("🟢 Llamando a agregarAlCarrito");
+  console.log("productoId:", productoId);
+  console.log("cantidad:", cantidad);
+  console.log("token:", token);
+
   if (!token) {
-    alert('Debes iniciar sesión para agregar productos al carrito');
+    alert("Debes iniciar sesión para agregar productos al carrito");
     return false;
   }
 
   try {
-    const response = await axios.post('http://localhost:3001/api/carrito/agregar', 
+    const response = await axios.post(
+      "http://localhost:3001/api/carrito/agregar",
       { productoId, cantidad },
       { headers: { Authorization: `Bearer ${token}` } }
     );
-    console.log("✅ Respuesta:", response.data);
-    await obtenerCarrito();
-    alert('Producto agregado al carrito');
+    
+    console.log("✅ Respuesta del servidor:", response.data);
+    
+    await obtenerCarrito(); // Recargar carrito después de agregar
+    
+    alert("Producto agregado al carrito");
     return true;
   } catch (error) {
     console.error("❌ Error completo:", error);
-    console.error("❌ Response error:", error.response?.data);
-    console.error("❌ Status:", error.response?.status);
-    alert(error.response?.data?.message || 'Error al agregar producto al carrito');
+    console.error("❌ Response:", error.response?.data);
+    alert(error.response?.data?.message || "Error al agregar producto al carrito");
     return false;
   }
 };

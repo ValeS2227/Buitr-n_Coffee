@@ -23,9 +23,139 @@ const verificarToken = (req, res, next) => {
   });
 };
 
-// Agregar estas rutas a tu archivo pedido.routes.js existente
 
-// 🟢 OBTENER HISTORIAL DE COMPRAS DEL USUARIO
+// 🟢 CREAR PEDIDO
+router.post("/", verificarToken, async (req, res) => {
+  const usuarioId = req.usuarioId;
+  const { items, subtotal, total } = req.body;
+
+  console.log("📦 Creando pedido para usuario:", usuarioId);
+  console.log("Items:", items?.length || 0);
+  console.log("Subtotal:", subtotal);
+  console.log("Total:", total);
+
+  if (!items || items.length === 0) {
+    return res.status(400).json({ message: "El pedido no tiene productos" });
+  }
+
+  const fecha = new Date();
+  const fechaLimite = new Date();
+  fechaLimite.setDate(fechaLimite.getDate() + 2);
+
+  const sqlPedido = `
+    INSERT INTO pedido (ID_Usuario, Fecha, Subtotal, Total, Estado, Fecha_Limite, Pagado)
+    VALUES (?, ?, ?, ?, 'Pendiente', ?, 0)
+  `;
+
+  db.query(sqlPedido, [usuarioId, fecha, subtotal, total, fechaLimite], (err, result) => {
+    if (err) {
+      console.error("Error al crear pedido:", err);
+      return res.status(500).json({ message: "Error al crear pedido", error: err.message });
+    }
+
+    const pedidoId = result.insertId;
+
+    const detalles = items.map(item => [
+      pedidoId,
+      item.ID_Producto,
+      item.Cantidad,
+      item.PrecioUnitario || item.Precio
+    ]);
+
+    const sqlDetalle = `
+      INSERT INTO detalle_pedido (ID_Pedido, ID_Producto, Cantidad, PrecioUnitario)
+      VALUES ?
+    `;
+
+    db.query(sqlDetalle, [detalles], (err) => {
+      if (err) {
+        console.error("Error al crear detalles:", err);
+        return res.status(500).json({ message: "Error al crear detalles del pedido" });
+      }
+
+      const updateStock = items.map(item => {
+        return new Promise((resolve, reject) => {
+          const sqlStock = "UPDATE producto SET Stock = Stock - ? WHERE ID_Producto = ?";
+          db.query(sqlStock, [item.Cantidad, item.ID_Producto], (err) => {
+            if (err) reject(err);
+            else resolve();
+          });
+        });
+      });
+
+      Promise.all(updateStock)
+        .then(() => {
+          res.status(201).json({
+            message: "Pedido creado correctamente",
+            ID_Pedido: pedidoId,
+            fecha: fecha,
+            fecha_limite: fechaLimite
+          });
+        })
+        .catch(err => {
+          console.error("Error al actualizar stock:", err);
+          res.status(500).json({ message: "Error al actualizar stock" });
+        });
+    });
+  });
+});
+
+// =========================
+//  CANCELAR PEDIDOS VENCIDOS (CRON JOB)
+// =========================
+router.post("/cancelar-vencidos", (req, res) => {
+  const sql = `
+    SELECT p.ID_Pedido, p.ID_Usuario, 
+           GROUP_CONCAT(dp.ID_Producto, ':', dp.Cantidad SEPARATOR ',') as productos
+    FROM pedido p
+    INNER JOIN detalle_pedido dp ON p.ID_Pedido = dp.ID_Pedido
+    WHERE p.Estado = 'Pendiente' 
+      AND p.Fecha_Limite < NOW()
+      AND p.Pagado = 0
+    GROUP BY p.ID_Pedido
+  `;
+
+  db.query(sql, (err, pedidosVencidos) => {
+    if (err) {
+      console.error("Error al buscar pedidos vencidos:", err);
+      return res.status(500).json({ message: "Error al procesar" });
+    }
+
+    let actualizados = 0;
+
+    if (pedidosVencidos.length === 0) {
+      return res.json({ message: "No hay pedidos vencidos", actualizados: 0 });
+    }
+
+    // Procesar cada pedido vencido
+    pedidosVencidos.forEach(pedido => {
+      // Cambiar estado a Cancelado
+      const updateSql = "UPDATE pedido SET Estado = 'Cancelado' WHERE ID_Pedido = ?";
+      db.query(updateSql, [pedido.ID_Pedido], (err) => {
+        if (err) console.error("Error al cancelar pedido:", err);
+      });
+
+      // Devolver stock
+      const productos = pedido.productos.split(',');
+      productos.forEach(item => {
+        const [productoId, cantidad] = item.split(':');
+        const stockSql = "UPDATE producto SET Stock = Stock + ? WHERE ID_Producto = ?";
+        db.query(stockSql, [parseInt(cantidad), productoId], (err) => {
+          if (err) console.error("Error al devolver stock:", err);
+        });
+      });
+
+      actualizados++;
+    });
+
+    res.json({ 
+      message: "Pedidos vencidos cancelados", 
+      actualizados: actualizados 
+    });
+  });
+});
+
+// 🟢 OBTENER HISTORIAL DE PEDIDOS DEL USUARIO
 router.get("/historial", verificarToken, (req, res) => {
   const usuarioId = req.usuarioId;
 
@@ -33,12 +163,11 @@ router.get("/historial", verificarToken, (req, res) => {
     SELECT 
       p.ID_Pedido,
       p.Fecha,
+      p.Fecha_Limite,
       p.Subtotal,
-      p.Envio,
       p.Total,
       p.Estado,
-      p.Direccion,
-      p.MetodoPago,
+      p.Pagado,
       COUNT(dp.ID_Detalle) as CantidadProductos,
       GROUP_CONCAT(DISTINCT pr.Nombre_producto SEPARATOR '||') as Productos
     FROM pedido p
@@ -50,9 +179,11 @@ router.get("/historial", verificarToken, (req, res) => {
   `;
 
   db.query(sql, [usuarioId], (err, results) => {
-    if (err) return res.status(500).json(err);
+    if (err) {
+      console.error("Error en historial:", err);
+      return res.status(500).json({ message: "Error al obtener historial", error: err.message });
+    }
 
-    // Formatear los resultados
     const pedidos = results.map(pedido => ({
       ...pedido,
       ProductosLista: pedido.Productos ? pedido.Productos.split('||') : []
@@ -67,47 +198,65 @@ router.get("/detalle/:pedidoId", verificarToken, (req, res) => {
   const usuarioId = req.usuarioId;
   const pedidoId = req.params.pedidoId;
 
-  const sql = `
-    SELECT 
-      p.*,
-      dp.Cantidad as ProductoCantidad,
-      dp.PrecioUnitario,
-      pr.Nombre_producto,
-      pr.imagen,
-      pr.Descripcion
-    FROM pedido p
-    INNER JOIN detalle_pedido dp ON p.ID_Pedido = dp.ID_Pedido
-    INNER JOIN producto pr ON dp.ID_Producto = pr.ID_Producto
-    WHERE p.ID_Pedido = ? AND p.ID_Usuario = ?
+  // Primero obtener información del pedido
+  const sqlPedido = `
+    SELECT ID_Pedido, Fecha, Subtotal, Total, Estado, Fecha_Limite, Pagado
+    FROM pedido
+    WHERE ID_Pedido = ? AND ID_Usuario = ?
   `;
 
-  db.query(sql, [pedidoId, usuarioId], (err, results) => {
-    if (err) return res.status(500).json(err);
+  db.query(sqlPedido, [pedidoId, usuarioId], (err, pedidoResult) => {
+    if (err) {
+      console.error("Error al obtener pedido:", err);
+      return res.status(500).json({ message: "Error al obtener pedido" });
+    }
 
-    if (results.length === 0) {
+    if (pedidoResult.length === 0) {
       return res.status(404).json({ message: "Pedido no encontrado" });
     }
 
-    const pedido = {
-      ID_Pedido: results[0].ID_Pedido,
-      Fecha: results[0].Fecha,
-      Subtotal: results[0].Subtotal,
-      Envio: results[0].Envio,
-      Total: results[0].Total,
-      Estado: results[0].Estado,
-      Direccion: results[0].Direccion,
-      MetodoPago: results[0].MetodoPago,
-      items: results.map(item => ({
+    const pedido = pedidoResult[0];
+
+    // Obtener productos del pedido
+    const sqlProductos = `
+      SELECT 
+        dp.ID_Producto,
+        dp.Cantidad,
+        dp.PrecioUnitario,
+        pr.Nombre_producto,
+        pr.imagen,
+        pr.Descripcion
+      FROM detalle_pedido dp
+      INNER JOIN producto pr ON dp.ID_Producto = pr.ID_Producto
+      WHERE dp.ID_Pedido = ?
+    `;
+
+    db.query(sqlProductos, [pedidoId], (err, productosResult) => {
+      if (err) {
+        console.error("Error al obtener productos:", err);
+        return res.status(500).json({ message: "Error al obtener productos del pedido" });
+      }
+
+      const items = productosResult.map(item => ({
         ID_Producto: item.ID_Producto,
         Nombre_producto: item.Nombre_producto,
-        Cantidad: item.ProductoCantidad,
+        Cantidad: item.Cantidad,
         PrecioUnitario: item.PrecioUnitario,
         imagen: item.imagen,
         Descripcion: item.Descripcion
-      }))
-    };
+      }));
 
-    res.json(pedido);
+      res.json({
+        ID_Pedido: pedido.ID_Pedido,
+        Fecha: pedido.Fecha,
+        Subtotal: pedido.Subtotal,
+        Total: pedido.Total,
+        Estado: pedido.Estado,
+        Fecha_Limite: pedido.Fecha_Limite,
+        Pagado: pedido.Pagado,
+        items: items
+      });
+    });
   });
 });
 
@@ -219,11 +368,9 @@ router.post("/registrar", verificarToken, (req, res) => {
     });
   });
 });
-// =========================
-// 🔵 OBTENER TODOS LOS PEDIDOS (SOLO ADMIN)
-// =========================
+
+// 🟢 OBTENER TODOS LOS PEDIDOS (SOLO ADMIN)
 router.get("/admin/todos", verificarToken, (req, res) => {
-  // Verificar que es admin
   const checkAdminSql = "SELECT ID_Rol FROM usuario WHERE ID_Usuario = ?";
   
   db.query(checkAdminSql, [req.usuarioId], (err, result) => {
@@ -233,8 +380,19 @@ router.get("/admin/todos", verificarToken, (req, res) => {
     }
 
     const sql = `
-      SELECT p.*, u.Nombre_usuario, u.Apellido, u.Correo, u.Telefono,
-             (SELECT COUNT(*) FROM detalle_pedido WHERE ID_Pedido = p.ID_Pedido) as CantidadProductos
+      SELECT 
+        p.ID_Pedido,
+        p.Fecha,
+        p.Fecha_Limite,
+        p.Subtotal,
+        p.Total,
+        p.Estado,
+        p.Pagado,
+        u.Nombre_usuario,
+        u.Apellido,
+        u.Correo,
+        u.Telefono,
+        (SELECT COUNT(*) FROM detalle_pedido WHERE ID_Pedido = p.ID_Pedido) as CantidadProductos
       FROM pedido p
       JOIN usuario u ON p.ID_Usuario = u.ID_Usuario
       ORDER BY p.Fecha DESC

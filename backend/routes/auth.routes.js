@@ -3,10 +3,10 @@ const router = express.Router();
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { enviarBienvenida, enviarRecuperacionContrasena } = require('../services/emailService');
 
-// 🔐 CLAVE JWT (mejor usar .env en producción)
+// CLAVE JWT 
 const SECRET = "secreto123";
-
 
 // =========================
 // 🟢 REGISTRO
@@ -19,7 +19,6 @@ router.post("/register", async (req, res) => {
   }
 
   try {
-    // 🔍 Verificar si el usuario ya existe
     const checkSql = "SELECT * FROM usuario WHERE Correo = ?";
     db.query(checkSql, [Correo], async (err, result) => {
       if (err) return res.status(500).json(err);
@@ -28,7 +27,6 @@ router.post("/register", async (req, res) => {
         return res.status(400).json({ message: "El correo ya está registrado" });
       }
 
-      // 🔐 Encriptar contraseña
       const hashedPassword = await bcrypt.hash(Clave, 10);
 
       const sql = `
@@ -40,14 +38,20 @@ router.post("/register", async (req, res) => {
       db.query(
         sql,
         [Nombre_usuario, Apellido, Correo, Documento, Telefono, hashedPassword],
-        (err, result) => {
+        async (err, result) => {
           if (err) return res.status(500).json(err);
+
+          try {
+            await enviarBienvenida(Correo, Nombre_usuario);
+            console.log(`📧 Bienvenida enviada a ${Correo}`);
+          } catch (error) {
+            console.error("Error al enviar bienvenida:", error);
+          }
 
           res.status(201).json({ message: "Usuario registrado correctamente" });
         }
       );
     });
-
   } catch (error) {
     res.status(500).json(error);
   }
@@ -81,7 +85,6 @@ router.post("/login", (req, res) => {
       return res.status(401).json({ message: "Contraseña incorrecta" });
     }
 
-    // ✅ VERIFICAR SI EL USUARIO ESTÁ INHABILITADO
     if (user.Estado === 0) {
       return res.status(401).json({ message: "Tu cuenta ha sido inhabilitada. Contacta al administrador." });
     }
@@ -109,6 +112,102 @@ router.post("/login", (req, res) => {
     });
   });
 });
+
+// =========================
+// RECUPERACIÓN DE CONTRASEÑA
+// =========================
+const codigosRecuperacion = new Map();
+
+router.post("/olvido-contrasena", async (req, res) => {
+  const { Correo } = req.body;
+
+  if (!Correo) {
+    return res.status(400).json({ message: "El correo es obligatorio" });
+  }
+
+  const sql = "SELECT ID_Usuario, Nombre_usuario, Correo FROM usuario WHERE Correo = ? AND Estado = 1";
+  
+  db.query(sql, [Correo], async (err, result) => {
+    if (err) return res.status(500).json(err);
+    
+    if (result.length === 0) {
+      return res.status(404).json({ message: "No existe una cuenta con este correo" });
+    }
+
+    const usuario = result[0];
+    const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    codigosRecuperacion.set(usuario.Correo, {
+      codigo: codigo,
+      expira: Date.now() + 5 * 60 * 1000,
+      id_usuario: usuario.ID_Usuario
+    });
+
+    try {
+      await enviarRecuperacionContrasena(usuario.Correo, usuario.Nombre_usuario, codigo);
+      res.json({ message: "Código enviado a tu correo" });
+    } catch (error) {
+      console.error("Error al enviar correo:", error);
+      res.status(500).json({ message: "Error al enviar el correo" });
+    }
+  });
+});
+
+// =========================
+// VERIFICAR CÓDIGO
+// =========================
+router.post("/verificar-codigo", (req, res) => {
+  const { Correo, codigo } = req.body;
+  const registro = codigosRecuperacion.get(Correo);
+
+  if (!registro) {
+    return res.status(404).json({ message: "Código no encontrado" });
+  }
+
+  if (registro.codigo !== codigo) {
+    return res.status(400).json({ message: "Código incorrecto" });
+  }
+
+  if (Date.now() > registro.expira) {
+    codigosRecuperacion.delete(Correo);
+    return res.status(400).json({ message: "Código expirado" });
+  }
+
+  res.json({ message: "Código verificado" });
+});
+
+// =========================
+// RESTABLECER CONTRASEÑA
+// =========================
+router.post("/restablecer-contrasena", async (req, res) => {
+  const { Correo, codigo, nuevaClave } = req.body;
+
+  if (nuevaClave.length < 6) {
+    return res.status(400).json({ message: "La contraseña debe tener al menos 6 caracteres" });
+  }
+
+  const registro = codigosRecuperacion.get(Correo);
+
+  if (!registro || registro.codigo !== codigo) {
+    return res.status(400).json({ message: "Código inválido" });
+  }
+
+  if (Date.now() > registro.expira) {
+    codigosRecuperacion.delete(Correo);
+    return res.status(400).json({ message: "Código expirado" });
+  }
+
+  const hashedPassword = await bcrypt.hash(nuevaClave, 10);
+  const sql = "UPDATE usuario SET Clave = ? WHERE ID_Usuario = ?";
+  
+  db.query(sql, [hashedPassword, registro.id_usuario], (err, result) => {
+    if (err) return res.status(500).json(err);
+    
+    codigosRecuperacion.delete(Correo);
+    res.json({ message: "Contraseña actualizada correctamente" });
+  });
+});
+
 
 // =========================
 // 🟡 PERFIL (GET)
@@ -449,102 +548,4 @@ router.patch("/usuarios/:id/cambiar-rol", (req, res) => {
     });
   });
 });
-
-// =========================
-// RECUPERACIÓN DE CONTRASEÑA
-// =========================
-const { enviarCorreoRecuperacion } = require("../utils/emailService");
-
-// Almacenar códigos temporalmente
-const codigosRecuperacion = new Map();
-
-// 1. SOLICITAR CÓDIGO
-router.post("/olvido-contrasena", async (req, res) => {
-  const { Correo } = req.body;
-
-  if (!Correo) {
-    return res.status(400).json({ message: "El correo es obligatorio" });
-  }
-
-  const sql = "SELECT ID_Usuario, Nombre_usuario, Correo FROM usuario WHERE Correo = ? AND Estado = 1";
-  
-  db.query(sql, [Correo], async (err, result) => {
-    if (err) return res.status(500).json(err);
-    
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No existe una cuenta con este correo" });
-    }
-
-    const usuario = result[0];
-    const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    codigosRecuperacion.set(usuario.Correo, {
-      codigo: codigo,
-      expira: Date.now() + 10 * 60 * 1000,
-      id_usuario: usuario.ID_Usuario
-    });
-
-    try {
-      await enviarCorreoRecuperacion(usuario.Correo, usuario.Nombre_usuario, codigo);
-      res.json({ message: "Código enviado a tu correo" });
-    } catch (error) {
-      console.error("Error al enviar correo:", error);
-      res.status(500).json({ message: "Error al enviar el correo" });
-    }
-  });
-});
-
-// 2. VERIFICAR CÓDIGO
-router.post("/verificar-codigo", (req, res) => {
-  const { Correo, codigo } = req.body;
-
-  const registro = codigosRecuperacion.get(Correo);
-
-  if (!registro) {
-    return res.status(404).json({ message: "Código no encontrado" });
-  }
-
-  if (registro.codigo !== codigo) {
-    return res.status(400).json({ message: "Código incorrecto" });
-  }
-
-  if (Date.now() > registro.expira) {
-    codigosRecuperacion.delete(Correo);
-    return res.status(400).json({ message: "Código expirado" });
-  }
-
-  res.json({ message: "Código verificado" });
-});
-
-// 3. RESTABLECER CONTRASEÑA
-router.post("/restablecer-contrasena", async (req, res) => {
-  const { Correo, codigo, nuevaClave } = req.body;
-
-  if (nuevaClave.length < 6) {
-    return res.status(400).json({ message: "La contraseña debe tener al menos 6 caracteres" });
-  }
-
-  const registro = codigosRecuperacion.get(Correo);
-
-  if (!registro || registro.codigo !== codigo) {
-    return res.status(400).json({ message: "Código inválido" });
-  }
-
-  if (Date.now() > registro.expira) {
-    codigosRecuperacion.delete(Correo);
-    return res.status(400).json({ message: "Código expirado" });
-  }
-
-  const hashedPassword = await bcrypt.hash(nuevaClave, 10);
-  const sql = "UPDATE usuario SET Clave = ? WHERE ID_Usuario = ?";
-  
-  db.query(sql, [hashedPassword, registro.id_usuario], (err, result) => {
-    if (err) return res.status(500).json(err);
-    
-    codigosRecuperacion.delete(Correo);
-    res.json({ message: "Contraseña actualizada correctamente" });
-  });
-});
-
-
 module.exports = router;

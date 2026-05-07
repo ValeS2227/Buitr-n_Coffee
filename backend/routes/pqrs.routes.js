@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 const jwt = require("jsonwebtoken");
+const { enviarConfirmacionPQRS, enviarRespuestaPQRS } = require('../services/emailService');
 
 const SECRET = "secreto123";
 
@@ -19,7 +20,7 @@ const verificarToken = (req, res, next) => {
 };
 
 // =========================
-// 🟢 CREAR PQRS (Público con autenticación opcional)
+// 🟢 CREAR PQRS (con envío de correo de confirmación)
 // =========================
 router.post("/", async (req, res) => {
   const { nombre, email, telefono, tipo, descripcion, codigo_referencia, id_usuario } = req.body;
@@ -33,11 +34,20 @@ router.post("/", async (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, ?, 'pendiente')
   `;
 
-  db.query(sql, [codigo_referencia, id_usuario || null, nombre, email, telefono || null, tipo, descripcion], (err, result) => {
+  db.query(sql, [codigo_referencia, id_usuario || null, nombre, email, telefono || null, tipo, descripcion], async (err, result) => {
     if (err) {
       console.error("Error al crear PQRS:", err);
       return res.status(500).json({ message: "Error al crear PQRS" });
     }
+    
+    // ✅ Enviar correo de confirmación con Brevo
+    try {
+      await enviarConfirmacionPQRS(email, nombre, codigo_referencia, tipo);
+      console.log(`📧 Confirmación PQRS enviada a ${email}`);
+    } catch (error) {
+      console.error("Error al enviar confirmación PQRS:", error);
+    }
+    
     res.status(201).json({ 
       message: "PQRS creada correctamente",
       id: result.insertId,
@@ -94,7 +104,6 @@ router.get("/mis-pqrs", verificarToken, (req, res) => {
 // 🔵 OBTENER TODAS LAS PQRS (SOLO ADMIN)
 // =========================
 router.get("/admin", verificarToken, (req, res) => {
-  // Verificar que es admin
   if (req.usuarioRol !== 1) {
     return res.status(403).json({ message: "No tienes permisos para ver PQRS" });
   }
@@ -113,9 +122,9 @@ router.get("/admin", verificarToken, (req, res) => {
 });
 
 // =========================
-// 🟡 ACTUALIZAR ESTADO DE PQRS (SOLO ADMIN)
+// 🟡 ACTUALIZAR ESTADO DE PQRS (SOLO ADMIN) con envío de respuesta
 // =========================
-router.patch("/admin/:id", verificarToken, (req, res) => {
+router.patch("/admin/:id", verificarToken, async (req, res) => {
   if (req.usuarioRol !== 1) {
     return res.status(403).json({ message: "No tienes permisos" });
   }
@@ -123,13 +132,40 @@ router.patch("/admin/:id", verificarToken, (req, res) => {
   const { id } = req.params;
   const { estado, respuesta } = req.body;
 
-  const sql = "UPDATE pqrs SET Estado = ?, Respuesta = ? WHERE ID_PQRS = ?";
-  db.query(sql, [estado, respuesta || null, id], (err, result) => {
+  // Primero obtener los datos del usuario para enviar el correo
+  const getUserSql = `
+    SELECT p.Email, p.Nombre, p.Codigo_Referencia
+    FROM pqrs p
+    WHERE p.ID_PQRS = ?
+  `;
+
+  db.query(getUserSql, [id], async (err, userResult) => {
     if (err) return res.status(500).json(err);
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "PQRS no encontrada" });
-    }
-    res.json({ message: "PQRS actualizada correctamente" });
+    
+    const sql = "UPDATE pqrs SET Estado = ?, Respuesta = ? WHERE ID_PQRS = ?";
+    db.query(sql, [estado, respuesta || null, id], async (err, result) => {
+      if (err) return res.status(500).json(err);
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "PQRS no encontrada" });
+      }
+      
+      // ✅ Enviar correo de respuesta con Brevo (solo si hay respuesta)
+      if (respuesta && userResult.length > 0) {
+        try {
+          await enviarRespuestaPQRS(
+            userResult[0].Email, 
+            userResult[0].Nombre, 
+            respuesta, 
+            userResult[0].Codigo_Referencia
+          );
+          console.log(`📧 Respuesta PQRS enviada a ${userResult[0].Email}`);
+        } catch (error) {
+          console.error("Error al enviar respuesta PQRS:", error);
+        }
+      }
+      
+      res.json({ message: "PQRS actualizada correctamente" });
+    });
   });
 });
 

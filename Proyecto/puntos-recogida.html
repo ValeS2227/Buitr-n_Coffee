@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Puntos de Recogida - Buitrón Coffee</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f0eb;
+      color: #2c1a0e;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2c1a0e, #5c3d2e);
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      font-size: 1rem;
+      opacity: 0.85;
+    }
+
+    .contenedor {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    #mapa {
+      height: 500px;
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .leyenda {
+      display: flex;
+      gap: 24px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .leyenda-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+
+    .punto {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 2px solid white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+
+    .punto.abierto  { background: #28a745; }
+    .punto.ocupado  { background: #ffc107; }
+    .punto.cerrado  { background: #dc3545; }
+
+    .error-msg {
+      text-align: center;
+      padding: 30px;
+      color: #dc3545;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>☕ Puntos de Recogida</h1>
+    <p>Encuentra el punto más cercano para recoger tu café Buitrón</p>
+  </header>
+
+  <div class="contenedor">
+    <div id="mapa"></div>
+
+    <div class="leyenda">
+      <div class="leyenda-item">
+        <span class="punto abierto"></span> Abierto
+      </div>
+      <div class="leyenda-item">
+        <span class="punto ocupado"></span> Ocupado
+      </div>
+      <div class="leyenda-item">
+        <span class="punto cerrado"></span> Cerrado
+      </div>
+    </div>
+
+    <div id="error-msg" class="error-msg" style="display:none;"></div>
+  </div>
+
+  <script>
+    const colores = {
+      abierto: '#28a745',
+      ocupado: '#ffc107',
+      cerrado: '#dc3545'
+    };
+
+    // Inicializar el mapa centrado en Colombia
+    const map = L.map('mapa').setView([4.7110, -74.0721], 6);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    // ⚠️ Cambia esta URL por la de tu servidor real
+    const API_URL = 'http://localhost:3001/api/puntos-recogida';
+
+    fetch(API_URL)
+      .then(res => {
+        if (!res.ok) throw new Error('No se pudo conectar con el servidor');
+        return res.json();
+      })
+      .then(puntos => {
+        if (!puntos.length) {
+          document.getElementById('error-msg').style.display = 'block';
+          document.getElementById('error-msg').textContent = 'No hay puntos de recogida registrados aún.';
+          return;
+        }
+
+        puntos.forEach(p => {
+          const color = colores[p.estado] || '#888';
+
+          // Icono personalizado con círculo de color
+          const icono = L.divIcon({
+            className: '',
+            html: `<div style="
+              width:22px; height:22px; border-radius:50%;
+              background:${color}; border:3px solid white;
+              box-shadow:0 2px 6px rgba(0,0,0,0.4);
+            "></div>`,
+            iconSize: [22, 22],
+            iconAnchor: [11, 11],
+            popupAnchor: [0, -14]
+          });
+
+          L.marker([p.lat, p.lng], { icon: icono })
+            .addTo(map)
+            .bindPopup(`
+              <div style="min-width:180px; font-family:sans-serif;">
+                <strong style="font-size:1rem; color:#2c1a0e;">${p.nombre}</strong><br/>
+                <span style="font-size:0.82rem; color:#555;">📍 ${p.direccion}</span><br/>
+                ${p.horario ? `<span style="font-size:0.78rem; color:#777;">🕐 ${p.horario}</span><br/>` : ''}
+                ${p.telefono ? `<span style="font-size:0.78rem; color:#777;">📞 ${p.telefono}</span><br/>` : ''}
+                <span style="
+                  display:inline-block; margin-top:6px;
+                  padding:2px 10px; border-radius:12px;
+                  font-size:0.72rem; font-weight:600;
+                  background:${color}22; color:${color};
+                  text-transform:uppercase;
+                ">${p.estado}</span>
+              </div>
+            `);
+        });
+
+        // Centrar mapa automáticamente en los puntos
+        const bounds = puntos.map(p => [p.lat, p.lng]);
+        map.fitBounds(bounds, { padding: [40, 40] });
+      })
+      .catch(err => {
+        document.getElementById('error-msg').style.display = 'block';
+        document.getElementById('error-msg').textContent = 'Error al cargar los puntos: ' + err.message;
+      });
+  </script>
+
+</body>
+</html>

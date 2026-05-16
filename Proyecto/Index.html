@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buitron Coffee</title>
+  <link href="css/Index.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+  <div class="top-banner">
+    Encontrarás descuentos si te registras, ¡Aprovechalo!
+  </div>
+  <header>
+    <div class="header-spacer"></div>
+
+    <div class="header-logo">
+      <h1><i>Buitrón Coffee</i></h1>
+    </div>
+
+    <div class="header-icons">
+        <button onclick="location.href='iniciosesion.html'">Inicia Sesión</button>
+      <a href="iniciosesion.html" title="Usuario">&#128100;</a>
+    </div>
+  </header>
+  <nav>
+    <a href="#" class="active">Inicio</a>
+    <a href="Produccion.html" >Producción</a>
+    <a href="Nosotros.html">Nosotros</a>
+    <a href="Exportaciones.html">Exportaciones</a>
+    <a href="puntos-recogida.html">Puntos</a>
+
+  </nav>
+  <div class="hero">
+    <img
+      src="img/banner.jpeg"
+      alt="Banner café"
+    />
+    <div class="hero-arrow">&#8964;</div>
+  </div>
+
+  <!-- Productos -->
+  <section class="products-section">
+
+    <div class="tabs">
+      <span class="tab active">Ideales para ti</span>
+      <span class="tab">Café Por Mayor</span>
+    </div>
+
+    <div class="products-grid">
+
+      <div class="product-card">
+        <img src="img/cafe1.jpeg" alt="Café Molido">
+        <div class="product-name">Café Molido</div>
+        <div class="product-price">Desde $ 60.000</div>
+        <button class="btn-ver" onclick="location.href='productos-sinlogin.html?id=1'">VER</button>
+      </div>
+
+      <div class="product-card">
+        <img src="img/cafe2.jpeg" alt="Café Molido">
+        <div class="product-name">Grano</div>
+        <div class="product-price">Desde $ 65.000</div>
+        <button class="btn-ver" onclick="location.href='productos-sinlogin.html?id=2'">VER</button>
+      </div>
+
+      <div class="product-card">
+        <img src="img/cafe3.jpeg" alt="Café Molido">
+        <div class="product-name">Grano Especial</div>
+        <div class="product-price">Desde $ 70.000</div>
+        <button class="btn-ver" onclick="location.href='productos-sinlogin.html?id=3'">VER</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WhatsApp -->
+  <a 
+  class="whatsapp-btn"
+  href="https://wa.me/573001234567"
+  target="_blank"
+  title="Contáctanos por WhatsApp"
+>
+  <img src="img/whatsapp.jpeg" alt="WhatsApp" width="28" height="28">
+</a>
+
+</body>
+</html>

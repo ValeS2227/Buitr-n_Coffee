@@ -9,7 +9,7 @@
 /* ===== BODY ===== */
 .auth-body {
     min-height: 100vh;
-    background: #d4d4d4;
+    background: #eee;
     display: flex;
     justify-content: center;
     align-items: center;

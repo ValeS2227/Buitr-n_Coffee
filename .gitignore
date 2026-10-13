@@ -3,6 +3,3 @@ build/
 dist/
 .env
 *.zip
-*.sql
-backend/
-Backend_duplicado/

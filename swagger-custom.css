@@ -1,0 +1,203 @@
+/* =============================================
+   SWAGGER - DISEÑO PERSONALIZADO BUITRÓN COFFEE
+   ============================================= */
+
+/* Fondo general */
+.swagger-ui {
+  background: #0a0e17 !important;
+}
+
+/* Contenedor principal */
+.swagger-ui .swagger-container {
+  background: #0a0e17 !important;
+}
+
+/* Títulos */
+.swagger-ui .info .title {
+  color: #f0e6d3 !important;
+  font-size: 42px !important;
+  font-weight: 700 !important;
+}
+
+.swagger-ui .info .title small {
+  font-size: 18px !important;
+  color: #c8a96e !important;
+}
+
+.swagger-ui .info .description {
+  color: #c8d0d9 !important;
+  font-size: 16px !important;
+}
+
+/* =============================================
+   COLORES NEON PARA MÉTODOS HTTP
+   ============================================= */
+
+/* GET - Verde neón */
+.swagger-ui .opblock-get .opblock-summary-method {
+  background: #00ff88 !important;
+  color: #0a0e17 !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  padding: 8px 16px !important;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5) !important;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.3) !important;
+}
+
+.swagger-ui .opblock-get {
+  border-color: #00ff88 !important;
+  background: rgba(0, 255, 136, 0.05) !important;
+}
+
+/* POST - Azul neón */
+.swagger-ui .opblock-post .opblock-summary-method {
+  background: #00d4ff !important;
+  color: #0a0e17 !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5) !important;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.3) !important;
+}
+
+.swagger-ui .opblock-post {
+  border-color: #00d4ff !important;
+  background: rgba(0, 212, 255, 0.05) !important;
+}
+
+/* PUT - Naranja neón */
+.swagger-ui .opblock-put .opblock-summary-method {
+  background: #ff6b00 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  text-shadow: 0 0 10px rgba(255, 107, 0, 0.5) !important;
+  box-shadow: 0 0 15px rgba(255, 107, 0, 0.3) !important;
+}
+
+.swagger-ui .opblock-put {
+  border-color: #ff6b00 !important;
+  background: rgba(255, 107, 0, 0.05) !important;
+}
+
+/* PATCH - Morado neón */
+.swagger-ui .opblock-patch .opblock-summary-method {
+  background: #b84aff !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  text-shadow: 0 0 10px rgba(184, 74, 255, 0.5) !important;
+  box-shadow: 0 0 15px rgba(184, 74, 255, 0.3) !important;
+}
+
+.swagger-ui .opblock-patch {
+  border-color: #b84aff !important;
+  background: rgba(184, 74, 255, 0.05) !important;
+}
+
+/* DELETE - Rojo neón */
+.swagger-ui .opblock-delete .opblock-summary-method {
+  background: #ff0044 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  text-shadow: 0 0 10px rgba(255, 0, 68, 0.5) !important;
+  box-shadow: 0 0 15px rgba(255, 0, 68, 0.3) !important;
+}
+
+.swagger-ui .opblock-delete {
+  border-color: #ff0044 !important;
+  background: rgba(255, 0, 68, 0.05) !important;
+}
+
+/* =============================================
+   TAMAÑO DE LETRA GENERAL (MÁS GRANDE)
+   ============================================= */
+
+.swagger-ui {
+  font-size: 18px !important;
+}
+
+.swagger-ui .opblock-summary-description {
+  font-size: 16px !important;
+}
+
+.swagger-ui .parameters-col_description {
+  font-size: 15px !important;
+}
+
+.swagger-ui .model-title {
+  font-size: 18px !important;
+}
+
+.swagger-ui .tab li {
+  font-size: 16px !important;
+}
+
+/* =============================================
+   BOTONES
+   ============================================= */
+
+.swagger-ui .btn.execute {
+  background: #00ff88 !important;
+  color: #0a0e17 !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  padding: 10px 24px !important;
+}
+
+.swagger-ui .btn.execute:hover {
+  background: #00cc6a !important;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.4) !important;
+}
+
+.swagger-ui .btn.authorize {
+  background: #00d4ff !important;
+  color: #0a0e17 !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  padding: 10px 24px !important;
+}
+
+.swagger-ui .btn.authorize:hover {
+  background: #00b0cc !important;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4) !important;
+}
+
+/* =============================================
+   FONDO DE LAS OPERACIONES
+   ============================================= */
+
+.swagger-ui .opblock {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-radius: 12px !important;
+  margin-bottom: 16px !important;
+}
+
+.swagger-ui .opblock .opblock-summary {
+  padding: 16px 20px !important;
+}
+
+.swagger-ui .opblock .opblock-body {
+  padding: 16px 20px !important;
+}
+
+/* =============================================
+   SCROLLBAR (BONITO)
+   ============================================= */
+
+.swagger-ui ::-webkit-scrollbar {
+  width: 10px !important;
+}
+
+.swagger-ui ::-webkit-scrollbar-track {
+  background: #1a1e24 !important;
+}
+
+.swagger-ui ::-webkit-scrollbar-thumb {
+  background: #c8a96e !important;
+  border-radius: 5px !important;
+}
+
+.swagger-ui ::-webkit-scrollbar-thumb:hover {
+  background: #b89555 !important;
+}

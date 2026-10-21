@@ -1,0 +1,136 @@
+<mxfile host="app.diagrams.net" agent="ChatGPT" pages="2">
+  <diagram id="arquitectura-buitron" name="Arquitectura general">
+    <mxGraphModel dx="1212" dy="661" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#263238;" value="ARQUITECTURA GENERAL — BUITRÓN COFFEE" vertex="1">
+          <mxGeometry height="40" width="810" x="180" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=12;fontColor=#546E7A;" value="Frontend React + Vite · Backend Node.js / Express · Supabase" vertex="1">
+          <mxGeometry height="25" width="750" x="210" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3CD;strokeColor=#D4A017;fontColor=#664D03;fontSize=14;fontStyle=1;arcSize=12;" value="USUARIO&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;Navega, se registra e ingresa el código&lt;/font&gt;" vertex="1">
+          <mxGeometry height="65" width="300" x="250" y="381" as="geometry" />
+        </mxCell>
+        <mxCell id="frontend" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCEAFE;strokeColor=#2563EB;fontColor=#172554;fontSize=14;spacing=10;" value="&lt;b&gt;FRONTEND WEB&lt;/b&gt;&lt;br&gt;React + Vite&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;Interfaz · Formularios · Catálogo · Panel administrativo&lt;/font&gt;" vertex="1">
+          <mxGeometry height="95" width="380" x="460" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="backend" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE7F3;strokeColor=#BE185D;fontColor=#831843;fontSize=14;spacing=10;" value="&lt;b&gt;BACKEND&lt;/b&gt;&lt;br&gt;Node.js + Express&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;API REST · Rutas · Validaciones · Lógica de negocio&lt;/font&gt;" vertex="1">
+          <mxGeometry height="95" width="380" x="680" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="auth" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#15803D;fontColor=#14532D;fontSize=14;spacing=10;" value="&lt;b&gt;SUPABASE AUTH&lt;/b&gt;&lt;br&gt;Registro · Inicio de sesión&lt;br&gt;Confirmación del código de verificación" vertex="1">
+          <mxGeometry height="95" width="260" x="80" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="db" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#DCFCE7;strokeColor=#15803D;fontColor=#14532D;fontSize=14;" value="SUPABASE&lt;br&gt;PostgreSQL&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;Usuarios y datos del sistema&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="250" x="870" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="email" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#9333EA;fontColor=#581C87;fontSize=14;spacing=10;" value="&lt;b&gt;SERVICIO DE CORREO&lt;/b&gt;&lt;br&gt;Entrega del código de verificación&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;Configurado mediante Supabase Auth&lt;/font&gt;" vertex="1">
+          <mxGeometry height="95" width="260" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#475569;" target="frontend" value="Usa la aplicación">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="frontend" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#475569;" target="backend" value="HTTPS · solicitudes API">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="backend" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#475569;" target="db" value="Consultas autorizadas">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="frontend" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#15803D;" target="auth" value="Registro / confirmar código">
+          <mxGeometry relative="1" x="-0.0181" as="geometry">
+            <Array as="points">
+              <mxPoint x="210" y="170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="auth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#9333EA;" target="email" value="Solicita envío del código">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="email" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#9333EA;" target="user" value="Correo con código">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="auth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#15803D;" target="frontend" value="Resultado de verificación">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="registro-verificacion" name="Registro y verificación">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t2" value="FLUJO DE REGISTRO Y VERIFICACIÓN DE CUENTA" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#263238;" vertex="1" parent="1">
+          <mxGeometry x="120" y="20" width="930" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="u2" value="USUARIO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3CD;strokeColor=#D4A017;fontColor=#664D03;fontSize=14;fontStyle=1;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="130" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" value="REACT + VITE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCEAFE;strokeColor=#2563EB;fontColor=#172554;fontSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="350" y="130" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" value="SUPABASE AUTH" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#15803D;fontColor=#14532D;fontSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="650" y="130" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" value="SERVICIO DE CORREO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#9333EA;fontColor=#581C87;fontSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="650" y="320" width="210" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="d2" value="POSTGRESQL" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#DCFCE7;strokeColor=#15803D;fontColor=#14532D;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="650" y="500" width="210" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" value="1. Completa el formulario" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=15;fillColor=#F8FAFC;strokeColor=#94A3B8;fontColor=#334155;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="245" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" value="2. Solicita el registro" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=15;fillColor=#F8FAFC;strokeColor=#94A3B8;fontColor=#334155;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="340" y="245" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="s4" value="3. Genera / envía código" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=15;fillColor=#F8FAFC;strokeColor=#94A3B8;fontColor=#334155;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="640" y="245" width="230" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="s5" value="4. Recibe el código por correo" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=15;fillColor=#F8FAFC;strokeColor=#94A3B8;fontColor=#334155;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="900" y="320" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="s6" value="5. Ingresa el código en la web" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=15;fillColor=#F8FAFC;strokeColor=#94A3B8;fontColor=#334155;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="340" y="410" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="s7" value="6. Supabase confirma el código" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=15;fillColor=#F8FAFC;strokeColor=#94A3B8;fontColor=#334155;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="340" y="500" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="s8" value="7. La web informa el resultado" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=15;fillColor=#F8FAFC;strokeColor=#94A3B8;fontColor=#334155;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="500" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="n2" value="El envío del código y la confirmación dependen de la configuración de Supabase Auth y del método de registro utilizado por la aplicación." style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=15;fillColor=#F8FAFC;strokeColor=#94A3B8;fontColor=#334155;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="230" y="635" width="700" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="f1" value="Formulario" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#475569;" edge="1" parent="1" source="u2" target="r2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f2" value="Solicitud de registro" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#475569;" edge="1" parent="1" source="r2" target="a2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f3" value="Enviar código" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#475569;" edge="1" parent="1" source="a2" target="m2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f4" value="Código por correo" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#475569;" edge="1" parent="1" source="m2" target="u2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f5" value="Introduce el código" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#475569;" edge="1" parent="1" source="u2" target="r2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f6" value="Confirma OTP" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#475569;" edge="1" parent="1" source="r2" target="a2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f7" value="Actualiza datos de autenticación" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#475569;" edge="1" parent="1" source="a2" target="d2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f8" value="Resultado" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#475569;" edge="1" parent="1" source="a2" target="r2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f9" value="Mensaje de confirmación" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;strokeColor=#475569;" edge="1" parent="1" source="r2" target="u2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

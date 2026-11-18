@@ -8,7 +8,10 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("Faltan variables de entorno de Supabase");
 }
 
-// Cliente con permisos de administrador (service_role)
+// LOG TEMPORAL: debe imprimir "sb_secret_". Bórralo cuando termines.
+console.log("Clave empieza con:", SUPABASE_SERVICE_ROLE_KEY.slice(0, 10));
+
+// Cliente con permisos de administrador (service_role / secret key)
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
   auth: {
     autoRefreshToken: true,

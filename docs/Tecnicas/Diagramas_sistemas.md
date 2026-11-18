@@ -56,6 +56,8 @@ flowchart LR
     UC16 --- Admin
 ```
 
+
+
 # 2 DIAGRAMA DE CLASE (Mermaid)
 
 ```mermaid

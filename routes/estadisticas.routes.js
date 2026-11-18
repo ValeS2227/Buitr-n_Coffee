@@ -18,7 +18,7 @@ const verificarToken = (req, res, next) => {
       return res.status(401).json({ message: "Token inválido" });
     }
     req.usuarioId = decoded.id;
-    req.usuarioRol = decoded.rol;
+    req.usuarioRol = Number(decoded.rol);
     next();
   });
 };

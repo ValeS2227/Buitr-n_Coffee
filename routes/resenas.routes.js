@@ -4,6 +4,32 @@ const supabase = require("../config/supabaseClient");
 const jwt = require("jsonwebtoken");
 
 const SECRET = process.env.JWT_SECRET || "secreto123";
+const PALABRAS_BLOQUEADAS = new Set([
+  "cabron",
+  "estupido",
+  "gonorrea",
+  "hijueputa",
+  "idiota",
+  "imbecil",
+  "malparido",
+  "marica",
+  "maricon",
+  "mierda",
+  "pendejo",
+  "puta",
+  "puto",
+  "verga",
+]);
+
+const contienePalabrasBloqueadas = (texto) => {
+  const palabras = texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .match(/[a-z0-9]+/g) || [];
+
+  return palabras.some((palabra) => PALABRAS_BLOQUEADAS.has(palabra));
+};
 
 const verificarToken = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -105,6 +131,14 @@ router.post("/", verificarToken, async (req, res) => {
     return res.status(400).json({ message: "Faltan campos obligatorios" });
   }
 
+  if (typeof comentario !== "string" || contienePalabrasBloqueadas(comentario)) {
+    return res.status(400).json({ message: "La reseña contiene palabras no permitidas" });
+  }
+
+  if (!comentario.trim()) {
+    return res.status(400).json({ message: "El comentario no puede estar vacío" });
+  }
+
   const { data: usuario, error: errUsuario } = await supabase
     .from("usuario")
     .select("nombre_usuario")
@@ -149,7 +183,7 @@ router.get("/admin", verificarToken, async (req, res) => {
 
   console.log("Resultado admin check:", admin);
 
-  if (!admin || admin.id_rol !== 2) {
+  if (!admin || Number(admin.id_rol) !== 2) {
     return res.status(403).json({ message: "No tienes permisos" });
   }
 
@@ -186,7 +220,7 @@ router.patch("/admin/:id", verificarToken, async (req, res) => {
     .maybeSingle();
 
   if (errAdmin) return res.status(500).json({ error: errAdmin.message });
-  if (!admin || admin.id_rol !== 2) {
+  if (!admin || Number(admin.id_rol) !== 2) {
     return res.status(403).json({ message: "No tienes permisos" });
   }
 

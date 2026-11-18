@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const supabase = require("../config/supabaseClient");
 const jwt = require("jsonwebtoken");
+const {
+  PromotionError,
+  calcularPromocion,
+  registrarUsoPromocion,
+} = require("../utils/promotionService");
 
 const SECRET = process.env.JWT_SECRET || "secreto123";
 
@@ -100,7 +105,11 @@ router.get("/detalle/:pedidoId", verificarToken, async (req, res) => {
 // Se registra en dos rutas porque el frontend llama a la raíz "/api/pedidos"
 router.post(["/", "/registrar"], verificarToken, async (req, res) => {
   const usuarioId = req.usuarioId;
-  const { direccion, metodoPago = "Efectivo" } = req.body;
+  const {
+    direccion,
+    metodoPago = "Efectivo",
+    codigoPromocion,
+  } = req.body;
 
   try {
     // Primero obtener los items del carrito
@@ -117,7 +126,35 @@ router.post(["/", "/registrar"], verificarToken, async (req, res) => {
 
     const subtotal = carritoItems.reduce((sum, item) => sum + item.producto.precio * item.cantidad, 0);
     const envio = subtotal >= 50000 ? 0 : 5000;
-    const total = subtotal + envio;
+    let descuento = 0;
+    let total = subtotal + envio;
+    let promocionAplicada = null;
+
+    if (codigoPromocion) {
+      try {
+        promocionAplicada = await calcularPromocion({
+          codigo: codigoPromocion,
+          subtotal,
+          items: carritoItems.map((item) => ({
+            ID_Producto: item.producto.id,
+            Nombre_producto: item.producto.nombre_producto,
+            Cantidad: item.cantidad,
+            Precio: item.producto.precio,
+            PrecioUnitario: item.producto.precio,
+          })),
+        });
+      } catch (error) {
+        if (error instanceof PromotionError) {
+          return res.status(error.status).json({
+            message: error.message,
+          });
+        }
+        throw error;
+      }
+      descuento = promocionAplicada.descuento;
+      total = Math.max(0, subtotal + envio - descuento);
+    }
+
     const fecha = new Date();
     const fechaLimite = new Date(fecha.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 días, igual que el resto de tus pedidos
 
@@ -159,6 +196,10 @@ router.post(["/", "/registrar"], verificarToken, async (req, res) => {
 
     if (errVaciar) return res.status(500).json(errVaciar);
 
+    if (promocionAplicada && (descuento > 0 || promocionAplicada.promocion.Tipo === "puntos_dobles")) {
+      await registrarUsoPromocion(promocionAplicada.promocionId);
+    }
+
     // Obtener datos completos para el recibo
     const { data: pedidoCompleto, error: errCompleto } = await supabase
       .from("pedido")
@@ -196,6 +237,7 @@ router.post(["/", "/registrar"], verificarToken, async (req, res) => {
         fecha: fecha.toISOString(),
         subtotal,
         envio,
+        descuento,
         total,
         items,
         usuario,
@@ -218,7 +260,7 @@ router.get("/admin/todos", verificarToken, async (req, res) => {
     .maybeSingle();
 
   if (errAdmin) return res.status(500).json(errAdmin);
-  if (!admin || admin.id_rol !== 2) {
+  if (!admin || Number(admin.id_rol) !== 2) {
     return res.status(403).json({ message: "No tienes permisos" });
   }
 
@@ -258,7 +300,7 @@ router.get("/admin/detalle/:pedidoId", verificarToken, async (req, res) => {
     .maybeSingle();
 
   if (errAdmin) return res.status(500).json(errAdmin);
-  if (!admin || admin.id_rol !== 2) {
+  if (!admin || Number(admin.id_rol) !== 2) {
     return res.status(403).json({ message: "No tienes permisos" });
   }
 
@@ -291,7 +333,7 @@ router.patch("/admin/estado/:pedidoId", verificarToken, async (req, res) => {
     .maybeSingle();
 
   if (errAdmin) return res.status(500).json(errAdmin);
-  if (!admin || admin.id_rol !== 2) {
+  if (!admin || Number(admin.id_rol) !== 2) {
     return res.status(403).json({ message: "No tienes permisos" });
   }
 

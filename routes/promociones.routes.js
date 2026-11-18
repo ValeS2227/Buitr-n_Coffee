@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const supabase = require("../config/supabaseClient");
 const jwt = require("jsonwebtoken");
+const {
+  PromotionError,
+  calcularPromocion,
+} = require("../utils/promotionService");
 
 const SECRET = process.env.JWT_SECRET || "secreto123";
 
@@ -15,7 +19,7 @@ const verificarToken = (req, res, next) => {
       return res.status(401).json({ success: false, message: "Token inválido" });
     }
     req.usuarioId = decoded.id;
-    req.usuarioRol = decoded.rol;
+    req.usuarioRol = Number(decoded.rol);
     next();
   });
 };
@@ -325,150 +329,20 @@ router.delete("/admin/eliminar/:id", verificarToken, verificarAdmin, async (req,
 router.post("/aplicar", verificarToken, async (req, res) => {
   const { codigo, subtotal, items } = req.body;
 
-  if (!codigo) {
-    return res.status(400).json({
-      success: false,
-      message: "Código de promoción requerido",
-    });
-  }
-
-  const ahora = new Date().toISOString();
-
-  const { data: promocion, error } = await supabase
-    .from("promociones")
-    .select("*")
-    .eq("codigo", codigo)
-    .eq("estado", true)
-    .lte("fecha_inicio", ahora)
-    .gte("fecha_fin", ahora)
-    .maybeSingle();
-
-  if (error) {
-    console.error("Error al validar código:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Error al validar código",
-    });
-  }
-
-  if (!promocion || !tieneCupo(promocion)) {
-    return res.status(404).json({
-      success: false,
-      message: "Código inválido o promoción expirada",
-    });
-  }
-
-  let descuento = 0;
-  let mensaje = "";
-
-  // Verificar monto mínimo de compra
-  if (promocion.minimo_compra && subtotal < promocion.minimo_compra) {
-    return res.status(400).json({
-      success: false,
-      message: `El pedido debe ser mayor a $${promocion.minimo_compra.toLocaleString()} para aplicar esta promoción`,
-    });
-  }
-
-  switch (promocion.tipo) {
-    case "descuento_porcentaje":
-      if (promocion.id_producto) {
-        const item = items.find((i) => i.ID_Producto === promocion.id_producto);
-        if (item) {
-          const precioUnitario = item.PrecioUnitario || item.Precio;
-          descuento = precioUnitario * item.Cantidad * (promocion.valor / 100);
-          mensaje = `✅ Descuento del ${promocion.valor}% aplicado a "${item.Nombre_producto}"`;
-        } else {
-          return res.status(400).json({
-            success: false,
-            message: `El producto "${promocion.nombre}" no está en el carrito`,
-          });
-        }
-      } else {
-        descuento = subtotal * (promocion.valor / 100);
-        mensaje = `✅ Descuento del ${promocion.valor}% aplicado al total`;
-      }
-      break;
-
-    case "descuento_fijo":
-      descuento = promocion.valor;
-      mensaje = `✅ Descuento de $${promocion.valor.toLocaleString()} aplicado`;
-      break;
-
-    case "2x1":
-      if (promocion.id_producto) {
-        const item = items.find((i) => i.ID_Producto === promocion.id_producto);
-        if (item && item.Cantidad >= 2) {
-          const precioUnitario = item.PrecioUnitario || item.Precio;
-          const productosGratis = Math.floor(item.Cantidad / 2);
-          descuento = productosGratis * precioUnitario;
-          mensaje = `✅ 2x1 aplicado: ${productosGratis} producto(s) gratis`;
-        } else {
-          return res.status(400).json({
-            success: false,
-            message: `Necesitas al menos 2 unidades para aplicar 2x1 en "${promocion.nombre}"`,
-          });
-        }
-      } else {
-        return res.status(400).json({
-          success: false,
-          message: "La promoción 2x1 requiere un producto específico",
-        });
-      }
-      break;
-
-    case "puntos_dobles":
-      mensaje = "✅ Puntos dobles acumulados por esta compra";
-      descuento = 0;
-      break;
-
-    case "combo":
-      if (promocion.id_producto) {
-        const item = items.find((i) => i.ID_Producto === promocion.id_producto);
-        if (item) {
-          const precioUnitario = item.PrecioUnitario || item.Precio;
-          descuento = precioUnitario * item.Cantidad * (promocion.valor / 100);
-          mensaje = `✅ Descuento combo del ${promocion.valor}% aplicado`;
-        } else {
-          mensaje = "✅ Promoción combo disponible";
-          descuento = 0;
-        }
-      } else {
-        descuento = subtotal * (promocion.valor / 100);
-        mensaje = `✅ Descuento combo del ${promocion.valor}% aplicado al total`;
-      }
-      break;
-
-    default:
-      return res.status(400).json({
+  try {
+    const resultado = await calcularPromocion({ codigo, subtotal, items });
+    const { promocionId, ...data } = resultado;
+    res.json({ success: true, data });
+  } catch (error) {
+    if (!(error instanceof PromotionError)) {
+      console.error("Error inesperado al aplicar promoción:", error);
+      return res.status(500).json({
         success: false,
-        message: "Tipo de promoción no válido",
+        message: "Error al validar código",
       });
-  }
-
-  // Registrar el uso de la promoción (incremento atómico vía RPC)
-  if (descuento > 0 || promocion.tipo === "puntos_dobles") {
-    const { error: errUso } = await supabase.rpc("incrementar_uso_promocion", {
-      p_promocion_id: promocion.id,
-    });
-    if (errUso) {
-      console.error("Error al actualizar usos:", errUso);
     }
+    res.status(error.status).json({ success: false, message: error.message });
   }
-
-  res.json({
-    success: true,
-    data: {
-      descuento: parseFloat(descuento.toFixed(2)),
-      total: parseFloat((subtotal - descuento).toFixed(2)),
-      mensaje,
-      promocion: {
-        ID_Promocion: promocion.id,
-        Nombre: promocion.nombre,
-        Tipo: promocion.tipo,
-        Codigo: promocion.codigo,
-      },
-    },
-  });
 });
 
 module.exports = router;

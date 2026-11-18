@@ -13,7 +13,7 @@ const verificarToken = (req, res, next) => {
   jwt.verify(token, SECRET, (err, decoded) => {
     if (err) return res.status(401).json({ message: "Token inválido" });
     req.usuarioId = decoded.id;
-    req.usuarioRol = decoded.rol;
+    req.usuarioRol = Number(decoded.rol);
     next();
   });
 };

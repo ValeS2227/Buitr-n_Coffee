@@ -88,9 +88,9 @@ const InhabilitarProducto = () => {
 
   const productosFiltrados = () => {
     if (filtro === 'activos') {
-      return productos.filter(p => p.Estado === 1);
+      return productos.filter(p => p.Estado === true || p.Estado === 1);
     } else if (filtro === 'inhabilitados') {
-      return productos.filter(p => p.Estado === 0);
+      return productos.filter(p => p.Estado === false || p.Estado === 0);
     }
     return productos;
   };
@@ -104,8 +104,8 @@ const InhabilitarProducto = () => {
   }
 
   const productosMostrar = productosFiltrados();
-  const productosActivos = productos.filter(p => p.Estado === 1).length;
-  const productosInhabilitados = productos.filter(p => p.Estado === 0).length;
+  const productosActivos = productos.filter(p => p.Estado === true || p.Estado === 1).length;
+  const productosInhabilitados = productos.filter(p => p.Estado === false || p.Estado === 0).length;
 
   return (
     <div className="inhabilitar-container">
@@ -178,7 +178,7 @@ const InhabilitarProducto = () => {
               </tr>
             ) : (
               productosMostrar.map((producto) => (
-                <tr key={producto.ID_Producto} className={producto.Estado === 0 ? 'inhabilitado' : ''}>
+                <tr key={producto.ID_Producto} className={producto.Estado === false || producto.Estado === 0 ? 'inhabilitado' : ''}>
                   <td>{producto.ID_Producto}</td>
                   <td>
                     {producto.imagen ? (
@@ -202,12 +202,12 @@ const InhabilitarProducto = () => {
                     {producto.Stock}
                   </td>
                   <td>
-                    <span className={`estado-badge ${producto.Estado === 1 ? 'activo' : 'inhabilitado'}`}>
-                      {producto.Estado === 1 ? 'Activo' : 'Inhabilitado'}
+                    <span className={`estado-badge ${producto.Estado === true || producto.Estado === 1 ? 'activo' : 'inhabilitado'}`}>
+                      {producto.Estado === true || producto.Estado === 1 ? 'Activo' : 'Inhabilitado'}
                     </span>
                   </td>
                   <td>
-                    {producto.Estado === 1 ? (
+                    {producto.Estado === true || producto.Estado === 1 ? (
                       <button 
                         className="btn-inhabilitar-accion"
                         onClick={() => inhabilitarProducto(producto.ID_Producto, producto.Nombre_producto)}

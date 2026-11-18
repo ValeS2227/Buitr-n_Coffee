@@ -16,7 +16,8 @@ const REGEX_CORREO = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
  * la pantalla de verificación de código para el correo ingresado.
  *
  * Props:
- * - onRegistrar: (datos) => Promise<void>   llamada al servicio de registro (lanza en caso de error)
+ * - onEnviarCodigo: (correo) => Promise<void> solicita el código antes de crear la cuenta
+ * - onRegistrar: (datos) => Promise<void>   crea la cuenta después de verificar el código
  * - onVerificar: (codigo, correo) => Promise<void>  confirma el código de verificación
  * - onReenviarCodigo: (correo) => Promise<void>      reenvía el código de verificación
  * - onVolverLogin: () => void                 navegación al presionar la flecha de regreso
@@ -24,6 +25,7 @@ const REGEX_CORREO = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
  */
 export default function RegistroScreen({
   onRegistrar,
+  onEnviarCodigo,
   onVerificar,
   onReenviarCodigo,
   onVolverLogin,
@@ -87,17 +89,11 @@ export default function RegistroScreen({
 
     setCargando(true);
     try {
-      await onRegistrar?.({
-        nombreUsuario: form.nombre.trim(),
-        apellido: form.apellido.trim(),
-        documento: form.documento.trim(),
-        correo: form.correo.trim(),
-        clave: form.clave.trim(),
-        telefono: form.telefono.trim(),
-        direccion: form.direccion.trim(),
-      });
-
-      mostrarMensaje("Registro realizado. Por favor verifica tu correo.", false);
+      if (!onEnviarCodigo) {
+        throw new Error("No está disponible el envío del código de verificación.");
+      }
+      await onEnviarCodigo(form.correo.trim());
+      mostrarMensaje("Código enviado. Revisa tu correo para continuar.", false);
       setMostrarVerificacion(true);
     } catch (err) {
       mostrarMensaje(String(err?.message ?? err).replace(/^Exception:\s*/, ""));
@@ -111,7 +107,21 @@ export default function RegistroScreen({
       <VerificacionScreen
         email={form.correo.trim()}
         esRecuperacion={false}
-        onVerificar={(codigo) => onVerificar?.(codigo, form.correo.trim())}
+        onVerificar={async (codigo) => {
+          if (!onVerificar || !onRegistrar) {
+            throw new Error("No está disponible la verificación del registro.");
+          }
+          await onVerificar(codigo, form.correo.trim());
+          await onRegistrar({
+            nombreUsuario: form.nombre.trim(),
+            apellido: form.apellido.trim(),
+            documento: form.documento.trim(),
+            correo: form.correo.trim(),
+            clave: form.clave.trim(),
+            telefono: form.telefono.trim(),
+            direccion: form.direccion.trim(),
+          });
+        }}
         onReenviar={() => onReenviarCodigo?.(form.correo.trim())}
         onExito={onVerificacionExitosa}
         onVolver={() => setMostrarVerificacion(false)}

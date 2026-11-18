@@ -3,6 +3,37 @@ import axios from 'axios';
 import { API_URL } from '../config.js';
 import '../estilos/resenas.css';
 
+const PALABRAS_BLOQUEADAS = new Set([
+  'cabron',
+  'cabrón',
+  'estupido',
+  'estúpido',
+  'gonorrea',
+  'hijueputa',
+  'idiota',
+  'imbecil',
+  'imbécil',
+  'malparido',
+  'marica',
+  'maricon',
+  'maricón',
+  'mierda',
+  'pendejo',
+  'puta',
+  'puto',
+  'verga',
+]);
+
+const contienePalabrasBloqueadas = (texto) => {
+  const palabras = texto
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .match(/[a-z0-9]+/g) || [];
+
+  return palabras.some((palabra) => PALABRAS_BLOQUEADAS.has(palabra));
+};
+
 const ResenasProducto = ({ productoId, onCalificacionActualizada }) => {
   const [resenas, setResenas] = useState([]);
   const [promedio, setPromedio] = useState({ promedio: 0, total: 0 });
@@ -11,6 +42,17 @@ const ResenasProducto = ({ productoId, onCalificacionActualizada }) => {
   const [formData, setFormData] = useState({ calificacion: 5, comentario: '' });
   const [enviando, setEnviando] = useState(false);
   const [mensaje, setMensaje] = useState('');
+
+  const handleComentarioChange = (e) => {
+    const comentario = e.target.value;
+    setFormData((actual) => ({ ...actual, comentario }));
+
+    if (contienePalabrasBloqueadas(comentario)) {
+      setMensaje('Por favor, evita palabras ofensivas en tu reseña.');
+    } else if (mensaje === 'Por favor, evita palabras ofensivas en tu reseña.') {
+      setMensaje('');
+    }
+  };
 
   useEffect(() => {
     const user = localStorage.getItem('usuario');
@@ -52,6 +94,11 @@ const ResenasProducto = ({ productoId, onCalificacionActualizada }) => {
 
     if (!formData.comentario.trim()) {
       setMensaje('Por favor escribe un comentario');
+      return;
+    }
+
+    if (contienePalabrasBloqueadas(formData.comentario)) {
+      setMensaje('Por favor, evita palabras ofensivas en tu reseña.');
       return;
     }
 
@@ -115,7 +162,7 @@ const ResenasProducto = ({ productoId, onCalificacionActualizada }) => {
           </div>
           <div className="comentario-input">
             <label>Comentario:</label>
-            <textarea name="comentario" value={formData.comentario} onChange={(e) => setFormData({...formData, comentario: e.target.value})} rows="4" placeholder="Cuéntanos tu experiencia..." required />
+            <textarea name="comentario" value={formData.comentario} onChange={handleComentarioChange} rows="4" placeholder="Cuéntanos tu experiencia..." required />
           </div>
           <button type="submit" disabled={enviando}>{enviando ? 'Enviando...' : 'Envia tu reseña'}</button>
         </form>

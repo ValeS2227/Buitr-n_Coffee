@@ -1,2 +1,8 @@
-
-FrontEnd/.env
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+*.zip
+.env
+.env.*
+!.env.example

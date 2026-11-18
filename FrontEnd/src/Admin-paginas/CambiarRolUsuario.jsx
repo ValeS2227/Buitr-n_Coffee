@@ -4,10 +4,22 @@ import axios from 'axios';
 import { API_URL } from '../config.js';
 import './estilos-admin/CambiarRolUsuario.css';
 
+const obtenerIdUsuarioActual = () => {
+  try {
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    return Number(usuario.ID_Usuario);
+  } catch (err) {
+    console.error('Error al leer el usuario actual:', err);
+    return null;
+  }
+};
+
 const CambiarRolUsuario = () => {
   const navigate = useNavigate();
+  const [idUsuarioActual] = useState(obtenerIdUsuarioActual);
   const [usuarios, setUsuarios] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState('');
   const [exito, setExito] = useState('');
   const [filtro, setFiltro] = useState('todos');
@@ -38,7 +50,8 @@ const CambiarRolUsuario = () => {
 
   const abrirModalCambioRol = (usuario) => {
     setUsuarioSeleccionado(usuario);
-    setNuevoRol(usuario.ID_Rol.toString());
+    setNuevoRol(String(Number(usuario.ID_Rol)));
+    setError('');
     setMostrarModal(true);
   };
 
@@ -50,32 +63,55 @@ const CambiarRolUsuario = () => {
   };
 
   const cambiarRol = async () => {
-    if (!nuevoRol) {
+    if (!usuarioSeleccionado || !nuevoRol) {
       setError('Debes seleccionar un rol');
       return;
     }
 
+    if (Number(usuarioSeleccionado.ID_Usuario) === idUsuarioActual) {
+      setError('No puedes cambiar el rol de tu propia cuenta');
+      return;
+    }
+
+    setGuardando(true);
     try {
       const token = localStorage.getItem('token');
-      
-      await axios.patch(
+      const response = await axios.patch(
         `${API_URL}/api/auth/usuarios/${usuarioSeleccionado.ID_Usuario}/cambiar-rol`,
-        { nuevoRol: parseInt(nuevoRol) },
+        { nuevoRol: Number(nuevoRol) },
         {
           headers: {
             Authorization: `Bearer ${token}`
           }
         }
       );
-      
-      setExito(`Rol de "${usuarioSeleccionado.Nombre_usuario}" cambiado correctamente`);
-      obtenerUsuarios(); // Recargar la lista
-      cerrarModal();
-      
+
+      const rolActualizado = Number(response.data.ID_Rol || nuevoRol);
+      setUsuarios((lista) =>
+        lista.map((usuario) =>
+          Number(usuario.ID_Usuario) === Number(usuarioSeleccionado.ID_Usuario)
+            ? { ...usuario, ID_Rol: rolActualizado }
+            : usuario
+        )
+      );
+      setExito(response.data.message || `Rol de "${usuarioSeleccionado.Nombre_usuario}" cambiado correctamente`);
+      setMostrarModal(false);
+      setUsuarioSeleccionado(null);
+      setNuevoRol('');
+
       setTimeout(() => setExito(''), 3000);
     } catch (err) {
       console.error('Error al cambiar rol:', err);
-      setError(err.response?.data?.message || 'Error al cambiar el rol');
+      const respuesta = err.response?.data;
+      const respuestaHtml = typeof respuesta === 'string' && /<!doctype html|<html/i.test(respuesta);
+      setError(
+        respuesta?.message ||
+          (respuestaHtml
+            ? 'El servidor no reconoce esta ruta. Despliega el Backend_duplicado actualizado y verifica VITE_API_URL.'
+            : 'Error al cambiar el rol')
+      );
+    } finally {
+      setGuardando(false);
     }
   };
 
@@ -85,29 +121,31 @@ const CambiarRolUsuario = () => {
 
   const usuariosFiltrados = () => {
     if (filtro === 'admin') {
-      return usuarios.filter(u => u.ID_Rol === 2);
+      return usuarios.filter(u => Number(u.ID_Rol) === 2);
     } else if (filtro === 'usuario') {
-      return usuarios.filter(u => u.ID_Rol === 1);
+      return usuarios.filter(u => Number(u.ID_Rol) === 1);
     }
     return usuarios;
   };
 
-  // 1 = Usuario, 2 = Administrador
   const getRolBadge = (rol) => {
-    switch(rol) {
+    switch(Number(rol)) {
       case 2:
         return <span className="badge-admin">Administrador</span>;
       case 1:
         return <span className="badge-usuario">Usuario</span>;
+      case 3:
+        return <span className="badge-proveedor">Proveedor</span>;
       default:
         return <span className="badge-default">{rol}</span>;
     }
   };
 
   const getRolNombre = (rol) => {
-    switch(rol) {
+    switch(Number(rol)) {
       case 2: return 'Administrador';
       case 1: return 'Usuario';
+      case 3: return 'Proveedor';
       default: return 'Desconocido';
     }
   };
@@ -186,6 +224,8 @@ const CambiarRolUsuario = () => {
                     <button 
                       className="btn-cambiar-rol"
                       onClick={() => abrirModalCambioRol(usuario)}
+                      disabled={guardando || Number(usuario.ID_Usuario) === idUsuarioActual}
+                      title={Number(usuario.ID_Usuario) === idUsuarioActual ? 'No puedes cambiar tu propio rol' : 'Cambiar rol'}
                     >
                       Cambiar Rol
                     </button>
@@ -215,6 +255,7 @@ const CambiarRolUsuario = () => {
                   value={nuevoRol} 
                   onChange={(e) => setNuevoRol(e.target.value)}
                   className="rol-select"
+                  disabled={guardando}
                 >
                   <option value="">Seleccionar rol</option>
                   <option value="1">Usuario</option>
@@ -223,11 +264,11 @@ const CambiarRolUsuario = () => {
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn-cancelar-modal" onClick={cerrarModal}>
+              <button className="btn-cancelar-modal" onClick={cerrarModal} disabled={guardando}>
                 Cancelar
               </button>
-              <button className="btn-guardar-modal" onClick={cambiarRol}>
-                Guardar Cambios
+              <button className="btn-guardar-modal" onClick={cambiarRol} disabled={guardando || !nuevoRol || Number(nuevoRol) === Number(usuarioSeleccionado.ID_Rol)}>
+                {guardando ? 'Guardando...' : 'Guardar Cambios'}
               </button>
             </div>
           </div>

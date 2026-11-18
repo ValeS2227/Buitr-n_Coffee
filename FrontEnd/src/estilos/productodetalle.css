@@ -156,6 +156,18 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+.btn-agregar-carrito:focus-visible {
+  outline: 3px solid rgba(78, 52, 46, 0.45);
+  outline-offset: 3px;
+}
+
+.btn-agregar-carrito:disabled {
+  background: #a99a90;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
 /* Loading */
 .loading {
   text-align: center;

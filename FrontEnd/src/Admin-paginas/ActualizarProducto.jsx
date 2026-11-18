@@ -4,6 +4,18 @@ import axios from 'axios';
 import { API_URL } from '../config.js';
 import './estilos-admin/ActualizarProducto.css';
 
+// Categorías base del selector
+const CATEGORIAS_BASE = ['Tostado', 'Fino', 'Molido', 'Grano'];
+
+const FORM_VACIO = {
+  Nombre_producto: '',
+  Descripcion: '',
+  Categoria: '',
+  Precio: '',
+  Stock: '',
+  imagen: ''
+};
+
 const ActualizarProducto = () => {
   const navigate = useNavigate();
   const [productos, setProductos] = useState([]);
@@ -14,14 +26,7 @@ const ActualizarProducto = () => {
   const [editando, setEditando] = useState(false);
 
   // Formulario
-  const [formData, setFormData] = useState({
-    Nombre_producto: '',
-    Descripcion: '',
-    Categoria: '',
-    Precio: '',
-    Stock: '',
-    imagen: ''
-  });
+  const [formData, setFormData] = useState(FORM_VACIO);
 
   useEffect(() => {
     obtenerProductos();
@@ -51,7 +56,7 @@ const ActualizarProducto = () => {
     setFormData({
       Nombre_producto: producto.Nombre_producto,
       Descripcion: producto.Descripcion || '',
-      Categoria: producto.Categoria,
+      Categoria: producto.Categoria || '',
       Precio: producto.Precio,
       Stock: producto.Stock,
       imagen: producto.imagen || ''
@@ -68,16 +73,15 @@ const ActualizarProducto = () => {
 
     try {
       const token = localStorage.getItem('token');
-      
-      await axios.put(
-        `${API_URL}/api/productos/${productoSeleccionado.ID_Producto}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+      const url = `${API_URL}/api/productos/${productoSeleccionado.ID_Producto}`;
+
+      console.log('PUT a:', url, 'datos:', formData);
+
+      await axios.put(url, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-      );
+      });
 
       setExito('Producto actualizado correctamente');
       
@@ -88,19 +92,13 @@ const ActualizarProducto = () => {
       setTimeout(() => {
         setEditando(false);
         setProductoSeleccionado(null);
-        setFormData({
-          Nombre_producto: '',
-          Descripcion: '',
-          Categoria: '',
-          Precio: '',
-          Stock: '',
-          imagen: ''
-        });
+        setFormData(FORM_VACIO);
         setExito('');
       }, 2000);
       
     } catch (err) {
       console.error('Error al actualizar producto:', err);
+      console.log('Estado:', err.response?.status, 'Respuesta:', err.response?.data);
       setError(err.response?.data?.message || 'Error al actualizar el producto');
     }
   };
@@ -108,6 +106,10 @@ const ActualizarProducto = () => {
   const volver = () => {
     navigate('/admin');
   };
+
+  const categoriasDisponibles = formData.Categoria && !CATEGORIAS_BASE.includes(formData.Categoria)
+    ? [...CATEGORIAS_BASE, formData.Categoria]
+    : CATEGORIAS_BASE;
 
   if (cargando) {
     return (
@@ -138,14 +140,14 @@ const ActualizarProducto = () => {
               <p className="sin-datos">No hay productos registrados</p>
             ) : (
               productos.map((producto) => (
-                <div 
+                <div
                   key={producto.ID_Producto} 
                   className={`producto-card ${productoSeleccionado?.ID_Producto === producto.ID_Producto ? 'seleccionado' : ''}`}
                   onClick={() => seleccionarProducto(producto)}
                 >
                   <div className="producto-imagen-mini">
                     {producto.imagen ? (
-                      <img 
+                      <img
                         src={`${API_URL}/imagenes/${producto.imagen}`} 
                         alt={producto.Nombre_producto}
                         onError={(e) => {
@@ -207,10 +209,9 @@ const ActualizarProducto = () => {
                   required
                 >
                   <option value="">Seleccionar categoría</option>
-                  <option value="Tostado">Tostado</option>
-                  <option value="Fino">Fino</option>
-                  <option value="Molido">Molido</option>
-                  <option value="Grano">Grano</option>
+                  {categoriasDisponibles.map((cat) => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
                 </select>
               </div>
 
@@ -255,7 +256,7 @@ const ActualizarProducto = () => {
                 <button type="submit" className="btn-actualizar-form">
                   Actualizar Producto
                 </button>
-                <button 
+                <button
                   type="button" 
                   className="btn-cancelar"
                   onClick={() => {

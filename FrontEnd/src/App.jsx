@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import axios from "axios";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { API_URL } from "./config";
 
 // CONTEXT Y SERVICIOS
 import { CarritoProvider } from "./context/CarritoContext";
@@ -6,6 +8,7 @@ import { CarritoProvider } from "./context/CarritoContext";
 // COMPONENTES DE PROTECCIÓN
 import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./components/AdminRoute";
+import AdminLayout from "./components/AdminLayout";
 
 // USUARIOS PAGINAS
 import Index from "./paginas/Index";
@@ -41,17 +44,15 @@ function App() {
     <CarritoProvider>
       <BrowserRouter>
         <Routes>
-          {/* RUTAS PÚBLICAS */}
           <Route path="/" element={<Index />} />
           <Route path="/index" element={<Index />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/registro" element={<Registro />} />
+          <Route path="/registro" element={<RegistroRoute />} />
           <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/nosotros" element={<Nosotros />} />
           <Route path="/producto/:id" element={<ProductoDetalle />} />
           <Route path="/olvido-contrasena" element={<OlvidoContrasena />} />
 
-          {/* RUTAS PROTEGIDAS PARA USUARIOS AUTENTICADOS */}
           <Route
             path="/usuario"
             element={
@@ -63,9 +64,9 @@ function App() {
           <Route
             path="/resenas/ver"
             element={
-              <AdminRoute>
+              <AdminPage>
                 <GestionResenas />
-              </AdminRoute>
+              </AdminPage>
             }
           />
           <Route
@@ -117,99 +118,142 @@ function App() {
             }
           />
 
-          {/* RUTAS DE ADMIN - SOLO PARA ADMINISTRADORES */}
           <Route
             path="/admin"
             element={
-              <AdminRoute>
+              <AdminPage>
                 <IndexAdmin />
-              </AdminRoute>
+              </AdminPage>
             }
           />
           <Route
             path="/productos/crear"
             element={
-              <AdminRoute>
+              <AdminPage>
                 <CrearProducto />
-              </AdminRoute>
+              </AdminPage>
             }
           />
           <Route
             path="/productos/actualizar"
             element={
-              <AdminRoute>
+              <AdminPage>
                 <ActualizarProducto />
-              </AdminRoute>
+              </AdminPage>
             }
           />
-
           <Route
             path="/productos/ver"
             element={
-              <AdminRoute>
+              <AdminPage>
                 <VerProductos />
-              </AdminRoute>
+              </AdminPage>
             }
           />
           <Route
             path="/productos/inhabilitar"
             element={
-              <AdminRoute>
+              <AdminPage>
                 <InhabilitarProducto />
-              </AdminRoute>
+              </AdminPage>
             }
           />
           <Route
             path="/usuarios/ver"
             element={
-              <AdminRoute>
+              <AdminPage>
                 <VerUsuarios />
-              </AdminRoute>
+              </AdminPage>
             }
           />
           <Route
             path="/usuarios/inhabilitar"
             element={
-              <AdminRoute>
+              <AdminPage>
                 <InhabilitarUsuarios />
-              </AdminRoute>
+              </AdminPage>
             }
           />
           <Route
             path="/usuarios/cambiar-rol"
             element={
-              <AdminRoute>
+              <AdminPage>
                 <CambiarRolUsuario />
-              </AdminRoute>
+              </AdminPage>
             }
           />
           <Route
             path="/pqrs/ver"
             element={
-              <AdminRoute>
+              <AdminPage>
                 <VerPqrs />
-              </AdminRoute>
+              </AdminPage>
             }
           />
           <Route
             path="/resenas/ver"
             element={
-              <AdminRoute>
+              <AdminPage>
                 <GestionResenas />
-              </AdminRoute>
+              </AdminPage>
             }
           />
           <Route
             path="/admin/pedidos"
             element={
-              <AdminRoute>
+              <AdminPage>
                 <GestionPedidos />
-              </AdminRoute>
+              </AdminPage>
             }
           />
         </Routes>
       </BrowserRouter>
     </CarritoProvider>
+  );
+}
+
+function AdminPage({ children }) {
+  return (
+    <AdminRoute>
+      <AdminLayout>{children}</AdminLayout>
+    </AdminRoute>
+  );
+}
+
+function RegistroRoute() {
+  const navigate = useNavigate();
+
+  return (
+    <Registro
+      onEnviarCodigo={(correo) =>
+        axios.post(`${API_URL}/api/verificacion-email/enviar-codigo`, {
+          Correo: correo,
+        })
+      }
+      onVerificar={(codigo, correo) =>
+        axios.post(`${API_URL}/api/verificacion-email/verificar-codigo`, {
+          Correo: correo,
+          Codigo: codigo,
+        })
+      }
+      onReenviarCodigo={(correo) =>
+        axios.post(`${API_URL}/api/verificacion-email/reenviar-codigo`, {
+          Correo: correo,
+        })
+      }
+      onRegistrar={(datos) =>
+        axios.post(`${API_URL}/api/auth/register`, {
+          Nombre_usuario: datos.nombreUsuario,
+          Apellido: datos.apellido,
+          Correo: datos.correo,
+          Documento: datos.documento,
+          Telefono: datos.telefono,
+          Clave: datos.clave,
+        })
+      }
+      onVolverLogin={() => navigate("/login")}
+      onVerificacionExitosa={() => navigate("/login")}
+    />
   );
 }
 

@@ -18,11 +18,85 @@ function Carrito() {
   const [pedidoCompletado, setPedidoCompletado] = useState(null);
   const [usuario, setUsuario] = useState(null);
   const [errorDetalle, setErrorDetalle] = useState("");
+  const [codigoPromocion, setCodigoPromocion] = useState("");
+  const [promocionAplicada, setPromocionAplicada] = useState(null);
+  const [validandoPromocion, setValidandoPromocion] = useState(false);
+  const [mensajePromocion, setMensajePromocion] = useState("");
+  const [errorPromocion, setErrorPromocion] = useState("");
 
   const token = localStorage.getItem('token');
 
-  const subtotal = carrito.total;
-  const total = subtotal; // No hay envío
+  const subtotal = Number(carrito.total) || 0;
+  const costoEnvio = subtotal >= 50000 ? 0 : 5000;
+  const carritoFingerprint = JSON.stringify(
+    carrito.items.map((item) => [item.ID_Producto, item.Cantidad, item.Precio]),
+  );
+  const promocionVigente =
+    promocionAplicada?.carritoFingerprint === carritoFingerprint
+      ? promocionAplicada
+      : null;
+  const total = Math.max(0, subtotal + costoEnvio - (promocionVigente?.descuento || 0));
+
+  const aplicarCodigoPromocion = async () => {
+    if (!token) {
+      setErrorPromocion("Inicia sesión para aplicar un código promocional.");
+      return;
+    }
+    if (!codigoPromocion.trim()) {
+      setErrorPromocion("Escribe el código de la promoción.");
+      return;
+    }
+
+    setValidandoPromocion(true);
+    setErrorPromocion("");
+    setMensajePromocion("");
+    setPromocionAplicada(null);
+
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/promociones/aplicar`,
+        {
+          codigo: codigoPromocion.trim(),
+          subtotal,
+          items: carrito.items.map((item) => ({
+            ID_Producto: item.ID_Producto,
+            Nombre_producto: item.Nombre_producto,
+            Cantidad: item.Cantidad,
+            Precio: item.Precio,
+            PrecioUnitario: item.Precio,
+          })),
+        },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      if (!response.data?.success || !response.data.data) {
+        throw new Error(response.data?.message || "No se pudo aplicar la promoción.");
+      }
+
+      setPromocionAplicada({
+        codigo: codigoPromocion.trim(),
+        descuento: Number(response.data.data.descuento) || 0,
+        carritoFingerprint,
+      });
+      setMensajePromocion(response.data.data.mensaje || "Promoción aplicada.");
+    } catch (error) {
+      console.error("Error al aplicar código promocional:", error);
+      setErrorPromocion(
+        error.response?.data?.message ||
+          error.message ||
+          "No se pudo validar el código promocional.",
+      );
+    } finally {
+      setValidandoPromocion(false);
+    }
+  };
+
+  const quitarPromocion = () => {
+    setPromocionAplicada(null);
+    setCodigoPromocion("");
+    setMensajePromocion("");
+    setErrorPromocion("");
+  };
 
   const handleProcederPago = async () => {
     if (!token) {
@@ -59,25 +133,21 @@ function Carrito() {
     try {
       const pedidoData = {
         ID_Usuario: usuario.ID_Usuario,
-        items: carrito.items.map(item => ({
-          ID_Producto: item.ID_Producto,
-          Nombre_producto: item.Nombre_producto,
-          Cantidad: item.Cantidad,
-          PrecioUnitario: item.Precio
-        })),
-        subtotal: subtotal,
-        total: total
+        metodoPago,
+        ...(promocionVigente && { codigoPromocion: promocionVigente.codigo }),
       };
 
       const pedidoRes = await axios.post(`${API_URL}/api/pedidos`, pedidoData, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      const pedido = pedidoRes.data.pedido || {};
 
       setPedidoCompletado({
         id: pedidoRes.data.ID_Pedido,
         items: carrito.items,
-        subtotal: subtotal,
-        total: total,
+        subtotal: Number(pedido.subtotal ?? subtotal),
+        descuento: Number(pedido.descuento ?? 0),
+        total: Number(pedido.total ?? total),
         fecha: new Date().toISOString(),
         fecha_limite: pedidoRes.data.fecha_limite,
         metodoPago: metodoPago
@@ -107,6 +177,11 @@ function Carrito() {
             <p>Tu pedido ha sido procesado correctamente.</p>
             <p><strong>Número de pedido:</strong> #{pedidoCompletado.id}</p>
             <p><strong>Fecha límite de pago:</strong> {new Date(pedidoCompletado.fecha_limite).toLocaleString()}</p>
+            <p><strong>Subtotal:</strong> ${Number(pedidoCompletado.subtotal).toLocaleString()}</p>
+            {pedidoCompletado.descuento > 0 && (
+              <p><strong>Descuento:</strong> -${Number(pedidoCompletado.descuento).toLocaleString()}</p>
+            )}
+            <p><strong>Total:</strong> ${Number(pedidoCompletado.total).toLocaleString()}</p>
             
             <div className="recibo-actions">
               <PDFDownloadLink
@@ -234,13 +309,65 @@ function Carrito() {
               <span>Subtotal:</span>
               <span>${subtotal.toLocaleString()}</span>
             </div>
+            <div className="resumen-linea">
+              <span>Envío:</span>
+              <span>{costoEnvio === 0 ? "Gratis" : `$${costoEnvio.toLocaleString()}`}</span>
+            </div>
+            <div className="promocion-carrito">
+              <label htmlFor="codigo-promocion">Código promocional</label>
+              <div className="promocion-carrito-campo">
+                <input
+                  id="codigo-promocion"
+                  value={codigoPromocion}
+                  onChange={(event) => {
+                    setCodigoPromocion(event.target.value);
+                    setErrorPromocion("");
+                    if (promocionAplicada) {
+                      setPromocionAplicada(null);
+                      setMensajePromocion("");
+                    }
+                  }}
+                  placeholder="Ingresa tu código"
+                  disabled={validandoPromocion || procesando}
+                />
+                <button
+                  type="button"
+                  onClick={aplicarCodigoPromocion}
+                  disabled={validandoPromocion || procesando}
+                >
+                  {validandoPromocion ? "Validando..." : "Aplicar"}
+                </button>
+              </div>
+              {promocionVigente && (
+                <div className="promocion-carrito-aplicada">
+                  <span>{mensajePromocion}</span>
+                  <button type="button" onClick={quitarPromocion}>Quitar</button>
+                </div>
+              )}
+              {promocionAplicada && !promocionVigente && (
+                <p className="promocion-carrito-aviso">
+                  El carrito cambió. Vuelve a aplicar el código para actualizar el descuento.
+                </p>
+              )}
+              {errorPromocion && <p className="promocion-carrito-error" role="alert">{errorPromocion}</p>}
+            </div>
+            {promocionVigente?.descuento > 0 && (
+              <div className="resumen-linea promocion-descuento">
+                <span>Descuento:</span>
+                <span>-${promocionVigente.descuento.toLocaleString()}</span>
+              </div>
+            )}
             <div className="resumen-linea total">
               <span>Total:</span>
               <span>${total.toLocaleString()}</span>
             </div>
 
             {!mostrarFormulario ? (
-              <button onClick={handleProcederPago} className="btn-primary btn-checkout">
+              <button
+                onClick={handleProcederPago}
+                className="btn-primary btn-checkout"
+                disabled={validandoPromocion}
+              >
                 Continuar con el Pedido
               </button>
             ) : (
@@ -260,7 +387,7 @@ function Carrito() {
                 <button 
                   onClick={confirmarCompra} 
                   className="btn-primary"
-                  disabled={procesando}
+                  disabled={procesando || validandoPromocion}
                 >
                   {procesando ? "Procesando..." : "Confirmar Pedido"}
                 </button>

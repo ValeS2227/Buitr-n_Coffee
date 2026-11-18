@@ -11,16 +11,12 @@ function HeaderIndex() {
     navigate("/login");
   };
 
-  const handleBuscar = () => {
+  const handleBuscar = (event) => {
+    event.preventDefault();
+
     if (busqueda.trim()) {
       navigate(`/catalogo?search=${encodeURIComponent(busqueda)}`);
       setBusqueda("");
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleBuscar();
     }
   };
 
@@ -44,19 +40,18 @@ function HeaderIndex() {
         </div>
 
         <div className="icons">
-          <div className="search-box">
+          <form className="search-box" onSubmit={handleBuscar}>
             <input 
-              type="text" 
+              type="search" 
               placeholder="Buscar producto" 
+              aria-label="Buscar producto"
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
-              onKeyPress={handleKeyPress}
             />
-            <i 
-              className="fa-solid fa-magnifying-glass"
-              onClick={handleBuscar}
-            ></i>
-          </div>
+            <button type="submit" className="search-submit" aria-label="Buscar">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            </button>
+          </form>
 
           <div onClick={handleUserClick} style={{ cursor: "pointer" }}>
             <i className="fa-solid fa-user"></i>

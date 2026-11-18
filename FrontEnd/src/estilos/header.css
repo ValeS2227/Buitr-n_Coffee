@@ -60,20 +60,26 @@
   border: none;
   font-size: 14px;
   outline: none;
-  width: 220px;
+  width: 130px;
 }
 
 .search-box input::placeholder {
   color: #999;
 }
 
-.search-box .fa-magnifying-glass {
+.search-box .search-submit {
   position: absolute;
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #F9A15E;
   cursor: pointer;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.search-box .search-submit .fa-magnifying-glass {
+  color: #F9A15E;
   font-size: 16px;
 }
 
@@ -135,7 +141,7 @@
   }
   
   .search-box input {
-    width: 180px;
+    width: 120px;
   }
   
   .nav {

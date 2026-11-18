@@ -10,7 +10,7 @@ function AdminRoute({ children }) {
   }
   
   // Si el usuario no es admin (ID_Rol !== 2, ya que 1 = usuario y 2 = administrador), redirigir al catálogo
-  if (usuario.ID_Rol !== 2) {
+  if (Number(usuario.ID_Rol) !== 2) {
     return <Navigate to="/catalogo" />;
   }
   

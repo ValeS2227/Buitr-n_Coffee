@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { API_URL } from "../config.js";
+import { API_URL, getImagen } from "../config.js";
 import "../estilos/catalogo.css";
 import { useNavigate } from "react-router-dom";
 import HeaderIndex from "../components/HeaderIndex";
@@ -42,36 +42,42 @@ function Index() {
 
         <div className="cards">
 
-          {productos.map((producto) => (
-            <div
-              key={producto.ID_Producto}
-              className="card"
-              onClick={handleProductClick}
-              style={{ cursor: "pointer" }}
-            >
+          {productos.map((producto) => {
+            const imagen =
+              producto.imagen ||
+              producto.Imagen ||
+              producto.imagen_url ||
+              producto.url_imagen;
 
-              <img
-                src={`${API_URL}/imagenes/${producto.imagen}`}
-                alt={producto.Nombre_producto}
-              />
-
-              <h3>{producto.Nombre_producto}</h3>
-
-              <p>{producto.Descripcion}</p>
-
-              <strong>${producto.Precio}</strong>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleProductClick();
-                }}
+            return (
+              <div
+                key={producto.ID_Producto}
+                className="card"
+                onClick={handleProductClick}
+                style={{ cursor: "pointer" }}
               >
-                Ver más
-              </button>
+                <img
+                  src={getImagen(imagen)}
+                  alt={producto.Nombre_producto || "Imagen del producto"}
+                />
 
-            </div>
-          ))}
+                <h3>{producto.Nombre_producto}</h3>
+
+                <p>{producto.Descripcion}</p>
+
+                <strong>${producto.Precio}</strong>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleProductClick();
+                  }}
+                >
+                  Ver más
+                </button>
+              </div>
+            );
+          })}
 
         </div>
 

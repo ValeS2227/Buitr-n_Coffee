@@ -1,1 +1,1 @@
-module.exports = "archivo-de-prueba";
+module.exports = "archivo-mock";

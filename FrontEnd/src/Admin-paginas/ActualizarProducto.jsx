@@ -1,0 +1,279 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { API_URL } from '../config.js';
+import './estilos-admin/ActualizarProducto.css';
+
+// Categorías base del selector
+const CATEGORIAS_BASE = ['Tostado', 'Fino', 'Molido', 'Grano'];
+
+const FORM_VACIO = {
+  Nombre_producto: '',
+  Descripcion: '',
+  Categoria: '',
+  Precio: '',
+  Stock: '',
+  imagen: ''
+};
+
+const ActualizarProducto = () => {
+  const navigate = useNavigate();
+  const [productos, setProductos] = useState([]);
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState('');
+  const [exito, setExito] = useState('');
+  const [editando, setEditando] = useState(false);
+
+  // Formulario
+  const [formData, setFormData] = useState(FORM_VACIO);
+
+  useEffect(() => {
+    obtenerProductos();
+  }, []);
+
+  const obtenerProductos = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/productos`);
+      setProductos(response.data);
+      setCargando(false);
+    } catch (err) {
+      console.error('Error al obtener productos:', err);
+      setError('Error al cargar los productos');
+      setCargando(false);
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const seleccionarProducto = (producto) => {
+    setProductoSeleccionado(producto);
+    setFormData({
+      Nombre_producto: producto.Nombre_producto,
+      Descripcion: producto.Descripcion || '',
+      Categoria: producto.Categoria || '',
+      Precio: producto.Precio,
+      Stock: producto.Stock,
+      imagen: producto.imagen || ''
+    });
+    setEditando(true);
+    setError('');
+    setExito('');
+  };
+
+  const actualizarProducto = async (e) => {
+    e.preventDefault();
+    setError('');
+    setExito('');
+
+    try {
+      const token = localStorage.getItem('token');
+      const url = `${API_URL}/api/productos/${productoSeleccionado.ID_Producto}`;
+
+      console.log('PUT a:', url, 'datos:', formData);
+
+      await axios.put(url, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      setExito('Producto actualizado correctamente');
+      
+      // Actualizar la lista de productos
+      await obtenerProductos();
+      
+      // Limpiar selección después de 2 segundos
+      setTimeout(() => {
+        setEditando(false);
+        setProductoSeleccionado(null);
+        setFormData(FORM_VACIO);
+        setExito('');
+      }, 2000);
+      
+    } catch (err) {
+      console.error('Error al actualizar producto:', err);
+      console.log('Estado:', err.response?.status, 'Respuesta:', err.response?.data);
+      setError(err.response?.data?.message || 'Error al actualizar el producto');
+    }
+  };
+
+  const volver = () => {
+    navigate('/admin');
+  };
+
+  const categoriasDisponibles = formData.Categoria && !CATEGORIAS_BASE.includes(formData.Categoria)
+    ? [...CATEGORIAS_BASE, formData.Categoria]
+    : CATEGORIAS_BASE;
+
+  if (cargando) {
+    return (
+      <div className="actualizar-container">
+        <div className="loading">Cargando productos...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="actualizar-container">
+      <div className="actualizar-header">
+        <button className="btn-volver" onClick={volver}>
+          ← Volver al Panel
+        </button>
+        <h1>ACTUALIZAR PRODUCTOS</h1>
+      </div>
+
+      {error && <div className="error-message">{error}</div>}
+      {exito && <div className="exito-message">{exito}</div>}
+
+      <div className="contenido-dos-columnas">
+        {/* Lista de productos */}
+        <div className="lista-productos">
+          <h2>Seleccionar Producto</h2>
+          <div className="productos-grid">
+            {productos.length === 0 ? (
+              <p className="sin-datos">No hay productos registrados</p>
+            ) : (
+              productos.map((producto) => (
+                <div
+                  key={producto.ID_Producto} 
+                  className={`producto-card ${productoSeleccionado?.ID_Producto === producto.ID_Producto ? 'seleccionado' : ''}`}
+                  onClick={() => seleccionarProducto(producto)}
+                >
+                  <div className="producto-imagen-mini">
+                    {producto.imagen ? (
+                      <img
+                        src={`${API_URL}/imagenes/${producto.imagen}`} 
+                        alt={producto.Nombre_producto}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="%23999"%3E%3Crect x="2" y="2" width="20" height="20"%3E%3C/rect%3E%3C/svg%3E';
+                        }}
+                      />
+                    ) : (
+                      <div className="sin-imagen-mini">📦</div>
+                    )}
+                  </div>
+                  <div className="producto-info-mini">
+                    <div className="producto-nombre-mini">{producto.Nombre_producto}</div>
+                    <div className="producto-precio-mini">${Number(producto.Precio).toLocaleString()}</div>
+                    <div className="producto-stock-mini">Stock: {producto.Stock}</div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Formulario de edición */}
+        <div className="formulario-edicion">
+          <h2>Editar Producto</h2>
+          {!editando ? (
+            <div className="sin-seleccion">
+              <p>Selecciona un producto de la lista para editarlo</p>
+            </div>
+          ) : (
+            <form onSubmit={actualizarProducto}>
+              <div className="form-group">
+                <label>Nombre del producto</label>
+                <input
+                  type="text"
+                  name="Nombre_producto"
+                  value={formData.Nombre_producto}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Descripción</label>
+                <textarea
+                  name="Descripcion"
+                  value={formData.Descripcion}
+                  onChange={handleChange}
+                  rows="3"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Categoría</label>
+                <select
+                  name="Categoria"
+                  value={formData.Categoria}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Seleccionar categoría</option>
+                  {categoriasDisponibles.map((cat) => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Precio ($)</label>
+                  <input
+                    type="number"
+                    name="Precio"
+                    value={formData.Precio}
+                    onChange={handleChange}
+                    step="0.01"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Stock</label>
+                  <input
+                    type="number"
+                    name="Stock"
+                    value={formData.Stock}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Imagen (nombre del archivo)</label>
+                <input
+                  type="text"
+                  name="imagen"
+                  value={formData.imagen}
+                  onChange={handleChange}
+                  placeholder="ejemplo: cafe1.jpeg"
+                />
+                <small>La imagen debe estar en la carpeta /imagenes del servidor</small>
+              </div>
+
+              <div className="form-buttons">
+                <button type="submit" className="btn-actualizar-form">
+                  Actualizar Producto
+                </button>
+                <button
+                  type="button" 
+                  className="btn-cancelar"
+                  onClick={() => {
+                    setEditando(false);
+                    setProductoSeleccionado(null);
+                    setError('');
+                  }}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ActualizarProducto;

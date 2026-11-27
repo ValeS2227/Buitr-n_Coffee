@@ -1,7 +1,4 @@
-/**
- * PARTE 1 — VER PQRS
- * Carga de la lista, estados (cargando / error / vacío), filtros y botón volver.
- */
+
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
